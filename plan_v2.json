@@ -1,0 +1,144 @@
+[
+  {
+    "step": "Read pom.xml dependencies and analyze backend boilerplate structure",
+    "sub_steps": [
+      "Open /home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/springapp/pom.xml to review dependencies (Spring Boot, JPA, Validation, MySQL, Spring Web).",
+      "Check /home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/springapp/src/main/resources/application.properties to confirm MySQL configuration.",
+      "Review existing directory and class structure under /home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/springapp/src/main/java/com/examly/springapp/."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/springapp/pom.xml"
+    ],
+    "description": "Ensure all backend dependencies and infrastructure required for backend logic (JPA, MySQL, validation, Spring Web) are present and ready for building the Expense Reimbursement System."
+  },
+  {
+    "step": "Implement Expense entity, repository, and service",
+    "sub_steps": [
+      "Create Expense.java entity class with fields and JPA annotations as per requirements. Validation annotations (@NotNull, @Min, @Size, custom for date, etc.).",
+      "Create ExpenseRepository.java extending JpaRepository.",
+      "Create ExpenseService.java handling business logic (createExpense, getAllExpenses, updateExpenseStatus).",
+      "Implement validation in service for business logic not covered by annotations (status checks, remarks, etc.)."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/springapp/src/main/java/com/examly/springapp/model/Expense.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/springapp/src/main/java/com/examly/springapp/repository/ExpenseRepository.java",
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/springapp/src/main/java/com/examly/springapp/service/ExpenseService.java"
+    ],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/springapp/src/main/java/com/examly/springapp/ExpenseReimbursementSystemApplication.java"
+    ],
+    "description": "Defines the main Expense model, data access, and business logic layer to support CRUD and validation operations for expense claims."
+  },
+  {
+    "step": "Implement ExpenseController with REST endpoints and exception handling",
+    "sub_steps": [
+      "Create ExpenseController.java exposing endpoints: POST /api/expenses, GET /api/expenses, PUT /api/expenses/{id}/status. ",
+      "Handle request validation and use ExpenseService for actual processing.",
+      "Return structured error messages and status codes on validation errors or resource not found.",
+      "Add CORS configuration to allow requests from React frontend."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/springapp/src/main/java/com/examly/springapp/controller/ExpenseController.java"
+    ],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/springapp/src/main/java/com/examly/springapp/ExpenseReimbursementSystemApplication.java"
+    ],
+    "description": "Exposes required REST endpoints for expense submission, listing, and status updates, handling request validation and error cases as per requirements."
+  },
+  {
+    "step": "Implement backend test cases using JUnit",
+    "sub_steps": [
+      "Implement (or update) test class ExpenseControllerTest.java and supporting test classes if needed under test/java/com/examly/springapp/.",
+      "Add tests for: testCreateExpense, testCreateExpenseValidation, testGetAllExpenses, testUpdateExpenseStatus, testUpdateExpenseStatusValidation.",
+      "Use @SpringBootTest or @WebMvcTest, mock service/repository layers as needed.",
+      "Mock/request expected scenarios: positive creation/fetch/update and all specified validation/error scenarios."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/springapp/src/test/java/com/examly/springapp/controller/ExpenseControllerTest.java"
+    ],
+    "files_to_edit": [],
+    "description": "Creates all backend tests mapped directly to provided test cases, ensuring proper test coverage for expense creation, validation, listing, and status update workflows."
+  },
+  {
+    "step": "Read package.json and analyze React boilerplate",
+    "sub_steps": [
+      "Check /home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/reactapp/package.json to verify dependencies available (react, react-dom, jest, @testing-library/react, etc.).",
+      "Analyze provided /src directory structure for App.js, CSS files, and current entry points.",
+      "Plan location for components (suggested: /src/components), tests, utilities, and CSS."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/reactapp/package.json"
+    ],
+    "description": "Ensures understanding of frontend dependencies, internal structure, and where to place components, utility functions, and styling for best organization."
+  },
+  {
+    "step": "Implement core React components and utilities (ExpenseForm, ExpenseList, ExpenseStatusUpdate, helpers, CSS variables/utilities)",
+    "sub_steps": [
+      "Create /src/components/ExpenseForm.js + ExpenseForm.css for expense submission form: fields, validation, error/success messages, form reset, loading state.",
+      "Create /src/components/ExpenseForm.test.js for component tests.",
+      "Create /src/components/ExpenseList.js + ExpenseList.css: fetch list on mount, display expenses in table, format amount/date, status filter, show 'No expenses found', integrate ExpenseStatusUpdate as subcomponent.",
+      "Create /src/components/ExpenseList.test.js for component tests.",
+      "Create /src/components/ExpenseStatusUpdate.js for Approve/Reject actions (only visible for PENDING), modal for remarks on rejection, calls to PUT endpoint, loader.",
+      "Create /src/components/ExpenseStatusUpdate.test.js for relevant actions.",
+      "Create /src/utils/api.js for API calls to backend (implement fetch logic, handle errors).",
+      "Create or update /src/App.js and /src/App.css: center layout, establish main app structure, import global CSS variables and base styles as per design spec.",
+      "Declare CSS variables (colors, spacing) in /src/App.css and use in components."
+    ],
+    "files_to_add": [
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/reactapp/src/components/ExpenseForm.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/reactapp/src/components/ExpenseForm.css",
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/reactapp/src/components/ExpenseForm.test.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/reactapp/src/components/ExpenseList.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/reactapp/src/components/ExpenseList.css",
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/reactapp/src/components/ExpenseList.test.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/reactapp/src/components/ExpenseStatusUpdate.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/reactapp/src/components/ExpenseStatusUpdate.test.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/reactapp/src/utils/api.js"
+    ],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/reactapp/src/App.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/reactapp/src/App.css"
+    ],
+    "description": "Builds the core frontend app, including all forms, tables, action buttons and supporting logic, wired up to interact with backend API. CSS and utility code ensure visual consistency and proper styling per spec."
+  },
+  {
+    "step": "Implement React frontend test cases with Jest/RTL",
+    "sub_steps": [
+      "In ExpenseForm.test.js, implement: testExpenseFormRendering, testExpenseFormSubmission \u2013 check rendering, input validation, POST API call, reset, messages.",
+      "In ExpenseList.test.js, implement: testExpenseListRendering, testExpenseStatusFilter \u2013 mock GET API, verify table render, filters, formatting, empty state.",
+      "In ExpenseStatusUpdate.test.js, implement: testExpenseStatusUpdate \u2013 mock PUT API, test buttons only for 'PENDING', modal for remarks, approve/reject logic, list refresh.",
+      "Use @testing-library/react patterns, mock global.fetch, use waitFor for async UI updates. Strictly avoid manual cleanup! Ensure unique data-testid selectors."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/reactapp/src/components/ExpenseForm.test.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/reactapp/src/components/ExpenseList.test.js",
+      "/home/coder/project/workspace/question_generation_service/solutions/6d883e9c-da69-471a-8572-6f26e7aa9623/reactapp/src/components/ExpenseStatusUpdate.test.js"
+    ],
+    "description": "Implements all required frontend Jest/RTL tests as mapped to provided cases, ensuring DOM, API calls, behaviors, error, and success states are validated."
+  },
+  {
+    "step": "Compile and test backend (Spring Boot)",
+    "sub_steps": [
+      "Run: mvn clean compile -q -Dspring.main.banner-mode=off to check compilation.",
+      "Run: mvn test -q -Dspring.main.banner-mode=off to execute JUnit tests and verify backend correctness (including coverage for all endpoints and validation rules)."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [],
+    "description": "Verifies backend compiles and all required tests pass, checking full functionality of the Expense Reimbursement System backend."
+  },
+  {
+    "step": "Install, lint, build, and test frontend (React with Jest)",
+    "sub_steps": [
+      "Run: npm install in /reactapp directory to install dependencies.",
+      "Run: npm run build to check for React compilation and build errors.",
+      "Run: npx eslint src/ --fix for linting and autofix.",
+      "Run: npm run test:ci to execute Jest tests and check all UI functionality as per requirements."
+    ],
+    "files_to_add": [],
+    "files_to_edit": [],
+    "description": "Ensures React frontend is fully functional, styled, and passes all required tests, confirming implementation matches the design, validation, and integration specs."
+  }
+]
