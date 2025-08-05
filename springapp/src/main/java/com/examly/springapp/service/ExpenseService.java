@@ -39,4 +39,8 @@ public class ExpenseService {
         return optionalExpense;
     }
 
+    public Optional<Expense> getExpenseById(Long id) {
+        return expenseRepository.findById(id);
+    }
+
 }

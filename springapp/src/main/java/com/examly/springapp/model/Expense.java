@@ -2,21 +2,29 @@ package com.examly.springapp.model;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable=false)
     private Long employeeId;
+    
+    @Column(nullable=false)
     private Double amount;
+    
+    @Column(nullable=false, length=200)
     private String description;
+    
+    @Column(nullable=false)
     private LocalDate date;
+    
+    @Column(nullable=false)
     private String status = "PENDING";
+    
     private String remarks;
 
     public Expense(){}
