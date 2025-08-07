@@ -23,10 +23,6 @@ public class ExpenseService {
         return expenseRepository.findAll();
     }
 
-    public List<Expense> getExpenseByStatus(String status){
-        return expenseRepository.findByStatus(status);
-    }
-
     public Optional<Expense> updateExpenseStatus(Long id, String status, String remarks){
         Optional<Expense> optionalExpense=expenseRepository.findById(id);
         if(optionalExpense.isPresent()){
