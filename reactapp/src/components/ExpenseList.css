@@ -1,0 +1,53 @@
+.expense-list {
+  max-width: 900px;
+  margin: 20px auto;
+}
+
+.expense-list h2 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.expense-list select {
+  margin-bottom: 15px;
+  padding: 5px;
+}
+
+.expense-list table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.expense-list th,
+.expense-list td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.expense-list th {
+  background-color: #f2f2f2;
+}
+
+.expense-list tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.expense-list button {
+  padding: 5px 10px;
+  margin: 2px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.expense-list button:first-child {
+  background-color: #4caf50;
+  color: white;
+}
+
+.expense-list button:nth-child(2) {
+  background-color: #f44336;
+  color: white;
+}

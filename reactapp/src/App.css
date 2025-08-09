@@ -1,0 +1,37 @@
+.App {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #eef2f3;
+  min-height: 100vh;
+}
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.modal textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+.modal button {
+  padding: 5px 10px;
+  margin-right: 5px;
+}
+
+.modal button:first-child {
+  background-color: #4caf50;
+  color: white;
+}
+
+.modal button:last-child {
+  background-color: #ccc;
+}
