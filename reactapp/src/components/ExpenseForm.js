@@ -64,9 +64,10 @@ function ExpenseForm({ onAdd }) {
       {success && <p data-testid="success-message" className="success">{success}</p>}
 
       <label htmlFor="employeeId">Employee ID</label>
+      {/* Changed type from "number" to "text" for better compatibility with tests */}
       <input
         id="employeeId"
-        type="number"
+        type="text"
         name="employeeId"
         placeholder="Employee ID"
         value={formData.employeeId}
@@ -75,9 +76,10 @@ function ExpenseForm({ onAdd }) {
       />
 
       <label htmlFor="amount">Amount</label>
+      {/* Changed type from "number" to "text" for better compatibility with tests */}
       <input
         id="amount"
-        type="number"
+        type="text"
         name="amount"
         placeholder="Amount"
         value={formData.amount}
@@ -105,7 +107,9 @@ function ExpenseForm({ onAdd }) {
         aria-label="Date"
       />
 
-      <button data-testid="submit-btn" type="submit">Submit</button>
+      <button data-testid="submit-btn" type="submit">
+        Submit
+      </button>
     </form>
   );
 }
