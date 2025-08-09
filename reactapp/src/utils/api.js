@@ -15,7 +15,10 @@ export async function createExpense(expense) {
 
 export async function getExpenses() {
   const res = await fetch(BASE_URL);
-  if (!res.ok) throw new Error("Failed to fetch expenses");
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => null);
+    throw new Error(errorData?.message || "Failed to fetch expenses");
+  }
   return res.json();
 }
 
