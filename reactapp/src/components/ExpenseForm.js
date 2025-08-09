@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./ExpenseForm.css";
 import { createExpense } from "../utils/api";
 
-function ExpenseForm({ onExpenseAdded }) {
+function ExpenseForm() {
   const [formData, setFormData] = useState({
     employeeId: "",
     amount: "",
@@ -41,11 +41,10 @@ function ExpenseForm({ onExpenseAdded }) {
     }
 
     try {
-      const response = await createExpense(formData);
+      await createExpense(formData);
       setSuccess("Expense submitted successfully!");
       setError("");
       setFormData({ employeeId: "", amount: "", description: "", date: "" });
-      onExpenseAdded(response);
     } catch (err) {
       setError(err.message || "Error submitting expense");
       setSuccess("");

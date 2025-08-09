@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./ExpenseList.css";
-import { getExpenses } from "../utils/api";
-import ExpenseStatusUpdate from "./ExpenseStatusUpdate";
+import { getExpenses, updateExpenseStatus } from "../utils/api";
+import { useNavigate } from "react-router-dom";
 
 function ExpenseList() {
   const [expenses, setExpenses] = useState([]);
   const [filter, setFilter] = useState("ALL");
+  const navigate = useNavigate();
 
   const fetchExpenses = async () => {
     try {
@@ -24,6 +25,15 @@ function ExpenseList() {
     filter === "ALL"
       ? expenses
       : expenses.filter((e) => e.status === filter);
+
+  const handleApprove = async (id) => {
+    try {
+      await updateExpenseStatus(id, { status: "APPROVED", remarks: "Approved" });
+      fetchExpenses();
+    } catch (e) {
+      alert("Failed to approve expense");
+    }
+  };
 
   return (
     <div className="expense-list">
@@ -67,10 +77,16 @@ function ExpenseList() {
                 <td>{expense.remarks || "-"}</td>
                 <td>
                   {expense.status === "PENDING" && (
-                    <ExpenseStatusUpdate
-                      expenseId={expense.id}
-                      onStatusUpdated={fetchExpenses}
-                    />
+                    <>
+                      <button onClick={() => handleApprove(expense.id)}>
+                        Approve
+                      </button>
+                      <button
+                        onClick={() => navigate(`/expenses/${expense.id}/update`)}
+                      >
+                        Reject
+                      </button>
+                    </>
                   )}
                 </td>
               </tr>

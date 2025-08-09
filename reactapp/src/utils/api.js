@@ -6,7 +6,10 @@ export async function createExpense(expense) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(expense),
   });
-  if (!res.ok) throw new Error("Failed to create expense");
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => null);
+    throw new Error(errorData?.message || "Failed to create expense");
+  }
   return res.json();
 }
 
@@ -22,6 +25,9 @@ export async function updateExpenseStatus(id, updateData) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(updateData),
   });
-  if (!res.ok) throw new Error("Failed to update expense status");
+  if (!res.ok) {
+    const errorData = await res.json().catch(() => null);
+    throw new Error(errorData?.message || "Failed to update expense status");
+  }
   return res.json();
 }
