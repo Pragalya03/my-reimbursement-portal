@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
-import ExpenseStatusUpdatePage from "./components/ExpenseStatusUpdatePage";
+import ExpenseStatusUpdate from "./components/ExpenseStatusUpdate";
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
       <Routes>
         <Route path="/" element={<ExpenseForm />} />
         <Route path="/expenses" element={<ExpenseList />} />
-        <Route path="/expenses/:id/update" element={<ExpenseStatusUpdatePage />} />
+        <Route path="/expenses/:id/update" element={<ExpenseStatusUpdate />} />
       </Routes>
     </Router>
   );

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const BACKEND_URL = "http://localhost:8080/api/expenses";
+const BACKEND_URL = "https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io/api/expenses";
 
 function ExpenseList() {
   const [expenses, setExpenses] = useState([]);
