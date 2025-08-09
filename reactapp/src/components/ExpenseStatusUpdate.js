@@ -45,7 +45,7 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
   };
 
   if (expense.status !== "PENDING") {
-    return null; // No buttons for non-pending expenses
+    return null;
   }
 
   return (

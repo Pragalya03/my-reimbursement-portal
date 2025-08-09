@@ -64,10 +64,9 @@ function ExpenseForm({ onAdd }) {
       {success && <p data-testid="success-message" className="success">{success}</p>}
 
       <label htmlFor="employeeId">Employee ID</label>
-      {/* Changed type from "number" to "text" for better compatibility with tests */}
       <input
         id="employeeId"
-        type="text"
+        type="number"
         name="employeeId"
         placeholder="Employee ID"
         value={formData.employeeId}
@@ -76,10 +75,10 @@ function ExpenseForm({ onAdd }) {
       />
 
       <label htmlFor="amount">Amount</label>
-      {/* Changed type from "number" to "text" for better compatibility with tests */}
       <input
         id="amount"
-        type="text"
+        type="number"
+        step="0.01"
         name="amount"
         placeholder="Amount"
         value={formData.amount}
