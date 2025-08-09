@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./ExpenseList.css";
-import { getExpenses, updateExpenseStatus } from "../utils/api";
-import { useNavigate } from "react-router-dom";
+import { getExpenses } from "../utils/api";
+import ExpenseStatusUpdate from "./ExpenseStatusUpdate";
 
 function ExpenseList() {
   const [expenses, setExpenses] = useState([]);
   const [filter, setFilter] = useState("ALL");
-  const navigate = useNavigate();
 
   const fetchExpenses = async () => {
     try {
@@ -22,23 +21,20 @@ function ExpenseList() {
   }, []);
 
   const filteredExpenses =
-    filter === "ALL"
-      ? expenses
-      : expenses.filter((e) => e.status === filter);
-
-  const handleApprove = async (id) => {
-    try {
-      await updateExpenseStatus(id, { status: "APPROVED", remarks: "Approved" });
-      fetchExpenses();
-    } catch (e) {
-      alert("Failed to approve expense");
-    }
-  };
+    filter === "ALL" ? expenses : expenses.filter((e) => e.status === filter);
 
   return (
     <div className="expense-list">
       <h2>Expense List</h2>
-      <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+
+      <label htmlFor="status-filter">Status</label>
+      <select
+        id="status-filter"
+        data-testid="status-filter"
+        value={filter}
+        onChange={(e) => setFilter(e.target.value)}
+        aria-label="Status"
+      >
         <option value="ALL">All</option>
         <option value="PENDING">Pending</option>
         <option value="APPROVED">Approved</option>
@@ -48,7 +44,7 @@ function ExpenseList() {
       {filteredExpenses.length === 0 ? (
         <p>No expenses found</p>
       ) : (
-        <table>
+        <table data-testid="expenses-table">
           <thead>
             <tr>
               <th>Employee ID</th>
@@ -77,16 +73,10 @@ function ExpenseList() {
                 <td>{expense.remarks || "-"}</td>
                 <td>
                   {expense.status === "PENDING" && (
-                    <>
-                      <button onClick={() => handleApprove(expense.id)}>
-                        Approve
-                      </button>
-                      <button
-                        onClick={() => navigate(`/expenses/${expense.id}/update`)}
-                      >
-                        Reject
-                      </button>
-                    </>
+                    <ExpenseStatusUpdate
+                      expense={expense}
+                      onStatusUpdate={fetchExpenses}
+                    />
                   )}
                 </td>
               </tr>

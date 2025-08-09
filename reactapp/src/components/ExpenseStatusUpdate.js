@@ -1,73 +1,76 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import { updateExpenseStatus } from "../utils/api";
 
-function ExpenseStatusUpdatePage() {
-  const { id } = useParams();
-  const navigate = useNavigate();
+function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
+  const [showRejectModal, setShowRejectModal] = useState(false);
   const [remarks, setRemarks] = useState("");
-  const [error, setError] = useState("");
+  const [modalError, setModalError] = useState("");
+
+  if (expense.status !== "PENDING") return null;
+
+  const handleApprove = async () => {
+    try {
+      await updateExpenseStatus(expense.id, { status: "APPROVED", remarks: "Approved" });
+      if (onStatusUpdate) onStatusUpdate();
+    } catch (err) {
+      alert("Failed to approve expense");
+    }
+  };
 
   const handleReject = async () => {
     if (!remarks.trim()) {
-      setError("Remarks are required for rejection");
+      setModalError("Remarks required for rejection");
       return;
     }
     try {
-      await updateExpenseStatus(id, { status: "REJECTED", remarks });
-      navigate("/expenses");
-    } catch (e) {
-      setError("Failed to update expense status");
+      await updateExpenseStatus(expense.id, { status: "REJECTED", remarks: remarks.trim() });
+      setShowRejectModal(false);
+      setRemarks("");
+      setModalError("");
+      if (onStatusUpdate) onStatusUpdate();
+    } catch (err) {
+      alert("Failed to reject expense");
     }
   };
 
   return (
-    <div
-      style={{
-        maxWidth: 400,
-        margin: "30px auto",
-        padding: 20,
-        border: "1px solid #ccc",
-        borderRadius: 6,
-        background: "#f9f9f9",
-      }}
-    >
-      <h2>Reject Expense #{id}</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <textarea
-        placeholder="Enter remarks"
-        value={remarks}
-        onChange={(e) => setRemarks(e.target.value)}
-        rows={5}
-        style={{ width: "100%", marginBottom: 10, padding: 8 }}
-      />
+    <>
       <button
-        onClick={handleReject}
-        style={{
-          marginRight: 10,
-          backgroundColor: "#f44336",
-          color: "white",
-          padding: "8px 16px",
-          border: "none",
-          borderRadius: 4,
-          cursor: "pointer",
-        }}
+        data-testid={`approve-btn-${expense.id}`}
+        onClick={handleApprove}
       >
-        Submit
+        Approve
       </button>
       <button
-        onClick={() => navigate("/expenses")}
-        style={{
-          padding: "8px 16px",
-          border: "none",
-          borderRadius: 4,
-          cursor: "pointer",
-        }}
+        data-testid={`reject-btn-${expense.id}`}
+        onClick={() => setShowRejectModal(true)}
       >
-        Cancel
+        Reject
       </button>
-    </div>
+
+      {showRejectModal && (
+        <div data-testid="reject-modal" className="modal">
+          <textarea
+            data-testid="remarks-input"
+            placeholder="Enter remarks"
+            value={remarks}
+            onChange={(e) => setRemarks(e.target.value)}
+          />
+          {modalError && (
+            <p data-testid="modal-error" style={{ color: "red" }}>{modalError}</p>
+          )}
+          <button data-testid="confirm-reject" onClick={handleReject}>Submit</button>
+          <button onClick={() => {
+            setShowRejectModal(false);
+            setRemarks("");
+            setModalError("");
+          }}>
+            Cancel
+          </button>
+        </div>
+      )}
+    </>
   );
 }
 
-export default ExpenseStatusUpdatePage;
+export default ExpenseStatusUpdate;
