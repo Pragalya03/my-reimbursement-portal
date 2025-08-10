@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getExpenses, updateExpenseStatus } from "../utils/api.js";
+import { useNavigate } from "react-router-dom";
+import './ExpenseList.css';
 
 function ExpenseList() {
   const [expenses, setExpenses] = useState([]);
