@@ -1,16 +1,25 @@
 .expense-list {
+  background: #fff;
   max-width: 900px;
-  margin: 20px auto;
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .expense-list h2 {
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #333;
 }
 
 .expense-list select {
+  padding: 6px;
   margin-bottom: 15px;
-  padding: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
 }
 
 .expense-list table {
@@ -21,13 +30,14 @@
 
 .expense-list th,
 .expense-list td {
-  border: 1px solid #ddd;
-  padding: 8px;
+  border: 1px solid #e5e7eb;
+  padding: 10px;
   text-align: left;
 }
 
 .expense-list th {
-  background-color: #f2f2f2;
+  background-color: #f9fafb;
+  font-weight: bold;
 }
 
 .expense-list tr:nth-child(even) {
@@ -35,19 +45,29 @@
 }
 
 .expense-list button {
-  padding: 5px 10px;
+  padding: 6px 12px;
   margin: 2px;
-  border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 0.9rem;
 }
 
 .expense-list button:first-child {
-  background-color: #4caf50;
+  background-color: #3b82f6;
   color: white;
+  border: none;
+}
+
+.expense-list button:first-child:hover {
+  background-color: #2563eb;
 }
 
 .expense-list button:nth-child(2) {
-  background-color: #f44336;
-  color: white;
+  background-color: white;
+  color: black;
+  border: 1px solid #ccc;
+}
+
+.expense-list button:nth-child(2):hover {
+  background-color: #f3f4f6;
 }
