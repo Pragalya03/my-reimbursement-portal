@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import "./ExpenseList.css";
-import { getExpenses, updateExpenseStatus } from "./ExpenseService";
+/*import "./ExpenseList.css";
+import { getExpenses, updateExpenseStatus } from "./ExpenseService";*/
+import "../utils/api.js";
+import { getExpenses, updateExpenseStatus } from "../utils/api.js";
 
 function ExpenseList() {
   const [expenses, setExpenses] = useState([]);
