@@ -26,7 +26,8 @@ function ExpenseForm({ onAdd }) {
     )
       return "Description must be 5-200 characters";
     if (!formData.date) return "Date is required";
-    if (new Date(formData.date) > new Date()) return "Date cannot be in the future";
+    if (new Date(formData.date) > new Date())
+      return "Date cannot be in the future";
     return "";
   };
 
@@ -34,9 +35,7 @@ function ExpenseForm({ onAdd }) {
     e.preventDefault();
     const validationError = validateForm();
     if (validationError) {
-      //setError(validationError);
       alert(validationError);
-      //setSuccess("");
       return;
     }
 
@@ -61,8 +60,16 @@ function ExpenseForm({ onAdd }) {
     <form className="expense-form" onSubmit={handleSubmit}>
       <h2>Add Expense</h2>
 
-      {error && <p data-testid="error-message" className="error">{error}</p>}
-      {success && <p data-testid="success-message" className="success">{success}</p>}
+      {error && (
+        <p data-testid="error-message" className="error">
+          {error}
+        </p>
+      )}
+      {success && (
+        <p data-testid="success-message" className="success">
+          {success}
+        </p>
+      )}
 
       <label htmlFor="employeeId">Employee ID</label>
       <input
@@ -72,7 +79,6 @@ function ExpenseForm({ onAdd }) {
         placeholder="Employee ID"
         value={formData.employeeId}
         onChange={handleChange}
-        aria-label="Employee ID"
       />
 
       <label htmlFor="amount">Amount</label>
@@ -84,7 +90,6 @@ function ExpenseForm({ onAdd }) {
         placeholder="Amount"
         value={formData.amount}
         onChange={handleChange}
-        aria-label="Amount"
       />
 
       <label htmlFor="description">Description</label>
@@ -94,7 +99,6 @@ function ExpenseForm({ onAdd }) {
         placeholder="Description"
         value={formData.description}
         onChange={handleChange}
-        aria-label="Description"
       />
 
       <label htmlFor="date">Date</label>
@@ -104,7 +108,6 @@ function ExpenseForm({ onAdd }) {
         name="date"
         value={formData.date}
         onChange={handleChange}
-        aria-label="Date"
       />
 
       <button data-testid="submit-btn" type="submit">
