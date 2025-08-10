@@ -71,7 +71,7 @@ function ExpenseForm({ onAdd }) {
         </p>
       )}
 
-      <label htmlFor="employeeId">Employee ID</label>
+      <label htmlFor="employeeId">Employee ID
       <input
         id="employeeId"
         type="number"
@@ -80,8 +80,9 @@ function ExpenseForm({ onAdd }) {
         value={formData.employeeId}
         onChange={handleChange}
       />
+      </label>
 
-      <label htmlFor="amount">Amount</label>
+      <label htmlFor="amount">Amount
       <input
         id="amount"
         type="number"
@@ -91,8 +92,9 @@ function ExpenseForm({ onAdd }) {
         value={formData.amount}
         onChange={handleChange}
       />
+      </label>
 
-      <label htmlFor="description">Description</label>
+      <label htmlFor="description">Description
       <textarea
         id="description"
         name="description"
@@ -100,8 +102,9 @@ function ExpenseForm({ onAdd }) {
         value={formData.description}
         onChange={handleChange}
       />
+      </label>
 
-      <label htmlFor="date">Date</label>
+      <label htmlFor="date">Date
       <input
         id="date"
         type="date"
@@ -109,6 +112,7 @@ function ExpenseForm({ onAdd }) {
         value={formData.date}
         onChange={handleChange}
       />
+      </label>
 
       <button data-testid="submit-btn" type="submit">
         Submit
