@@ -98,6 +98,7 @@ function ExpenseList() {
                   {expense.status === "PENDING" && activeAction?.id !== expense.id && (
                     <>
                       <button
+                      
                         onClick={() =>
                           setActiveAction({ id: expense.id, type: "APPROVED" })
                         }

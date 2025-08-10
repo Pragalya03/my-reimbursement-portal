@@ -72,48 +72,7 @@ function ExpenseForm({ onAdd }) {
         </p>
       )}
 
-      {/*<label htmlFor="employeeId">Employee ID
-      <input
-        id="employeeId"
-        type="number"
-        name="employeeId"
-        placeholder="Employee ID"
-        value={formData.employeeId}
-        onChange={handleChange}
-      />
-      </label>
-
-      <label htmlFor="amount">Amount
-      <input
-        id="amount"
-        type="number"
-        step="0.01"
-        name="amount"
-        placeholder="Amount"
-        value={formData.amount}
-        onChange={handleChange}
-      />
-      </label>
-
-      <label htmlFor="description">Description
-      <textarea
-        id="description"
-        name="description"
-        placeholder="Description"
-        value={formData.description}
-        onChange={handleChange}
-      />
-      </label>
-
-      <label htmlFor="date">Date
-      <input
-        id="date"
-        type="date"
-        name="date"
-        value={formData.date}
-        onChange={handleChange}
-      />
-      </label>*/}
+      
       <label>Employee ID
       <input
         type="number"
