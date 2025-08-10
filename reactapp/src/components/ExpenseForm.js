@@ -60,6 +60,7 @@ function ExpenseForm({ onAdd }) {
   };
 
   return (
+    <>
     <button className="back-btn" onClick={() => navigate("/")}>
          Back
       </button>
@@ -121,6 +122,7 @@ function ExpenseForm({ onAdd }) {
         Submit
       </button>
     </form>
+          </>
   );
 }
 
