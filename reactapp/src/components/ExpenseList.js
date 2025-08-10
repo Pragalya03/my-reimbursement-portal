@@ -53,6 +53,9 @@ function ExpenseList() {
 
   return (
     <div className="expense-list">
+    <button className="back-btn" onClick={() => navigate("/")}>
+        Back
+      </button>
       <h2>All Expenses</h2>
       <label htmlFor="status-filter" style={{ marginRight: "8px" }}>
         Status:
