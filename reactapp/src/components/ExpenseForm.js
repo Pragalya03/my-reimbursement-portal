@@ -58,6 +58,9 @@ function ExpenseForm({ onAdd }) {
   };
 
   return (
+    <button className="back-btn" onClick={() => navigate("/")}>
+         Back
+      </button>
     <form className="expense-form" onSubmit={handleSubmit}>
       <h2>Add Expense</h2>
 
