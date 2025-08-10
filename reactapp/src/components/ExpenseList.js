@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import "./ExpenseList.css";
-import { getExpenses, updateExpenseStatus } from "./ExpenseService";
+import { getExpenses, updateExpenseStatus } from "../utils/api.js";
 
 function ExpenseList() {
   const [expenses, setExpenses] = useState([]);
   const [statusFilter, setStatusFilter] = useState("");
+  const [activeAction, setActiveAction] = useState(null); // { id, type }
+  const [remarksInput, setRemarksInput] = useState("");
 
   useEffect(() => {
     fetchExpenses();
@@ -20,14 +21,27 @@ function ExpenseList() {
     }
   }
 
-  async function handleStatusChange(id, newStatus) {
+  async function submitStatusChange(id, newStatus) {
+    if (newStatus === "REJECTED" && !remarksInput.trim()) {
+      alert("Remarks are required for rejection.");
+      return;
+    }
+
     try {
-      await updateExpenseStatus(id, { status: newStatus });
+      await updateExpenseStatus(id, {
+        status: newStatus,
+        remarks: remarksInput.trim() || null
+      });
       setExpenses((prev) =>
         prev.map((exp) =>
-          exp.id === id ? { ...exp, status: newStatus } : exp
+          exp.id === id
+            ? { ...exp, status: newStatus, remarks: remarksInput.trim() || null }
+            : exp
         )
       );
+      // Reset
+      setActiveAction(null);
+      setRemarksInput("");
     } catch (error) {
       console.error("Failed to update status:", error);
     }
@@ -81,19 +95,56 @@ function ExpenseList() {
                 <td>{expense.status}</td>
                 <td>{expense.remarks || ""}</td>
                 <td>
-                  {expense.status === "PENDING" && (
+                  {expense.status === "PENDING" && activeAction?.id !== expense.id && (
                     <>
                       <button
-                        onClick={() => handleStatusChange(expense.id, "APPROVED")}
+                        onClick={() =>
+                          setActiveAction({ id: expense.id, type: "APPROVED" })
+                        }
                       >
                         Approve
                       </button>
                       <button
-                        onClick={() => handleStatusChange(expense.id, "REJECTED")}
+                        onClick={() =>
+                          setActiveAction({ id: expense.id, type: "REJECTED" })
+                        }
                       >
                         Reject
                       </button>
                     </>
+                  )}
+
+                  {/* Input for remarks when action is active */}
+                  {activeAction?.id === expense.id && (
+                    <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                      <input
+                        type="text"
+                        placeholder={
+                          activeAction.type === "REJECTED"
+                            ? "Enter remarks (required)"
+                            : "Enter remarks (optional)"
+                        }
+                        value={remarksInput}
+                        onChange={(e) => setRemarksInput(e.target.value)}
+                      />
+                      <div>
+                        <button
+                          onClick={() =>
+                            submitStatusChange(expense.id, activeAction.type)
+                          }
+                        >
+                          Submit
+                        </button>
+                        <button
+                          onClick={() => {
+                            setActiveAction(null);
+                            setRemarksInput("");
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
                   )}
                 </td>
               </tr>
