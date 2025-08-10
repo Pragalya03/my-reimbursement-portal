@@ -1,4 +1,5 @@
-const BASE_URL = "https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io/api/expenses";
+const BASE_URL =
+  "https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io/api/expenses";
 
 export async function createExpense(expense) {
   const res = await fetch(BASE_URL, {

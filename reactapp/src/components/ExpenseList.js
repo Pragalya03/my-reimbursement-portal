@@ -1,36 +1,48 @@
 import React, { useEffect, useState } from "react";
-
-const BACKEND_URL = "https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io/api/expenses";
+import "./ExpenseList.css";
+import { getExpenses, updateExpenseStatus } from "./ExpenseService";
 
 function ExpenseList() {
   const [expenses, setExpenses] = useState([]);
   const [statusFilter, setStatusFilter] = useState("");
 
   useEffect(() => {
-    async function fetchExpenses() {
-      try {
-        const res = await fetch(BACKEND_URL);
-        if (res.ok) {
-          const data = await res.json();
-          setExpenses(data);
-        } else {
-          setExpenses([]);
-        }
-      } catch (error) {
-        console.error("Failed to fetch expenses:", error);
-        setExpenses([]);
-      }
-    }
     fetchExpenses();
   }, []);
+
+  async function fetchExpenses() {
+    try {
+      const data = await getExpenses();
+      setExpenses(data);
+    } catch (error) {
+      console.error("Failed to fetch expenses:", error);
+      setExpenses([]);
+    }
+  }
+
+  async function handleStatusChange(id, newStatus) {
+    try {
+      await updateExpenseStatus(id, { status: newStatus });
+      setExpenses((prev) =>
+        prev.map((exp) =>
+          exp.id === id ? { ...exp, status: newStatus } : exp
+        )
+      );
+    } catch (error) {
+      console.error("Failed to update status:", error);
+    }
+  }
 
   const filteredExpenses = statusFilter
     ? expenses.filter((expense) => expense.status === statusFilter)
     : expenses;
 
   return (
-    <div>
-      <label htmlFor="status-filter">Status</label>
+    <div className="expense-list">
+      <h2>All Expenses</h2>
+      <label htmlFor="status-filter" style={{ marginRight: "8px" }}>
+        Status:
+      </label>
       <select
         id="status-filter"
         data-testid="status-filter"
@@ -47,12 +59,7 @@ function ExpenseList() {
       {filteredExpenses.length === 0 ? (
         <p>No expenses found</p>
       ) : (
-        <table
-          data-testid="expenses-table"
-          border="1"
-          cellPadding="5"
-          cellSpacing="0"
-        >
+        <table data-testid="expenses-table">
           <thead>
             <tr>
               <th>Employee ID</th>
@@ -60,16 +67,35 @@ function ExpenseList() {
               <th>Description</th>
               <th>Date</th>
               <th>Status</th>
+              <th>Remarks</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {filteredExpenses.map((expense) => (
               <tr key={expense.id}>
                 <td>{expense.employeeId}</td>
-                <td>{expense.amount}</td>
+                <td>${Number(expense.amount).toFixed(2)}</td>
                 <td>{expense.description}</td>
                 <td>{expense.date}</td>
                 <td>{expense.status}</td>
+                <td>{expense.remarks || ""}</td>
+                <td>
+                  {expense.status === "PENDING" && (
+                    <>
+                      <button
+                        onClick={() => handleStatusChange(expense.id, "APPROVED")}
+                      >
+                        Approve
+                      </button>
+                      <button
+                        onClick={() => handleStatusChange(expense.id, "REJECTED")}
+                      >
+                        Reject
+                      </button>
+                    </>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
