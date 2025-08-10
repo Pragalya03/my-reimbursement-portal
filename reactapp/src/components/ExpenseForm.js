@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./ExpenseForm.css";
 import { createExpense } from "../utils/api";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 
 
 function ExpenseForm({ onAdd }) {
@@ -61,9 +61,9 @@ function ExpenseForm({ onAdd }) {
 
   return (
     <>
-    <button className="back-btn" onClick={() => navigate("/")}>
+    {/*<button className="back-btn" onClick={() => navigate("/")}>
          Back
-      </button>
+  </button>*/}
     <form className="expense-form" onSubmit={handleSubmit}>
       <h2>Add Expense</h2>
 

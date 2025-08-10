@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { getExpenses, updateExpenseStatus } from "../utils/api.js";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 import './ExpenseList.css';
 
 function ExpenseList() {
+  
   const [expenses, setExpenses] = useState([]);
   const [statusFilter, setStatusFilter] = useState("");
   const [activeAction, setActiveAction] = useState(null); // { id, type }
@@ -55,9 +56,9 @@ function ExpenseList() {
 
   return (
     <div className="expense-list">
-    <button className="back-btn" onClick={() => navigate("/")}>
+    {/*<button className="back-btn" onClick={() => navigate("/")}>
         Back
-      </button>
+      </button>*/}
       <h2>All Expenses</h2>
       <label htmlFor="status-filter" style={{ marginRight: "8px" }}>
         Status:
