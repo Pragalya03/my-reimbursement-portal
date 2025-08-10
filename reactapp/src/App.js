@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, NavLink } from "react-router-do
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
 import ExpenseStatusUpdate from "./components/ExpenseStatusUpdate";
+import './App.css';
 
 function App() {
   return (
