@@ -34,8 +34,9 @@ function ExpenseForm({ onAdd }) {
     e.preventDefault();
     const validationError = validateForm();
     if (validationError) {
-      setError(validationError);
-      setSuccess("");
+      //setError(validationError);
+      alert(validationError);
+      //setSuccess("");
       return;
     }
 
