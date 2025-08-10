@@ -8,33 +8,11 @@ import ExpenseStatusUpdate from "./components/ExpenseStatusUpdate";
 function App() {
   return (
     <Router>
-      <nav>
-        <NavLink
-          to="/"
-          end
-          style={({ isActive }) => ({
-            marginRight: "15px",
-            color: isActive ? "white" : "#d1d5db",
-            backgroundColor: isActive ? "#312e81" : "transparent",
-            padding: "8px 15px",
-            borderRadius: "8px",
-            fontWeight: "600",
-            textDecoration: "none",
-          })}
-        >
+      <nav className="top-right-nav">
+        <NavLink to="/" end className={({ isActive }) => (isActive ? "active" : "")}>
           Add Expense
         </NavLink>
-        <NavLink
-          to="/expenses"
-          style={({ isActive }) => ({
-            color: isActive ? "white" : "#d1d5db",
-            backgroundColor: isActive ? "#312e81" : "transparent",
-            padding: "8px 15px",
-            borderRadius: "8px",
-            fontWeight: "600",
-            textDecoration: "none",
-          })}
-        >
+        <NavLink to="/expenses" className={({ isActive }) => (isActive ? "active" : "")}>
           Expense List
         </NavLink>
       </nav>
