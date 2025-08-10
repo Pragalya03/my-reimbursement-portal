@@ -35,7 +35,8 @@ function ExpenseForm({ onAdd }) {
     e.preventDefault();
     const validationError = validateForm();
     if (validationError) {
-      alert(validationError);
+      setError(validationError);
+      setSuccess("");
       return;
     }
 
@@ -71,7 +72,7 @@ function ExpenseForm({ onAdd }) {
         </p>
       )}
 
-      <label htmlFor="employeeId">Employee ID
+      {/*<label htmlFor="employeeId">Employee ID
       <input
         id="employeeId"
         type="number"
@@ -107,6 +108,44 @@ function ExpenseForm({ onAdd }) {
       <label htmlFor="date">Date
       <input
         id="date"
+        type="date"
+        name="date"
+        value={formData.date}
+        onChange={handleChange}
+      />
+      </label>*/}
+      <label>Employee ID
+      <input
+        type="number"
+        name="employeeId"
+        placeholder="Employee ID"
+        value={formData.employeeId}
+        onChange={handleChange}
+      />
+      </label>
+
+      <label >Amount
+      <input
+        type="number"
+        step="0.01"
+        name="amount"
+        placeholder="Amount"
+        value={formData.amount}
+        onChange={handleChange}
+      />
+      </label>
+
+      <label >Description
+      <textarea
+        name="description"
+        placeholder="Description"
+        value={formData.description}
+        onChange={handleChange}
+      />
+      </label>
+
+      <label>Date
+      <input
         type="date"
         name="date"
         value={formData.date}
