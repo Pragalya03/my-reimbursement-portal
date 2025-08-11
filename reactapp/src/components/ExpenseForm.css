@@ -1,132 +1,60 @@
-/* Root color variables */
-:root {
-  --color-primary: #344054;       /* Deep Slate Blue */
-  --color-secondary: #9CA3AF;     /* Cool Gray */
-  --color-bg: #F8F9FA;            /* Soft Warm Gray */
-  --color-card: #FFFFFF;          /* Pure White */
-  --color-text: #1F2937;          /* Charcoal */
-  --color-text-secondary: #6B7280;/* Muted Steel */
-  --status-approved: #6B8E6B;     /* Sage Green */
-  --status-pending: #D1BFA3;      /* Warm Taupe */
-  --status-rejected: #B85C5C;     /* Desaturated Red */
-}
-
-/* Form container */
 .expense-form {
-  font-family: 'Inter', 'Segoe UI', sans-serif;
-  max-width: 440px;
-  margin: 40px auto;
-  padding: 24px 26px;
-  border-radius: 12px;
-  background: linear-gradient(to bottom right, #ffffff, #fdfdfd);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
-  border: 1px solid var(--color-secondary);
-  animation: fadeInUp 0.35s ease forwards;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.expense-form:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-}
-
-/* Heading */
 .expense-form h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
   text-align: center;
-  margin-bottom: 24px;
-  color: var(--color-primary);
-  border-bottom: 2px solid rgba(52, 64, 84, 0.1);
-  padding-bottom: 6px;
+  margin-bottom: 20px;
+  color: #344054;
 }
 
-/* Labels */
 .expense-form label {
-  font-size: 0.87rem;
-  font-weight: 500;
-  color: var(--color-text-secondary);
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #1f2937;
 }
 
-/* Inputs & Textareas */
 .expense-form input,
-.expense-form textarea,
-.expense-form select {
+.expense-form textarea {
   width: 100%;
-  padding: 10px 12px;
+  padding: 8px 10px;
+  margin-bottom: 14px;
+  border: 1px solid #ccc;
   border-radius: 6px;
-  border: 1px solid var(--color-secondary);
-  font-size: 0.9rem;
-  color: var(--color-text);
-  background: #fff;
-  margin-bottom: 16px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-}
-
-.expense-form input:hover,
-.expense-form textarea:hover,
-.expense-form select:hover {
-  background-color: #fefefe;
-  border-color: var(--color-primary);
+  font-family: inherit;
+  transition: border-color 0.2s ease;
 }
 
 .expense-form input:focus,
-.expense-form textarea:focus,
-.expense-form select:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(52, 64, 84, 0.15);
+.expense-form textarea:focus {
+  border-color: #4f46e5;
   outline: none;
 }
 
-/* Buttons */
-.expense-form button.submit-btn {
-  background: var(--color-primary);
-  color: #fff;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: background-color 0.25s ease, transform 0.15s ease;
-}
-
-.expense-form button.submit-btn:hover {
-  background: #2A3340;
-  transform: translateY(-1px);
-}
-
-.expense-form button.cancel-btn {
-  background: var(--color-secondary);
-  color: #1F2937;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: background-color 0.25s ease, transform 0.15s ease;
-}
-
-.expense-form button.cancel-btn:hover {
-  background: #8B929E;
-  transform: translateY(-1px);
-}
-
-/* Button group */
-.expense-form .button-group {
-  display: flex;
-  gap: 14px;
-  margin-top: 14px;
-}
-
-/* Textarea resize control */
 .expense-form textarea {
+  min-height: 80px;
   resize: vertical;
 }
 
-/* Fade-in animation */
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+.submit-btn {
+  background: #4f46e5;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 1rem;
+  transition: background 0.2s ease;
+}
+
+.submit-btn:hover {
+  background: #3e3bb8;
 }
