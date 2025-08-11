@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { getExpenses, updateExpenseStatus } from "../utils/api.js";
-//import { useNavigate } from "react-router-dom";
-import './ExpenseList.css';
+import "./ExpenseList.css";
 
 function ExpenseList() {
-  
   const [expenses, setExpenses] = useState([]);
   const [statusFilter, setStatusFilter] = useState("");
-  const [activeAction, setActiveAction] = useState(null); // { id, type }
+  const [activeAction, setActiveAction] = useState(null);
   const [remarksInput, setRemarksInput] = useState("");
 
   useEffect(() => {
@@ -42,7 +40,6 @@ function ExpenseList() {
             : exp
         )
       );
-      // Reset
       setActiveAction(null);
       setRemarksInput("");
     } catch (error) {
@@ -50,36 +47,40 @@ function ExpenseList() {
     }
   }
 
+  const getStatusBadge = (status) => {
+    const colors = {
+      APPROVED: "badge-approved",
+      PENDING: "badge-pending",
+      REJECTED: "badge-rejected",
+    };
+    return <span className={`status-badge ${colors[status]}`}>{status}</span>;
+  };
+
   const filteredExpenses = statusFilter
     ? expenses.filter((expense) => expense.status === statusFilter)
     : expenses;
 
   return (
     <div className="expense-list">
-    {/*<button className="back-btn" onClick={() => navigate("/")}>
-        Back
-      </button>*/}
       <h2>All Expenses</h2>
-      <label htmlFor="status-filter" style={{ marginRight: "8px" }}>
-        Status:
-      </label>
-      <select
-        id="status-filter"
-        data-testid="status-filter"
-        aria-label="Status"
-        value={statusFilter}
-        onChange={(e) => setStatusFilter(e.target.value)}
-      >
-        <option value="">All</option>
-        <option value="PENDING">Pending</option>
-        <option value="APPROVED">Approved</option>
-        <option value="REJECTED">Rejected</option>
-      </select>
+      <div className="filter-container">
+        <label htmlFor="status-filter">Status:</label>
+        <select
+          id="status-filter"
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+        >
+          <option value="">All</option>
+          <option value="PENDING">Pending</option>
+          <option value="APPROVED">Approved</option>
+          <option value="REJECTED">Rejected</option>
+        </select>
+      </div>
 
       {filteredExpenses.length === 0 ? (
         <p>No expenses found</p>
       ) : (
-        <table data-testid="expenses-table">
+        <table className="expense-table">
           <thead>
             <tr>
               <th>Employee ID</th>
@@ -98,13 +99,13 @@ function ExpenseList() {
                 <td>${Number(expense.amount).toFixed(2)}</td>
                 <td>{expense.description}</td>
                 <td>{expense.date}</td>
-                <td>{expense.status}</td>
+                <td>{getStatusBadge(expense.status)}</td>
                 <td>{expense.remarks || ""}</td>
                 <td>
                   {expense.status === "PENDING" && activeAction?.id !== expense.id && (
                     <>
                       <button
-                      className='approve-btn'
+                        className="approve-btn"
                         onClick={() =>
                           setActiveAction({ id: expense.id, type: "APPROVED" })
                         }
@@ -112,7 +113,7 @@ function ExpenseList() {
                         Approve
                       </button>
                       <button
-                      className='reject-btn'
+                        className="reject-btn"
                         onClick={() =>
                           setActiveAction({ id: expense.id, type: "REJECTED" })
                         }
@@ -122,9 +123,8 @@ function ExpenseList() {
                     </>
                   )}
 
-                  {/* Input for remarks when action is active */}
                   {activeAction?.id === expense.id && (
-                    <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                    <div className="remarks-section">
                       <input
                         type="text"
                         placeholder={
@@ -137,16 +137,15 @@ function ExpenseList() {
                       />
                       <div>
                         <button
-                        className="submit-btn"
+                          className="submit-btn"
                           onClick={() =>
                             submitStatusChange(expense.id, activeAction.type)
                           }
                         >
                           Submit
                         </button>
-                        
                         <button
-                        className="cancel-btn"
+                          className="cancel-btn"
                           onClick={() => {
                             setActiveAction(null);
                             setRemarksInput("");
