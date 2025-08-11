@@ -201,6 +201,7 @@
   font-size: 0.9rem;
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100px;
 }
 
 .expense-list button.approve-btn:hover {
@@ -220,6 +221,7 @@
   font-size: 0.9rem;
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100px;
 }
 
 .expense-list button.reject-btn:hover {
@@ -231,16 +233,17 @@
 /* Secondary cancel button */
 .expense-list button.cancel-btn {
   background: white;
-  color: #334155;
-  border: 2px solid #cbd5e1;
-  padding: 6px 10px;
-  font-weight: 600;
+  color: #4f46e5;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
 }
 
 .expense-list button.cancel-btn:hover {
-  background-color: #f3f4f6;
-  border-color: #a5b4fc;
-  box-shadow: 0 8px 18px rgba(99, 102, 241, 0.3);
+  background: #4f46e5 !important;
+  color: #ffffff !important;
+  border-color: #4f46e5;
 }
 
 /* Submit button */
@@ -251,6 +254,7 @@
   border-radius: 8px;
   padding: 8px 16px;
   cursor: pointer;
+  margin-bottom: 5px;
 }
 
 .expense-list button.submit-btn:hover {
@@ -269,6 +273,7 @@
   font-family: 'Inter', sans-serif;
   color: #1e293b;
   outline-offset: 2px;
+  box-sizing:border-box;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   background: white;
 }

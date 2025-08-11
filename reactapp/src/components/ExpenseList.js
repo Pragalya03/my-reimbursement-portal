@@ -104,7 +104,7 @@ function ExpenseList() {
                   {expense.status === "PENDING" && activeAction?.id !== expense.id && (
                     <>
                       <button
-                      
+                      className='approve-btn'
                         onClick={() =>
                           setActiveAction({ id: expense.id, type: "APPROVED" })
                         }
@@ -112,6 +112,7 @@ function ExpenseList() {
                         Approve
                       </button>
                       <button
+                      className='reject-btn'
                         onClick={() =>
                           setActiveAction({ id: expense.id, type: "REJECTED" })
                         }
@@ -136,13 +137,16 @@ function ExpenseList() {
                       />
                       <div>
                         <button
+                        className="submit-btn"
                           onClick={() =>
                             submitStatusChange(expense.id, activeAction.type)
                           }
                         >
                           Submit
                         </button>
+                        
                         <button
+                        className="cancel-btn"
                           onClick={() => {
                             setActiveAction(null);
                             setRemarksInput("");
