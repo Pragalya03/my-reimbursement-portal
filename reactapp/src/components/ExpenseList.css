@@ -1,140 +1,112 @@
+/* Expense List Container */
 .expense-list {
-  font-family: 'Inter', sans-serif;
-  color: var(--color-text);
-  background-color: var(--color-card);
-  max-width: 1000px;
-  min-width: 700px;
-  margin: 40px auto;
-  padding: 24px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  background: var(--color-card);
+  border: 1px solid var(--color-secondary);
   border-radius: 10px;
-  border: 1px solid var(--color-secondary);
-  font-size: 0.9rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 20px;
+  max-width: 900px;
+  margin: 30px auto;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  animation: fadeInUp 0.3s ease forwards;
 }
 
-.expense-list:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
-}
-
-.expense-list h2 {
-  font-weight: 600;
-  font-size: 1.4rem;
-  text-align: center;
-  margin-bottom: 24px;
-  color: var(--color-primary);
-}
-
-.expense-list select {
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: 1px solid var(--color-secondary);
-  font-size: 0.9rem;
-  color: var(--color-text);
-  background: #fff;
-  margin-bottom: 20px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.expense-list select:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(52, 64, 84, 0.2);
-  outline: none;
-}
-
+/* Table Styling */
 .expense-list table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 8px; /* Row gap */
+  border-collapse: collapse;
+}
+
+.expense-list th,
+.expense-list td {
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 0.9rem;
 }
 
 .expense-list th {
-  padding: 12px 10px;
-  text-align: left;
-  background-color: var(--color-bg);
-  color: var(--color-text);
+  color: var(--color-primary);
   font-weight: 600;
+  border-bottom: 2px solid var(--color-secondary);
 }
 
 .expense-list td {
-  padding: 12px 10px;
-  background-color: #fff;
-  border-top: 1px solid var(--color-secondary);
+  color: var(--color-text);
   border-bottom: 1px solid var(--color-secondary);
-  transition: background-color 0.2s ease, transform 0.15s ease;
 }
 
-.expense-list tbody tr {
-  border-radius: 6px;
+/* Alternate Row Background */
+.expense-list tbody tr:nth-child(even) {
+  background-color: var(--color-bg);
 }
 
-.expense-list tbody tr:hover td {
-  background-color: #f3f4f6;
-  transform: scale(1.01);
+/* Hover Effect */
+.expense-list tbody tr:hover {
+  background-color: #ECEFF1;
+  transition: background-color 0.2s ease;
 }
 
-button {
-  transition: background-color 0.2s ease, transform 0.15s ease;
+/* Status Badges */
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
-button:hover {
-  transform: translateY(-1px);
+.status-approved {
+  background: var(--status-approved);
+  color: white;
 }
 
-button:active {
-  transform: translateY(0px);
+.status-pending {
+  background: var(--status-pending);
+  color: var(--color-text);
+}
+
+.status-rejected {
+  background: var(--status-rejected);
+  color: white;
 }
 
 /* Action Buttons */
-button.approve-btn {
-  background: var(--status-approved);
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
+.expense-list button {
+  padding: 8px 12px;
+  border-radius: 6px;
   font-size: 0.85rem;
-}
-
-button.approve-btn:hover {
-  background: #5E7F5E;
-}
-
-button.reject-btn {
-  background: var(--status-rejected);
-  color: white;
+  cursor: pointer;
   border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 0.85rem;
+  transition: background-color 0.2s ease, transform 0.15s ease;
 }
 
-button.reject-btn:hover {
-  background: #A94F4F;
-}
-
-button.submit-btn {
+.expense-list button.edit-btn {
   background: var(--color-primary);
   color: white;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 4px;
-  font-size: 0.9rem;
 }
 
-button.submit-btn:hover {
+.expense-list button.edit-btn:hover {
   background: #2A3340;
+  transform: translateY(-1px);
 }
 
-button.cancel-btn {
+.expense-list button.delete-btn {
+  background: var(--status-rejected);
+  color: white;
+}
+
+.expense-list button.delete-btn:hover {
+  background: #9C4A4A;
+  transform: translateY(-1px);
+}
+
+/* Cancel Button */
+.expense-list button.cancel-btn {
   background: var(--color-secondary);
-  color: black;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 4px;
-  font-size: 0.9rem;
+  color: var(--color-text);
 }
 
-button.cancel-btn:hover {
+.expense-list button.cancel-btn:hover {
   background: #8B929E;
+  transform: translateY(-1px);
 }
