@@ -42,6 +42,7 @@ function ExpenseForm({ onAdd }) {
       return;
     }
 
+    
     try {
       const response = await createExpense({
         employeeId: Number(formData.employeeId),
