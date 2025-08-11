@@ -5,14 +5,51 @@
   min-height: 100vh;
 }
 
-.user-type-selection{
+.user-type-selection {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background: white;
+  background: linear-gradient(135deg, #f0f4f8, #cce0ff);
 }
+
+.user-type-selection h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.user-type-buttons {
+  display: flex;
+  gap: 20px;
+}
+
+.user-type-btn {
+  padding: 14px 28px;
+  border-radius: 8px;
+  background-color: #2F4F4F; /* Deep Teal */
+  color: #fff;
+  font-size: 16px;
+  text-decoration: none;
+  font-weight: 500;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.user-type-btn:hover {
+  background-color: #4F7777; /* Softer teal */
+  transform: scale(1.05);
+}
+
+/* Active link */
+.user-type-btn.active {
+  background-color: #1E3D3D; /* Darker teal */
+  border-color: #133030;
+  font-weight: 600;
+}
+
 
 nav.top-right-nav {
   position: fixed;
