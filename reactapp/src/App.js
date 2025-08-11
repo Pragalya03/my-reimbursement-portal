@@ -22,12 +22,23 @@ function App() {
   return (
     <Router>
       <nav className="top-right-nav">
-        <NavLink to="/employee" className={({ isActive }) => (isActive ? "active" : "")}>
-          Add Expense
-        </NavLink>
-        <NavLink to="/manager" className={({ isActive }) => (isActive ? "active" : "")}>
-          Expense List
-        </NavLink>
+        <NavLink 
+  to="/employee" 
+  className={({ isActive }) => 
+    `user-type-btn ${isActive ? "active" : ""}`
+  }
+>
+  Employee
+</NavLink>
+
+<NavLink 
+  to="/manager" 
+  className={({ isActive }) => 
+    `user-type-btn ${isActive ? "active" : ""}`
+  }
+>
+  Manager
+</NavLink>
       </nav>
 
       <Routes>
