@@ -1,123 +1,178 @@
-:root {
-  --color-primary: #344054;       /* Deep Slate Blue */
-  --color-secondary: #9CA3AF;     /* Cool Gray */
-  --color-bg: #F8F9FA;            /* Soft Warm Gray */
-  --color-card: #FFFFFF;          /* Pure White */
-  --color-text: #1F2937;          /* Charcoal */
-  --color-text-secondary: #6B7280;/* Muted Steel */
-  --status-approved: #6B8E6B;     /* Sage Green */
-  --status-pending: #D1BFA3;      /* Warm Taupe */
-  --status-rejected: #B85C5C;     /* Desaturated Red */
-}
-/* Expense List Container */
 .expense-list {
-  font-family: 'Inter', 'Segoe UI', sans-serif;
-  background: var(--color-card);
-  border: 1px solid var(--color-secondary);
-  border-radius: 10px;
+  max-width: 1000px;
+  margin: 20px auto;
   padding: 20px;
-  max-width: 900px;
-  margin: 30px auto;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-  animation: fadeInUp 0.3s ease forwards;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Table Styling */
-.expense-list table {
+.expense-list h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333333;
+  font-size: 1.6rem;
+}
+
+/* Filter section */
+.filter-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.filter-container label {
+  font-weight: 500;
+  color: #555;
+}
+
+.filter-container select {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f9f9f9;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.filter-container select:hover {
+  border-color: #4f46e5;
+}
+
+/* Table styling */
+.styled-table {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 10px;
 }
 
-.expense-list th,
-.expense-list td {
+.styled-table th,
+.styled-table td {
   padding: 12px 14px;
   text-align: left;
-  font-size: 0.9rem;
 }
 
-.expense-list th {
-  color: var(--color-primary);
+.styled-table thead {
+  background: #f4f4f4;
+}
+
+.styled-table th {
+  color: #444;
   font-weight: 600;
-  border-bottom: 2px solid var(--color-secondary);
 }
 
-.expense-list td {
-  color: var(--color-text);
-  border-bottom: 1px solid var(--color-secondary);
+.styled-table tbody tr {
+  border-bottom: 1px solid #e0e0e0;
+  transition: background 0.2s ease;
 }
 
-/* Alternate Row Background */
-.expense-list tbody tr:nth-child(even) {
-  background-color: var(--color-bg);
+.styled-table tbody tr:hover {
+  background: #f9f9ff;
 }
 
-/* Hover Effect */
-.expense-list tbody tr:hover {
-  background-color: #ECEFF1;
-  transition: background-color 0.2s ease;
-}
-
-/* Status Badges */
-.status-badge {
-  display: inline-block;
+/* Status badges */
+.badge {
   padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.75rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
   font-weight: 500;
-}
-
-.status-approved {
-  background: var(--status-approved);
   color: white;
 }
 
-.status-pending {
-  background: var(--status-pending);
-  color: var(--color-text);
+.badge.approved {
+  background: #28a745;
 }
 
-.status-rejected {
-  background: var(--status-rejected);
-  color: white;
+.badge.rejected {
+  background: #d9534f;
 }
 
-/* Action Buttons */
-.expense-list button {
-  padding: 8px 12px;
+.badge.pending {
+  background: #ffc107;
+  color: #333;
+}
+
+/* Action buttons */
+.approve-btn,
+.reject-btn,
+.submit-btn,
+.cancel-btn {
+  padding: 6px 12px;
+  border: none;
   border-radius: 6px;
   font-size: 0.85rem;
   cursor: pointer;
-  border: none;
-  transition: background-color 0.2s ease, transform 0.15s ease;
+  transition: 0.2s ease;
+  margin-right: 5px;
 }
 
-.expense-list button.edit-btn {
-  background: var(--color-primary);
+.approve-btn {
+  background: #28a745;
   color: white;
 }
 
-.expense-list button.edit-btn:hover {
-  background: #2A3340;
-  transform: translateY(-1px);
+.approve-btn:hover {
+  background: #218838;
 }
 
-.expense-list button.delete-btn {
-  background: var(--status-rejected);
+.reject-btn {
+  background: #d9534f;
   color: white;
 }
 
-.expense-list button.delete-btn:hover {
-  background: #9C4A4A;
-  transform: translateY(-1px);
+.reject-btn:hover {
+  background: #c82333;
 }
 
-/* Cancel Button */
-.expense-list button.cancel-btn {
-  background: var(--color-secondary);
-  color: var(--color-text);
+.submit-btn {
+  background: #4f46e5;
+  color: white;
 }
 
-.expense-list button.cancel-btn:hover {
-  background: #8B929E;
-  transform: translateY(-1px);
+.submit-btn:hover {
+  background: #3e3bb8;
+}
+
+.cancel-btn {
+  background: white;
+  border: 1px solid #4f46e5;
+  color: #4f46e5;
+}
+
+.cancel-btn:hover {
+  background: #4f46e5;
+  color: white;
+}
+
+/* Remarks input */
+.remarks-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.remarks-section input {
+  padding: 6px 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.remarks-section input:focus {
+  border-color: #4f46e5;
+  outline: none;
+}
+
+.remarks-actions {
+  display: flex;
+  gap: 6px;
+}
+
+/* Empty state */
+.empty-text {
+  text-align: center;
+  padding: 20px;
+  color: #777;
+  font-style: italic;
 }
