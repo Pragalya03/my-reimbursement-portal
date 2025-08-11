@@ -1,54 +1,91 @@
 import React, { useEffect, useState } from "react";
-import "./ExpenseList.css";
-import { getExpenses, updateExpenseStatus } from "../utils/api";
+import { getExpenses, updateExpenseStatus } from "../utils/api.js";
+//import { useNavigate } from "react-router-dom";
+import './ExpenseList.css';
 
 function ExpenseList() {
+  
   const [expenses, setExpenses] = useState([]);
-  const [filter, setFilter] = useState("all");
-  const [remarks, setRemarks] = useState({});
+  const [statusFilter, setStatusFilter] = useState("");
+  const [activeAction, setActiveAction] = useState(null); // { id, type }
+  const [remarksInput, setRemarksInput] = useState("");
 
   useEffect(() => {
-    loadExpenses();
+    fetchExpenses();
   }, []);
 
-  const loadExpenses = async () => {
-    const data = await getExpenses();
-    setExpenses(data);
-  };
+  async function fetchExpenses() {
+    try {
+      const data = await getExpenses();
+      setExpenses(data);
+    } catch (error) {
+      console.error("Failed to fetch expenses:", error);
+      setExpenses([]);
+    }
+  }
 
-  const handleStatusChange = async (id, status) => {
-    await updateExpenseStatus(id, status, remarks[id] || "");
-    setRemarks({ ...remarks, [id]: "" });
-    loadExpenses();
-  };
+  async function submitStatusChange(id, newStatus) {
+    if (newStatus === "REJECTED" && !remarksInput.trim()) {
+      alert("Remarks are required for rejection.");
+      return;
+    }
 
-  const filteredExpenses =
-    filter === "all"
-      ? expenses
-      : expenses.filter((e) => e.status.toLowerCase() === filter);
+    try {
+      await updateExpenseStatus(id, {
+        status: newStatus,
+        remarks: remarksInput.trim() || null
+      });
+      setExpenses((prev) =>
+        prev.map((exp) =>
+          exp.id === id
+            ? { ...exp, status: newStatus, remarks: remarksInput.trim() || null }
+            : exp
+        )
+      );
+      // Reset
+      setActiveAction(null);
+      setRemarksInput("");
+    } catch (error) {
+      console.error("Failed to update status:", error);
+    }
+  }
+
+  const filteredExpenses = statusFilter
+    ? expenses.filter((expense) => expense.status === statusFilter)
+    : expenses;
 
   return (
     <div className="expense-list">
-      <h2>Expense Management</h2>
+    {/*<button className="back-btn" onClick={() => navigate("/")}>
+        Back
+      </button>*/}
+      <h2>All Expenses</h2>
+      <label htmlFor="status-filter" style={{ marginRight: "8px" }}>
+        Status:
+      </label>
+      <select
+        id="status-filter"
+        data-testid="status-filter"
+        aria-label="Status"
+        value={statusFilter}
+        onChange={(e) => setStatusFilter(e.target.value)}
+      >
+        <option value="">All</option>
+        <option value="PENDING">Pending</option>
+        <option value="APPROVED">Approved</option>
+        <option value="REJECTED">Rejected</option>
+      </select>
 
-      <div className="filter-container">
-        <label>Filter by Status:</label>
-        <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-          <option value="all">All</option>
-          <option value="approved">Approved</option>
-          <option value="pending">Pending</option>
-          <option value="rejected">Rejected</option>
-        </select>
-      </div>
-
-      {filteredExpenses.length > 0 ? (
-        <table className="styled-table">
+      {filteredExpenses.length === 0 ? (
+        <p>No expenses found</p>
+      ) : (
+        <table data-testid="expenses-table">
           <thead>
             <tr>
               <th>Employee ID</th>
-              <th>Expense Date</th>
               <th>Amount</th>
               <th>Description</th>
+              <th>Date</th>
               <th>Status</th>
               <th>Remarks</th>
               <th>Actions</th>
@@ -58,46 +95,73 @@ function ExpenseList() {
             {filteredExpenses.map((expense) => (
               <tr key={expense.id}>
                 <td>{expense.employeeId}</td>
-                <td>{expense.date}</td>
-                <td>₹{expense.amount}</td>
+                <td>${Number(expense.amount).toFixed(2)}</td>
                 <td>{expense.description}</td>
+                <td>{expense.date}</td>
+                <td>{expense.status}</td>
+                <td>{expense.remarks || ""}</td>
                 <td>
-                  <span className={`badge ${expense.status.toLowerCase()}`}>
-                    {expense.status}
-                  </span>
-                </td>
-                <td>
-                  <div className="remarks-section">
-                    <input
-                      type="text"
-                      placeholder="Enter remarks"
-                      value={remarks[expense.id] || ""}
-                      onChange={(e) =>
-                        setRemarks({ ...remarks, [expense.id]: e.target.value })
-                      }
-                    />
-                  </div>
-                </td>
-                <td className="remarks-actions">
-                  <button
-                    className="approve-btn"
-                    onClick={() => handleStatusChange(expense.id, "Approved")}
-                  >
-                    Approve
-                  </button>
-                  <button
-                    className="reject-btn"
-                    onClick={() => handleStatusChange(expense.id, "Rejected")}
-                  >
-                    Reject
-                  </button>
+                  {expense.status === "PENDING" && activeAction?.id !== expense.id && (
+                    <>
+                      <button
+                      className='approve-btn'
+                        onClick={() =>
+                          setActiveAction({ id: expense.id, type: "APPROVED" })
+                        }
+                      >
+                        Approve
+                      </button>
+                      <button
+                      className='reject-btn'
+                        onClick={() =>
+                          setActiveAction({ id: expense.id, type: "REJECTED" })
+                        }
+                      >
+                        Reject
+                      </button>
+                    </>
+                  )}
+
+                  {/* Input for remarks when action is active */}
+                  {activeAction?.id === expense.id && (
+                    <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                      <input
+                        type="text"
+                        placeholder={
+                          activeAction.type === "REJECTED"
+                            ? "Enter remarks (required)"
+                            : "Enter remarks (optional)"
+                        }
+                        value={remarksInput}
+                        onChange={(e) => setRemarksInput(e.target.value)}
+                      />
+                      <div>
+                        <button
+                        className="submit-btn"
+                          onClick={() =>
+                            submitStatusChange(expense.id, activeAction.type)
+                          }
+                        >
+                          Submit
+                        </button>
+                        
+                        <button
+                        className="cancel-btn"
+                          onClick={() => {
+                            setActiveAction(null);
+                            setRemarksInput("");
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      ) : (
-        <p className="empty-text">No expenses found.</p>
       )}
     </div>
   );
