@@ -1,291 +1,83 @@
-/*@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
 .expense-list {
-  background: #fff;
-  max-width: 900px;
+  font-family: 'Inter', sans-serif;
+  color: var(--color-text);
+  background-color: var(--color-card);
+  max-width: 1000px;
+  min-width: 700px;
   margin: 40px auto;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  font-size: 0.9rem;
 }
 
 .expense-list h2 {
-  text-align: center;
-  margin-bottom: 15px;
+  font-weight: 600;
   font-size: 1.4rem;
-  font-weight: bold;
-  color: #333;
+  text-align: center;
+  margin-bottom: 24px;
+  color: var(--color-primary);
 }
 
 .expense-list select {
-  padding: 6px;
- 
-  margin-bottom: 15px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+  font-size: 0.9rem;
+  color: var(--color-text);
+  background: #fff;
+  margin-bottom: 20px;
 }
 
 .expense-list table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
 }
 
 .expense-list th,
 .expense-list td {
-  border: 1px solid #e5e7eb;
-  padding: 10px;
+  padding: 10px 8px;
+  border-bottom: 1px solid #ddd;
   text-align: left;
 }
 
-.expense-list th {
-  background-color: #f9fafb;
-  font-weight: bold;
-}
-
-.expense-list tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-.expense-list button {
-  padding: 6px 12px;
-  margin: 2px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-
-.expense-list button:first-child {
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-}
-
-.expense-list button:first-child:hover {
-  background-color: #2563eb;
-}
-
-.expense-list button:nth-child(2) {
-  background-color: white;
-  color: black;
-  border: 1px solid #ccc;
-}
-
-.expense-list button:nth-child(2):hover {
-  background-color: #f3f4f6;
-}
-*/
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
-.expense-list {
-  font-family: 'Inter', sans-serif;
-  color: #1e293b;
-  background-color: #fff; /* white background */
-  max-width: 1000px;
-  min-width: 700px;
-  margin: 40px 0 60px 80px; /* shifted container right */
-  padding: 30px 40px;
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
-  box-sizing: border-box;
-  min-height: 400px; /* Ensures white bg covers most of viewport height */
-  display: flex;
-  flex-direction: column;
-  overflow-x: auto;
-  font-size: 0.9rem; /* decreased font size */
-}
-
-.expense-list h2 {
-  font-weight: 700;
-  font-size: 1.8rem; /* bigger heading */
-  text-align: center;
-  margin-bottom: 30px;
-  color: #4f46e5; /* purple tone instead of black */
-  letter-spacing: 1px;
-}
-
-.expense-list label {
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: #334155;
-  margin-right: 12px;
-}
-
-.expense-list select {
-  padding: 8px 12px;
-  border-radius: 12px; /* smoother edges */
-  border: 2px solid #cbd5e1; /* lighter border */
-  font-size: 0.9rem;
-  font-family: 'Inter', sans-serif;
-  color: #1e293b;
-  outline-offset: 2px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  box-sizing: border-box;
-  background: white;
-  margin-bottom: 30px;
-}
-
-.expense-list select:focus {
-  border-color: #6366f1; /* purple border on focus */
-  box-shadow: 0 0 8px #6366f1aa;
-  outline: none;
-}
-
-/* ===== TABLE STYLING UPDATED FROM FIRST BLOCK ===== */
-.expense-list table {
-  width: 100%;
-  table-layout: fixed; /* prevents uneven cell widths */
-  word-wrap: break-word;
-  border-collapse: separate; /* spacing between rows */
-  border-spacing: 0 18px; /* gap between rows */
-}
-
-.expense-list thead tr {
-  background: linear-gradient(90deg, #e0e7ff, #c7d2fe); /* gradient header */
-  box-shadow: 0 4px 8px rgba(79, 70, 229, 0.15);
-}
-
-.expense-list th,
-.expense-list td {
-  white-space: normal;
-  overflow-wrap: break-word;
-  padding: 10px 8px;
-}
-
-.expense-list th {
-  font-weight: 700;
-  text-transform: uppercase; /* all caps */
-  letter-spacing: 0.1em;
-  border-bottom: 3px solid #4f46e5; /* purple underline */
-  box-shadow: inset 0 -3px 5px rgba(79, 70, 229, 0.2);
-}
-
-.expense-list tbody tr {
-  background: #f9fafb;
-  border-radius: 12px;
-  transition: background-color 0.3s ease;
-  cursor: default;
-  height: 60px; /* consistent row height */
+.expense-list tbody tr:nth-child(even) {
+  background: var(--color-bg);
 }
 
 .expense-list tbody tr:hover {
-  background-color: #e0e7ff; /* purple hover */
+  background-color: #EFEFEF;
 }
 
-.expense-list tbody td {
-  font-weight: 500;
-  color: #475569;
-  vertical-align: middle;
-}
-
-/* Remarks column scroll (optional) */
-.expense-list tbody td.remarks-cell {
-  max-height: 40px;
-  overflow-y: auto;
-  white-space: normal;
-  word-wrap: break-word;
-  padding-right: 8px;
-  display: block;
-}
-
-/* ===== BUTTON STYLING UPDATED ===== */
-
-/* Approve button */
-.expense-list button.approve-btn {
-  background: #a7f3d0; /* pale green */
-  color: #065f46;
-  border: 2px solid #34d399;
-  padding: 8px 16px;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  width: 100px;
-}
-
-.expense-list button.approve-btn:hover {
-  background: #34d399;
+button.approve-btn {
+  background: var(--status-approved);
   color: white;
-  box-shadow: 0 6px 12px rgba(52, 211, 153, 0.6);
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
 }
 
-/* Reject button */
-.expense-list button.reject-btn {
-  background: #fecaca;
-  color: #991b1b;
-  border: 2px solid #f87171;
-  padding: 8px 16px;
-  border-radius: 12px;
-  font-weight: 700;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  width: 100px;
-}
-
-.expense-list button.reject-btn:hover {
-  background: #f87171;
+button.reject-btn {
+  background: var(--status-rejected);
   color: white;
-  box-shadow: 0 6px 12px rgba(248, 113, 113, 0.6);
-}
-
-/* Secondary cancel button */
-.expense-list button.cancel-btn {
-  background: white;
-  color: #4f46e5;
   border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
 }
 
-.expense-list button.cancel-btn:hover {
-  background: #4f46e5 !important;
-  color: #ffffff !important;
-  border-color: #4f46e5;
-}
-
-/* Submit button */
-.expense-list button.submit-btn {
-  background: white;
-  color: #4f46e5;
+button.submit-btn,
+button.cancel-btn {
+  background: var(--color-primary);
+  color: white;
   border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  cursor: pointer;
-  margin-bottom: 5px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.85rem;
 }
 
-.expense-list button.submit-btn:hover {
-  background: #4f46e5 !important;
-  color: #ffffff !important;
-  border-color: #4f46e5;
+button.cancel-btn {
+  background: var(--color-border);
+  color: black;
 }
-
-/* Remarks input */
-.expense-list input[type="text"] {
-  width: 100%;
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 2px solid #cbd5e1;
-  font-size: 0.9rem;
-  font-family: 'Inter', sans-serif;
-  color: #1e293b;
-  outline-offset: 2px;
-  box-sizing:border-box;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  background: white;
-}
-
-.expense-list input[type="text"]:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 8px #6366f1aa;
-}
-
-/* Container for approve/reject buttons side by side */
-.action-buttons {
-  display: flex;
-  gap: 12px;
-}
-
