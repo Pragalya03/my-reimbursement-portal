@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { getExpenses, updateExpenseStatus } from "../utils/api.js";
-//import { useNavigate } from "react-router-dom";
-import './ExpenseList.css';
+import "./ExpenseList.css";
 
 function ExpenseList() {
-  
   const [expenses, setExpenses] = useState([]);
   const [statusFilter, setStatusFilter] = useState("");
-  const [activeAction, setActiveAction] = useState(null); // { id, type }
+  const [activeAction, setActiveAction] = useState(null);
   const [remarksInput, setRemarksInput] = useState("");
 
   useEffect(() => {
@@ -29,11 +27,10 @@ function ExpenseList() {
       alert("Remarks are required for rejection.");
       return;
     }
-
     try {
       await updateExpenseStatus(id, {
         status: newStatus,
-        remarks: remarksInput.trim() || null
+        remarks: remarksInput.trim() || null,
       });
       setExpenses((prev) =>
         prev.map((exp) =>
@@ -42,7 +39,6 @@ function ExpenseList() {
             : exp
         )
       );
-      // Reset
       setActiveAction(null);
       setRemarksInput("");
     } catch (error) {
@@ -54,32 +50,43 @@ function ExpenseList() {
     ? expenses.filter((expense) => expense.status === statusFilter)
     : expenses;
 
+  // Badge style generator
+  const getStatusBadgeClass = (status) => {
+    switch (status) {
+      case "APPROVED":
+        return "badge approved";
+      case "REJECTED":
+        return "badge rejected";
+      case "PENDING":
+      default:
+        return "badge pending";
+    }
+  };
+
   return (
     <div className="expense-list">
-    {/*<button className="back-btn" onClick={() => navigate("/")}>
-        Back
-      </button>*/}
       <h2>All Expenses</h2>
-      <label htmlFor="status-filter" style={{ marginRight: "8px" }}>
-        Status:
-      </label>
-      <select
-        id="status-filter"
-        data-testid="status-filter"
-        aria-label="Status"
-        value={statusFilter}
-        onChange={(e) => setStatusFilter(e.target.value)}
-      >
-        <option value="">All</option>
-        <option value="PENDING">Pending</option>
-        <option value="APPROVED">Approved</option>
-        <option value="REJECTED">Rejected</option>
-      </select>
+
+      <div className="filter-container">
+        <label htmlFor="status-filter">Status:</label>
+        <select
+          id="status-filter"
+          data-testid="status-filter"
+          aria-label="Status"
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+        >
+          <option value="">All</option>
+          <option value="PENDING">Pending</option>
+          <option value="APPROVED">Approved</option>
+          <option value="REJECTED">Rejected</option>
+        </select>
+      </div>
 
       {filteredExpenses.length === 0 ? (
-        <p>No expenses found</p>
+        <p className="empty-text">No expenses found</p>
       ) : (
-        <table data-testid="expenses-table">
+        <table data-testid="expenses-table" className="styled-table">
           <thead>
             <tr>
               <th>Employee ID</th>
@@ -98,33 +105,37 @@ function ExpenseList() {
                 <td>${Number(expense.amount).toFixed(2)}</td>
                 <td>{expense.description}</td>
                 <td>{expense.date}</td>
-                <td>{expense.status}</td>
+                <td>
+                  <span className={getStatusBadgeClass(expense.status)}>
+                    {expense.status}
+                  </span>
+                </td>
                 <td>{expense.remarks || ""}</td>
                 <td>
-                  {expense.status === "PENDING" && activeAction?.id !== expense.id && (
-                    <>
-                      <button
-                      className='approve-btn'
-                        onClick={() =>
-                          setActiveAction({ id: expense.id, type: "APPROVED" })
-                        }
-                      >
-                        Approve
-                      </button>
-                      <button
-                      className='reject-btn'
-                        onClick={() =>
-                          setActiveAction({ id: expense.id, type: "REJECTED" })
-                        }
-                      >
-                        Reject
-                      </button>
-                    </>
-                  )}
+                  {expense.status === "PENDING" &&
+                    activeAction?.id !== expense.id && (
+                      <>
+                        <button
+                          className="approve-btn"
+                          onClick={() =>
+                            setActiveAction({ id: expense.id, type: "APPROVED" })
+                          }
+                        >
+                          Approve
+                        </button>
+                        <button
+                          className="reject-btn"
+                          onClick={() =>
+                            setActiveAction({ id: expense.id, type: "REJECTED" })
+                          }
+                        >
+                          Reject
+                        </button>
+                      </>
+                    )}
 
-                  {/* Input for remarks when action is active */}
                   {activeAction?.id === expense.id && (
-                    <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                    <div className="remarks-section">
                       <input
                         type="text"
                         placeholder={
@@ -135,18 +146,17 @@ function ExpenseList() {
                         value={remarksInput}
                         onChange={(e) => setRemarksInput(e.target.value)}
                       />
-                      <div>
+                      <div className="remarks-actions">
                         <button
-                        className="submit-btn"
+                          className="submit-btn"
                           onClick={() =>
                             submitStatusChange(expense.id, activeAction.type)
                           }
                         >
                           Submit
                         </button>
-                        
                         <button
-                        className="cancel-btn"
+                          className="cancel-btn"
                           onClick={() => {
                             setActiveAction(null);
                             setRemarksInput("");
