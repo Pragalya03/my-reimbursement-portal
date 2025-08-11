@@ -1,3 +1,14 @@
+:root {
+  --color-primary: #344054;       /* Deep Slate Blue */
+  --color-secondary: #9CA3AF;     /* Cool Gray */
+  --color-bg: #F8F9FA;            /* Soft Warm Gray */
+  --color-card: #FFFFFF;          /* Pure White */
+  --color-text: #1F2937;          /* Charcoal */
+  --color-text-secondary: #6B7280;/* Muted Steel */
+  --status-approved: #6B8E6B;     /* Sage Green */
+  --status-pending: #D1BFA3;      /* Warm Taupe */
+  --status-rejected: #B85C5C;     /* Desaturated Red */
+}
 /* Expense List Container */
 .expense-list {
   font-family: 'Inter', 'Segoe UI', sans-serif;
