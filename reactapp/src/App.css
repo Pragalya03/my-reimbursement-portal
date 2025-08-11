@@ -68,10 +68,12 @@ nav.top-right-nav {
   z-index: 1000;
   display: flex;
   gap: 15px;
+  background-color: #FFFDF8; /* Cream White background */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 nav.top-right-nav a {
-  color: #d1d5db; /* light gray */
+  color: #1B1D1E; /* Graphite Black text */
   font-weight: 600;
   text-decoration: none;
   padding: 8px 15px;
@@ -80,11 +82,11 @@ nav.top-right-nav a {
 }
 
 nav.top-right-nav a:hover {
-  background-color: #312e81;
-  color: white;
+  background-color: #6A8D8F; /* Dusty Aqua hover */
+  color: #FFFFFF; /* White text */
 }
 
 nav.top-right-nav a.active {
-  background-color: #312e81;
-  color: white;
+  background-color: #2F4F4F; /* Deep Teal active */
+  color: #FFFFFF; /* White text */
 }
