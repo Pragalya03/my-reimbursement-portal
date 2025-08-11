@@ -1,76 +1,18 @@
-/*body {
-  background-color: #f5f6f8;
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-}
+:root {
+  --color-bg: #F5F5F5;
+  --color-card: #FFFFFF;
+  --color-text: #1E1E1E;
+  --color-text-secondary: #6C6C6C;
+  --color-primary: #2C2C2C;
+  --color-border: #A0A0A0;
 
-.expense-form {
-  background: #fff;
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --status-approved: #8A7F63;
+  --status-pending: #C2B9A3;
+  --status-rejected: #A55B5B;
 }
-
-.page-title {
-  text-align: center;
-  font-size: 1.8rem;
-  font-weight: bold;
-  margin-bottom: 15px;
-  color: #3b82f6;
-}
-
-.expense-form h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: #333;
-}
-
-.expense-form input,
-.expense-form textarea,
-.expense-form button {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.95rem;
-}
-
-.expense-form textarea {
-  resize: vertical;
-}
-
-.expense-form button {
-  background-color: #3b82f6;
-  color: white;
-  border: none;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.expense-form button:hover {
-  background-color: #2563eb;
-}
-
-.error {
-  color: red;
-  font-size: 0.9rem;
-}
-
-.success {
-  color: green;
-  font-size: 0.9rem;
-}
-*/
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 body {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--color-bg);
   font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
@@ -81,137 +23,80 @@ body {
 }
 
 .expense-form {
-  background: #fff;
+  background: var(--color-card);
   max-width: 600px;
   width: 90%;
-  padding: 40px 35px 45px;
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+  padding: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
   box-sizing: border-box;
-  color: #1e293b;
-  position: relative;
-}
-
-.page-title {
-  text-align: center;
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 35px;
-  color: #4f46e5;
-  letter-spacing: 1px;
+  color: var(--color-text);
 }
 
 .expense-form h2 {
   text-align: center;
-  margin-bottom: 35px;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #4f46e5;
-  letter-spacing: 1px;
+  margin-bottom: 28px;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--color-primary);
 }
 
 .expense-form input,
 .expense-form textarea {
   width: 100%;
-  padding: 10px 0 8px;
-  border: none;
-  border-bottom: 2px solid #cbd5e1;
+  padding: 8px;
+  border: 1px solid var(--color-border);
   font-size: 1rem;
-  font-family: inherit;
-  color: #1e293b;
-  background: transparent;
-  transition: border-color 0.3s ease;
-  resize: vertical;
-  box-sizing: border-box;
-  outline-offset: 2px;
-  margin-bottom: 28px;
+  background: #fff;
+  margin-bottom: 20px;
+  color: var(--color-text);
 }
 
 .expense-form input::placeholder,
 .expense-form textarea::placeholder {
-  color: #94a3b8;
+  color: var(--color-text-secondary);
 }
 
 .expense-form input:focus,
 .expense-form textarea:focus {
-  border-bottom-color: #6366f1;
+  border-color: var(--color-primary);
   outline: none;
 }
 
 .expense-form button {
   width: 100%;
-  padding: 14px 0;
-  background: linear-gradient(90deg, #4f46e5, #6366f1);
+  padding: 12px 0;
+  background: var(--color-primary);
   border: none;
-  border-radius: 12px;
+  border-radius: 4px;
   color: white;
-  font-weight: 700;
-  font-size: 1.1rem;
+  font-weight: 600;
+  font-size: 1rem;
   cursor: pointer;
-  box-shadow: 0 8px 15px rgba(99, 102, 241, 0.4);
-  transition: background 0.3s ease, box-shadow 0.3s ease;
-  margin-top: 10px;
 }
 
 .expense-form button:hover {
-  background: linear-gradient(90deg, #4338ca, #4f46e5);
-  box-shadow: 0 12px 20px rgba(79, 70, 229, 0.6);
+  background: #3A3A3A;
 }
 
 .error {
-  background: #fee2e2;
-  border: 1px solid #fca5a5;
-  color: #b91c1c;
-  padding: 10px 12px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  font-weight: 600;
+  background: #f8dada;
+  border: 1px solid #e0a4a4;
+  color: var(--status-rejected);
+  padding: 8px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  font-weight: 500;
   text-align: center;
-  letter-spacing: 0.02em;
 }
 
 .success {
-  background: #d1fae5;
-  border: 1px solid #34d399;
-  color: #065f46;
-  padding: 10px 12px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  font-weight: 600;
+  background: #e5e2db;
+  border: 1px solid var(--status-approved);
+  color: var(--status-approved);
+  padding: 8px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  font-weight: 500;
   text-align: center;
-  letter-spacing: 0.02em;
-}
-
-/* Optional back button styling like first example */
-.back-btn {
-  position: fixed;
-  top: 25px;
-  left: 25px;
-  padding: 10px 18px;
-  background: white;
-  color: #4f46e5;
-  font-weight: 700;
-  font-size: 1rem;
-  border-radius: 14px;
-  border: 2px solid #4f46e5;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-  transition: background 0.3s ease, color 0.3s ease;
-  user-select: none;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.back-btn:hover {
-  background: #4f46e5;
-  color: white;
-  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.6);
-}
-
-.back-btn::before {
-  content: "←";
-  font-weight: 700;
-  font-size: 1.2rem;
-  line-height: 0;
 }
