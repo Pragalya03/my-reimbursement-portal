@@ -104,7 +104,7 @@ function ExpenseList() {
                 <td>{expense.employeeId}</td>
                 <td>${Number(expense.amount).toFixed(2)}</td>
                 <td>{expense.description}</td>
-                <td>{expense.date}</td>
+                <td>{formatDate(expense.date)}</td>
                 <td>{expense.status}</td>
                 <td>{expense.remarks || ""}</td>
                 <td>
