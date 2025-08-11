@@ -14,20 +14,20 @@
 /* Form container */
 .expense-form {
   font-family: 'Inter', 'Segoe UI', sans-serif;
-  max-width: 420px;
-  margin: 30px auto;
-  padding: 22px;
+  max-width: 440px;
+  margin: 40px auto;
+  padding: 24px 26px;
   border-radius: 12px;
-  background: var(--color-card);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  background: linear-gradient(to bottom right, #ffffff, #fdfdfd);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
   border: 1px solid var(--color-secondary);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
   animation: fadeInUp 0.35s ease forwards;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .expense-form:hover {
   transform: translateY(-3px);
-  box-shadow: 0 5px 14px rgba(0,0,0,0.08);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 }
 
 /* Heading */
@@ -35,22 +35,22 @@
   font-size: 1.5rem;
   font-weight: 600;
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   color: var(--color-primary);
-  letter-spacing: 0.5px;
+  border-bottom: 2px solid rgba(52, 64, 84, 0.1);
+  padding-bottom: 6px;
 }
 
 /* Labels */
 .expense-form label {
-  font-size: 0.9rem;
+  font-size: 0.87rem;
   font-weight: 500;
   color: var(--color-text-secondary);
   display: block;
-  margin-bottom: 6px;
-  transition: color 0.2s ease;
+  margin-bottom: 5px;
 }
 
-/* Inputs, Textareas, Select */
+/* Inputs & Textareas */
 .expense-form input,
 .expense-form textarea,
 .expense-form select {
@@ -58,17 +58,18 @@
   padding: 10px 12px;
   border-radius: 6px;
   border: 1px solid var(--color-secondary);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: var(--color-text);
   background: #fff;
-  margin-bottom: 15px;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
+  margin-bottom: 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
 .expense-form input:hover,
 .expense-form textarea:hover,
 .expense-form select:hover {
-  transform: translateY(-1px);
+  background-color: #fefefe;
+  border-color: var(--color-primary);
 }
 
 .expense-form input:focus,
@@ -84,49 +85,47 @@
   background: var(--color-primary);
   color: #fff;
   border: none;
-  padding: 10px 14px;
+  padding: 10px 16px;
   border-radius: 6px;
   font-size: 0.95rem;
   cursor: pointer;
-  transition: background-color 0.25s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  transition: background-color 0.25s ease, transform 0.15s ease;
 }
 
 .expense-form button.submit-btn:hover {
   background: #2A3340;
-  transform: translateY(-2px);
-  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  transform: translateY(-1px);
 }
 
 .expense-form button.cancel-btn {
   background: var(--color-secondary);
-  color: var(--color-text);
+  color: #1F2937;
   border: none;
-  padding: 10px 14px;
+  padding: 10px 16px;
   border-radius: 6px;
   font-size: 0.95rem;
   cursor: pointer;
-  transition: background-color 0.25s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  transition: background-color 0.25s ease, transform 0.15s ease;
 }
 
 .expense-form button.cancel-btn:hover {
   background: #8B929E;
-  transform: translateY(-2px);
-  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  transform: translateY(-1px);
 }
 
 /* Button group */
 .expense-form .button-group {
   display: flex;
-  gap: 12px;
-  margin-top: 10px;
+  gap: 14px;
+  margin-top: 14px;
 }
 
-/* Textarea resize */
+/* Textarea resize control */
 .expense-form textarea {
   resize: vertical;
 }
 
-/* Animation */
+/* Fade-in animation */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
