@@ -1,14 +1,14 @@
 :root {
-  --color-bg: #F5F5F5;
-  --color-card: #FFFFFF;
-  --color-text: #1E1E1E;
-  --color-text-secondary: #6C6C6C;
-  --color-primary: #2C2C2C;
-  --color-border: #A0A0A0;
+  --color-primary: #344054; /* Deep Slate Blue */
+  --color-secondary: #9CA3AF; /* Cool Gray */
+  --color-bg: #F8F9FA; /* Soft Warm Gray */
+  --color-card: #FFFFFF; /* Pure White */
+  --color-text: #1F2937; /* Charcoal */
+  --color-text-secondary: #6B7280; /* Muted Steel */
 
-  --status-approved: #8A7F63;
-  --status-pending: #C2B9A3;
-  --status-rejected: #A55B5B;
+  --status-approved: #6B8E6B; /* Sage Green */
+  --status-pending: #D1BFA3; /* Warm Taupe */
+  --status-rejected: #B85C5C; /* Desaturated Red */
 }
 
 body {
@@ -28,7 +28,7 @@ body {
   width: 90%;
   padding: 32px;
   border-radius: 8px;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-secondary);
   box-sizing: border-box;
   color: var(--color-text);
 }
@@ -45,7 +45,7 @@ body {
 .expense-form textarea {
   width: 100%;
   padding: 8px;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-secondary);
   font-size: 1rem;
   background: #fff;
   margin-bottom: 20px;
@@ -76,12 +76,12 @@ body {
 }
 
 .expense-form button:hover {
-  background: #3A3A3A;
+  background: #2A3340;
 }
 
 .error {
-  background: #f8dada;
-  border: 1px solid #e0a4a4;
+  background: #F9E5E5;
+  border: 1px solid var(--status-rejected);
   color: var(--status-rejected);
   padding: 8px;
   border-radius: 4px;
@@ -91,7 +91,7 @@ body {
 }
 
 .success {
-  background: #e5e2db;
+  background: #E8F0E8;
   border: 1px solid var(--status-approved);
   color: var(--status-approved);
   padding: 8px;
