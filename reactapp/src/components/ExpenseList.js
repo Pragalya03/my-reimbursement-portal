@@ -53,7 +53,14 @@ function ExpenseList() {
   const filteredExpenses = statusFilter
     ? expenses.filter((expense) => expense.status === statusFilter)
     : expenses;
-
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric"
+    });
+  }
   return (
     <div className="expense-list">
     {/*<button className="back-btn" onClick={() => navigate("/")}>
