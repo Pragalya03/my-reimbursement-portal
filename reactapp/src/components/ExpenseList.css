@@ -78,19 +78,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 .expense-list {
-  /* Updated container styling from first block */
-  font-family: 'Inter', sans-serif; /* modern font */
+  font-family: 'Inter', sans-serif;
   color: #1e293b;
-  background-color: #fff;
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 30px 40px; /* more padding */
-  border-radius: 20px; /* smoother rounded corners */
-  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3); /* purple shadow instead of plain gray */
+  background-color: #fff; /* white background */
+  max-width: 1000px;
+  min-width: 700px;
+  margin: 40px 0 60px 80px; /* shifted container right */
+  padding: 30px 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
   box-sizing: border-box;
+  min-height: 400px; /* Ensures white bg covers most of viewport height */
   display: flex;
   flex-direction: column;
   overflow-x: auto;
+  font-size: 0.9rem; /* decreased font size */
 }
 
 .expense-list h2 {
