@@ -1,72 +1,71 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 .expense-list {
   font-family: 'Inter', sans-serif;
-  color: #1e293b;
-  background-color: #fff; /* white background */
+  color: #1B1B1B;
+  background-color: #FFFFFF;
   max-width: 1000px;
   min-width: 700px;
-  margin: 40px 0 60px 80px; /* shifted container right */
+  margin: 40px 0 60px 80px;
   padding: 30px 40px;
   border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 20px 40px rgba(52, 73, 94, 0.3);
   box-sizing: border-box;
-  min-height: 400px; /* Ensures white bg covers most of viewport height */
+  min-height: 400px;
   display: flex;
   flex-direction: column;
   overflow-x: auto;
-  font-size: 0.9rem; /* decreased font size */
+  font-size: 0.9rem;
 }
 
 .expense-list h2 {
   font-weight: 700;
-  font-size: 1.8rem; /* bigger heading */
+  font-size: 1.8rem;
   text-align: center;
   margin-bottom: 30px;
-  color: #4f46e5; /* purple tone instead of black */
+  color: #34495E;
   letter-spacing: 1px;
 }
 
 .expense-list label {
   font-weight: 600;
   font-size: 0.9rem;
-  color: #334155;
+  color: #34495E;
   margin-right: 12px;
 }
 
 .expense-list select {
   padding: 8px 12px;
-  border-radius: 12px; /* smoother edges */
-  border: 2px solid #cbd5e1; /* lighter border */
+  border-radius: 12px;
+  border: 2px solid #95A5A6;
   font-size: 0.9rem;
   font-family: 'Inter', sans-serif;
-  color: #1e293b;
+  color: #1B1B1B;
   outline-offset: 2px;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   box-sizing: border-box;
-  background: white;
+  background: #FFFFFF;
   margin-bottom: 30px;
 }
 
 .expense-list select:focus {
-  border-color: #6366f1; /* purple border on focus */
-  box-shadow: 0 0 8px #6366f1aa;
+  border-color: #34495E;
+  box-shadow: 0 0 8px #34495E55;
   outline: none;
 }
 
-/* ===== TABLE STYLING UPDATED FROM FIRST BLOCK ===== */
+/* Table Styling */
 .expense-list table {
   width: 100%;
-  table-layout: fixed; /* prevents uneven cell widths */
+  table-layout: fixed;
   word-wrap: break-word;
-  border-collapse: separate; /* spacing between rows */
-  border-spacing: 0 18px; /* gap between rows */
+  border-collapse: separate;
+  border-spacing: 0 18px;
 }
 
 .expense-list thead tr {
-  background: linear-gradient(90deg, #e0e7ff, #c7d2fe); /* gradient header */
-  box-shadow: 0 4px 8px rgba(79, 70, 229, 0.15);
+  background: linear-gradient(90deg, #F8F9FA, #E0E7E9);
+  box-shadow: 0 4px 8px rgba(52, 73, 94, 0.15);
 }
 
 .expense-list th,
@@ -78,31 +77,31 @@
 
 .expense-list th {
   font-weight: 700;
-  text-transform: uppercase; /* all caps */
+  text-transform: uppercase;
   letter-spacing: 0.1em;
-  border-bottom: 3px solid #4f46e5; /* purple underline */
-  box-shadow: inset 0 -3px 5px rgba(79, 70, 229, 0.2);
+  border-bottom: 3px solid #34495E;
+  box-shadow: inset 0 -3px 5px rgba(52, 73, 94, 0.2);
 }
 
 .expense-list tbody tr {
-  background: #f9fafb;
+  background: #F8F9FA;
   border-radius: 12px;
   transition: background-color 0.3s ease;
   cursor: default;
-  height: 60px; /* consistent row height */
+  height: 60px;
 }
 
 .expense-list tbody tr:hover {
-  background-color: #e0e7ff; /* purple hover */
+  background-color: #E0E7E9;
 }
 
 .expense-list tbody td {
   font-weight: 500;
-  color: #475569;
+  color: #5F6A6A;
   vertical-align: middle;
 }
 
-/* Remarks column scroll (optional) */
+/* Remarks column scroll */
 .expense-list tbody td.remarks-cell {
   max-height: 40px;
   overflow-y: auto;
@@ -112,13 +111,11 @@
   display: block;
 }
 
-/* ===== BUTTON STYLING UPDATED ===== */
-
 /* Approve button */
 .expense-list button.approve-btn {
-  background: #a7f3d0; /* pale green */
-  color: #065f46;
-  border: 2px solid #34d399;
+  background: #E6F4EA;
+  color: #6C8B74;
+  border: 2px solid #6C8B74;
   padding: 8px 16px;
   border-radius: 12px;
   font-weight: 700;
@@ -129,16 +126,16 @@
 }
 
 .expense-list button.approve-btn:hover {
-  background: #34d399;
+  background: #6C8B74;
   color: white;
-  box-shadow: 0 6px 12px rgba(52, 211, 153, 0.6);
+  box-shadow: 0 6px 12px rgba(108, 139, 116, 0.6);
 }
 
 /* Reject button */
 .expense-list button.reject-btn {
-  background: #fecaca;
-  color: #991b1b;
-  border: 2px solid #f87171;
+  background: #F8D7DA;
+  color: #A05252;
+  border: 2px solid #A05252;
   padding: 8px 16px;
   border-radius: 12px;
   font-weight: 700;
@@ -149,15 +146,15 @@
 }
 
 .expense-list button.reject-btn:hover {
-  background: #f87171;
+  background: #A05252;
   color: white;
-  box-shadow: 0 6px 12px rgba(248, 113, 113, 0.6);
+  box-shadow: 0 6px 12px rgba(160, 82, 82, 0.6);
 }
 
-/* Secondary cancel button */
+/* Cancel button */
 .expense-list button.cancel-btn {
   background: white;
-  color: #4f46e5;
+  color: #34495E;
   border: none;
   border-radius: 8px;
   padding: 8px 16px;
@@ -165,15 +162,15 @@
 }
 
 .expense-list button.cancel-btn:hover {
-  background: #4f46e5 !important;
+  background: #34495E !important;
   color: #ffffff !important;
-  border-color: #4f46e5;
+  border-color: #34495E;
 }
 
 /* Submit button */
 .expense-list button.submit-btn {
   background: white;
-  color: #4f46e5;
+  color: #34495E;
   border: none;
   border-radius: 8px;
   padding: 8px 16px;
@@ -182,9 +179,9 @@
 }
 
 .expense-list button.submit-btn:hover {
-  background: #4f46e5 !important;
+  background: #34495E !important;
   color: #ffffff !important;
-  border-color: #4f46e5;
+  border-color: #34495E;
 }
 
 /* Remarks input */
@@ -192,22 +189,22 @@
   width: 100%;
   padding: 10px 14px;
   border-radius: 12px;
-  border: 2px solid #cbd5e1;
+  border: 2px solid #95A5A6;
   font-size: 0.9rem;
   font-family: 'Inter', sans-serif;
-  color: #1e293b;
+  color: #1B1B1B;
   outline-offset: 2px;
-  box-sizing:border-box;
+  box-sizing: border-box;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   background: white;
 }
 
 .expense-list input[type="text"]:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 8px #6366f1aa;
+  border-color: #34495E;
+  box-shadow: 0 0 8px #34495E55;
 }
 
-/* Container for approve/reject buttons side by side */
+/* Action buttons container */
 .action-buttons {
   display: flex;
   gap: 12px;
