@@ -1,3 +1,5 @@
+/*@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
 .expense-list {
   background: #fff;
   max-width: 900px;
@@ -72,3 +74,211 @@
 .expense-list button:nth-child(2):hover {
   background-color: #f3f4f6;
 }
+*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+.expense-list {
+  /* Updated container styling from first block */
+  font-family: 'Inter', sans-serif; /* modern font */
+  color: #1e293b;
+  background-color: #fff;
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 30px 40px; /* more padding */
+  border-radius: 20px; /* smoother rounded corners */
+  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3); /* purple shadow instead of plain gray */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow-x: auto;
+}
+
+.expense-list h2 {
+  font-weight: 700;
+  font-size: 1.8rem; /* bigger heading */
+  text-align: center;
+  margin-bottom: 30px;
+  color: #4f46e5; /* purple tone instead of black */
+  letter-spacing: 1px;
+}
+
+.expense-list label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #334155;
+  margin-right: 12px;
+}
+
+.expense-list select {
+  padding: 8px 12px;
+  border-radius: 12px; /* smoother edges */
+  border: 2px solid #cbd5e1; /* lighter border */
+  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+  color: #1e293b;
+  outline-offset: 2px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+  background: white;
+  margin-bottom: 30px;
+}
+
+.expense-list select:focus {
+  border-color: #6366f1; /* purple border on focus */
+  box-shadow: 0 0 8px #6366f1aa;
+  outline: none;
+}
+
+/* ===== TABLE STYLING UPDATED FROM FIRST BLOCK ===== */
+.expense-list table {
+  width: 100%;
+  table-layout: fixed; /* prevents uneven cell widths */
+  word-wrap: break-word;
+  border-collapse: separate; /* spacing between rows */
+  border-spacing: 0 18px; /* gap between rows */
+}
+
+.expense-list thead tr {
+  background: linear-gradient(90deg, #e0e7ff, #c7d2fe); /* gradient header */
+  box-shadow: 0 4px 8px rgba(79, 70, 229, 0.15);
+}
+
+.expense-list th,
+.expense-list td {
+  white-space: normal;
+  overflow-wrap: break-word;
+  padding: 10px 8px;
+}
+
+.expense-list th {
+  font-weight: 700;
+  text-transform: uppercase; /* all caps */
+  letter-spacing: 0.1em;
+  border-bottom: 3px solid #4f46e5; /* purple underline */
+  box-shadow: inset 0 -3px 5px rgba(79, 70, 229, 0.2);
+}
+
+.expense-list tbody tr {
+  background: #f9fafb;
+  border-radius: 12px;
+  transition: background-color 0.3s ease;
+  cursor: default;
+  height: 60px; /* consistent row height */
+}
+
+.expense-list tbody tr:hover {
+  background-color: #e0e7ff; /* purple hover */
+}
+
+.expense-list tbody td {
+  font-weight: 500;
+  color: #475569;
+  vertical-align: middle;
+}
+
+/* Remarks column scroll (optional) */
+.expense-list tbody td.remarks-cell {
+  max-height: 40px;
+  overflow-y: auto;
+  white-space: normal;
+  word-wrap: break-word;
+  padding-right: 8px;
+  display: block;
+}
+
+/* ===== BUTTON STYLING UPDATED ===== */
+
+/* Approve button */
+.expense-list button.approve-btn {
+  background: #a7f3d0; /* pale green */
+  color: #065f46;
+  border: 2px solid #34d399;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.expense-list button.approve-btn:hover {
+  background: #34d399;
+  color: white;
+  box-shadow: 0 6px 12px rgba(52, 211, 153, 0.6);
+}
+
+/* Reject button */
+.expense-list button.reject-btn {
+  background: #fecaca;
+  color: #991b1b;
+  border: 2px solid #f87171;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.expense-list button.reject-btn:hover {
+  background: #f87171;
+  color: white;
+  box-shadow: 0 6px 12px rgba(248, 113, 113, 0.6);
+}
+
+/* Secondary cancel button */
+.expense-list button.cancel-btn {
+  background: white;
+  color: #334155;
+  border: 2px solid #cbd5e1;
+  padding: 6px 10px;
+  font-weight: 600;
+}
+
+.expense-list button.cancel-btn:hover {
+  background-color: #f3f4f6;
+  border-color: #a5b4fc;
+  box-shadow: 0 8px 18px rgba(99, 102, 241, 0.3);
+}
+
+/* Submit button */
+.expense-list button.submit-btn {
+  background: white;
+  color: #4f46e5;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.expense-list button.submit-btn:hover {
+  background: #4f46e5 !important;
+  color: #ffffff !important;
+  border-color: #4f46e5;
+}
+
+/* Remarks input */
+.expense-list input[type="text"] {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 2px solid #cbd5e1;
+  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+  color: #1e293b;
+  outline-offset: 2px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  background: white;
+}
+
+.expense-list input[type="text"]:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 8px #6366f1aa;
+}
+
+/* Container for approve/reject buttons side by side */
+.action-buttons {
+  display: flex;
+  gap: 12px;
+}
+
