@@ -1,149 +1,129 @@
+import React, { useState } from "react";
+import "./ExpenseForm.css";
+import { createExpense } from "../utils/api";
+//import { useNavigate } from "react-router-dom";
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-body {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  font-family: 'Inter', sans-serif;
-  margin: 0;
-  padding: 0;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+function ExpenseForm({ onAdd }) {
+  const [formData, setFormData] = useState({
+    employeeId: "",
+    amount: "",
+    description: "",
+    date: "",
+  });
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const validateForm = () => {
+    if (!formData.employeeId) return "Employee ID is required";
+    if (Number(formData.amount) <= 0) return "Amount must be greater than 0";
+    if (
+      !formData.description ||
+      formData.description.length < 5 ||
+      formData.description.length > 200
+    )
+      return "Description must be 5-200 characters";
+    if (!formData.date) return "Date is required";
+    if (new Date(formData.date) > new Date())
+      return "Date cannot be in the future";
+    return "";
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      setSuccess("");
+      return;
+    }
+
+    try {
+      const response = await createExpense({
+        employeeId: Number(formData.employeeId),
+        amount: Number(formData.amount),
+        description: formData.description,
+        date: formData.date,
+      });
+      setSuccess("Expense submitted successfully!");
+      setError("");
+      setFormData({ employeeId: "", amount: "", description: "", date: "" });
+      if (onAdd) onAdd(response);
+    } catch (err) {
+      setError(err.message || "Error submitting expense");
+      setSuccess("");
+    }
+  };
+
+  return (
+    <>
+    {/*<button className="back-btn" onClick={() => navigate("/")}>
+         Back
+  </button>*/}
+    <form className="expense-form" onSubmit={handleSubmit}>
+      <h2>Add Expense</h2>
+
+      {error && (
+        <p data-testid="error-message" className="error">
+          {error}
+        </p>
+      )}
+      {success && (
+        <p data-testid="success-message" className="success">
+          {success}
+        </p>
+      )}
+
+      
+      <label>Employee ID
+      <input
+        type="number"
+        name="employeeId"
+        placeholder="Employee ID"
+        value={formData.employeeId}
+        onChange={handleChange}
+      />
+      </label>
+
+      <label >Amount
+      <input
+        type="number"
+        step="0.01"
+        name="amount"
+        placeholder="Amount"
+        value={formData.amount}
+        onChange={handleChange}
+      />
+      </label>
+
+      <label >Description
+      <textarea
+        name="description"
+        placeholder="Description"
+        value={formData.description}
+        onChange={handleChange}
+      />
+      </label>
+
+      <label>Date
+      <input
+        type="date"
+        name="date"
+        value={formData.date}
+        onChange={handleChange}
+      />
+      </label>
+
+      <button data-testid="submit-btn" type="submit">
+        Submit
+      </button>
+    </form>
+          </>
+  );
 }
 
-.expense-form {
-  background: #fff;
-  max-width: 600px;
-  width: 90%;
-  padding: 40px 35px 45px;
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
-  box-sizing: border-box;
-  color: #1e293b;
-  position: relative;
-}
-
-.page-title {
-  text-align: center;
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 35px;
-  color: #4f46e5;
-  letter-spacing: 1px;
-}
-
-.expense-form h2 {
-  text-align: center;
-  margin-bottom: 35px;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #4f46e5;
-  letter-spacing: 1px;
-}
-
-.expense-form input,
-.expense-form textarea {
-  width: 100%;
-  padding: 10px 0 8px;
-  border: none;
-  border-bottom: 2px solid #cbd5e1;
-  font-size: 1rem;
-  font-family: inherit;
-  color: #1e293b;
-  background: transparent;
-  transition: border-color 0.3s ease;
-  resize: vertical;
-  box-sizing: border-box;
-  outline-offset: 2px;
-  margin-bottom: 28px;
-}
-
-.expense-form input::placeholder,
-.expense-form textarea::placeholder {
-  color: #94a3b8;
-}
-
-.expense-form input:focus,
-.expense-form textarea:focus {
-  border-bottom-color: #6366f1;
-  outline: none;
-}
-
-.expense-form button {
-  width: 100%;
-  padding: 14px 0;
-  background: linear-gradient(90deg, #4f46e5, #6366f1);
-  border: none;
-  border-radius: 12px;
-  color: white;
-  font-weight: 700;
-  font-size: 1.1rem;
-  cursor: pointer;
-  box-shadow: 0 8px 15px rgba(99, 102, 241, 0.4);
-  transition: background 0.3s ease, box-shadow 0.3s ease;
-  margin-top: 10px;
-}
-
-.expense-form button:hover {
-  background: linear-gradient(90deg, #4338ca, #4f46e5);
-  box-shadow: 0 12px 20px rgba(79, 70, 229, 0.6);
-}
-
-.error {
-  background: #fee2e2;
-  border: 1px solid #fca5a5;
-  color: #b91c1c;
-  padding: 10px 12px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  font-weight: 600;
-  text-align: center;
-  letter-spacing: 0.02em;
-}
-
-.success {
-  background: #d1fae5;
-  border: 1px solid #34d399;
-  color: #065f46;
-  padding: 10px 12px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  font-weight: 600;
-  text-align: center;
-  letter-spacing: 0.02em;
-}
-
-/* Optional back button styling like first example */
-.back-btn {
-  position: fixed;
-  top: 25px;
-  left: 25px;
-  padding: 10px 18px;
-  background: white;
-  color: #4f46e5;
-  font-weight: 700;
-  font-size: 1rem;
-  border-radius: 14px;
-  border: 2px solid #4f46e5;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-  transition: background 0.3s ease, color 0.3s ease;
-  user-select: none;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.back-btn:hover {
-  background: #4f46e5;
-  color: white;
-  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.6);
-}
-
-.back-btn::before {
-  content: "←";
-  font-weight: 700;
-  font-size: 1.2rem;
-  line-height: 0;
-}
+export default ExpenseForm;
