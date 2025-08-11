@@ -58,42 +58,4 @@
 }
 
 
-nav.top-right-nav {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  right: auto;
-  padding: 10px 18px;
-  border-radius: 10px;
-  z-index: 1000;
-  display: flex;
-  gap: 18px;
-  background-color: #FFFDF8; /* Cream White */
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.08);
-  border: 1px solid #EAEAEA; /* subtle border for definition */
-}
-
-nav.top-right-nav a {
-  color: #1B1D1E; /* Graphite Black */
-  font-weight: 600;
-  font-size: 0.95rem;
-  text-decoration: none;
-  padding: 8px 14px;
-  border-radius: 8px;
-  transition: 
-    background-color 0.25s ease,
-    color 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-nav.top-right-nav a:hover {
-  background-color: #6A8D8F; /* Dusty Aqua hover */
-  color: #FFFFFF; /* White text */
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.08);
-}
-
-nav.top-right-nav a.active {
-  background-color: #2F4F4F; /* Deep Teal active */
-  color: #FFFFFF; /* White text */
-  box-shadow: 0px 4px 8px rgba(47, 79, 79, 0.4);
-}
+Could not paste
