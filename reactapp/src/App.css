@@ -70,21 +70,21 @@ nav.top-right-nav {
 }
 
 nav.top-right-nav a {
-  color: #374151; /* Dark gray text for readability */
-  background-color: #E5E7EB; /* Light gray background */
+  color: white; /* Dark gray text for readability */
+  background-color: #2F4F4F; /* Light gray background */
   font-weight: 600;
   text-decoration: none;
   padding: 8px 15px;
   border-radius: 8px;
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
 
 nav.top-right-nav a:hover {
-  background-color: #93C5FD; /* Light sky blue */
-  color: #1E3A8A; /* Deep blue text on hover */
+  background-color: #B8C9CA; /* Light sky blue */
+  color: #2F4F4F; /* Deep blue text on hover */
 }
 
 nav.top-right-nav a.active {
-  background-color: #60A5FA; /* Softer blue active state */
-  color: white;
+  background-color: #E2E7E7; /* Softer blue active state */
+  color: #2F4F4F;
 }
