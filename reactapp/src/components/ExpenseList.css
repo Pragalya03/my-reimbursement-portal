@@ -6,9 +6,16 @@
   min-width: 700px;
   margin: 40px auto;
   padding: 24px;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid var(--color-secondary);
   font-size: 0.9rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.expense-list:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
 }
 
 .expense-list h2 {
@@ -21,34 +28,65 @@
 
 .expense-list select {
   padding: 6px 10px;
-  border-radius: 4px;
+  border-radius: 6px;
   border: 1px solid var(--color-secondary);
   font-size: 0.9rem;
   color: var(--color-text);
   background: #fff;
   margin-bottom: 20px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.expense-list select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(52, 64, 84, 0.2);
+  outline: none;
 }
 
 .expense-list table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0 8px; /* Row gap */
 }
 
-.expense-list th,
-.expense-list td {
-  padding: 10px 8px;
-  border-bottom: 1px solid var(--color-secondary);
+.expense-list th {
+  padding: 12px 10px;
   text-align: left;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-weight: 600;
 }
 
-.expense-list tbody tr:nth-child(even) {
-  background: var(--color-bg);
+.expense-list td {
+  padding: 12px 10px;
+  background-color: #fff;
+  border-top: 1px solid var(--color-secondary);
+  border-bottom: 1px solid var(--color-secondary);
+  transition: background-color 0.2s ease, transform 0.15s ease;
 }
 
-.expense-list tbody tr:hover {
-  background-color: #EFEFEF;
+.expense-list tbody tr {
+  border-radius: 6px;
 }
 
+.expense-list tbody tr:hover td {
+  background-color: #f3f4f6;
+  transform: scale(1.01);
+}
+
+button {
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0px);
+}
+
+/* Action Buttons */
 button.approve-btn {
   background: var(--status-approved);
   color: white;
@@ -56,6 +94,10 @@ button.approve-btn {
   padding: 6px 12px;
   border-radius: 4px;
   font-size: 0.85rem;
+}
+
+button.approve-btn:hover {
+  background: #5E7F5E;
 }
 
 button.reject-btn {
@@ -67,17 +109,32 @@ button.reject-btn {
   font-size: 0.85rem;
 }
 
-button.submit-btn,
-button.cancel-btn {
+button.reject-btn:hover {
+  background: #A94F4F;
+}
+
+button.submit-btn {
   background: var(--color-primary);
   color: white;
   border: none;
-  padding: 6px 12px;
+  padding: 8px 14px;
   border-radius: 4px;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
+}
+
+button.submit-btn:hover {
+  background: #2A3340;
 }
 
 button.cancel-btn {
   background: var(--color-secondary);
   color: black;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+button.cancel-btn:hover {
+  background: #8B929E;
 }
