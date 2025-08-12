@@ -16,10 +16,9 @@ body {
   box-sizing: border-box;
 }
 
-/* Form styles */
 .expense-form {
   background: #FFFFFF;
-  max-width: 600px;  /* limits width so both sides are equal */
+  max-width: 600px;
   width: 100%;
   padding: 40px 35px 45px;
   border-radius: 20px;
@@ -118,7 +117,6 @@ body {
   letter-spacing: 0.02em;
 }
 
-/* Back button */
 .back-btn {
   position: fixed;
   top: 25px;
