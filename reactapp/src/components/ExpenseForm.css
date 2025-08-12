@@ -1,35 +1,34 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-/* Remove vertical centering from body */
+/* Background & font */
 body {
   background: linear-gradient(135deg, #2F4F4F 0%, #5C7A4B 100%);
   font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
-  
 }
 
-/* Page wrapper to center form */
+/* Full screen container to center form */
 .page-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 60px; /* Subtract navbar height */
-  padding-top: 40px; /* So content starts below navbar */
+  justify-content: center;  /* centers horizontally */
+  align-items: center;      /* centers vertically */
+  min-height: calc(100vh - 60px); /* viewport minus navbar height */
+  padding: 20px;             /* spacing for small screens */
+  box-sizing: border-box;
 }
 
-/* Your existing form styles */
+/* Form styles */
 .expense-form {
   background: #FFFFFF;
-  max-width: 600px;
-  width: 90%;
+  max-width: 600px;  /* limits width so both sides are equal */
+  width: 100%;
   padding: 40px 35px 45px;
   border-radius: 20px;
   box-shadow: 0 20px 40px rgba(47, 79, 79, 0.3);
   box-sizing: border-box;
   color: #1B1D1E;
 }
-
 
 .page-title {
   text-align: center;
@@ -121,7 +120,7 @@ body {
   letter-spacing: 0.02em;
 }
 
-/* Optional back button styling */
+/* Back button */
 .back-btn {
   position: fixed;
   top: 25px;
