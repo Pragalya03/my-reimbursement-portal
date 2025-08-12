@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-/* Background & font */
 body {
   background: linear-gradient(135deg, #2F4F4F 0%, #5C7A4B 100%);
   font-family: 'Inter', sans-serif;
@@ -8,7 +7,6 @@ body {
   padding: 0;
 }
 
-/* Full screen container to center form */
 .page-container {
   display: flex;
   justify-content: center;  /* centers horizontally */

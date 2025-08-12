@@ -22,7 +22,14 @@ function App() {
       {/* Rest of the page */}
       <div className="App">
         <Routes>
-          <Route path="/" element={<ExpenseForm />} />
+          <Route
+             path="/"
+                element={
+                    <div className="page-container">
+                        <ExpenseForm />
+                    </div>
+              }
+          />
           <Route
              path="/employee"
                 element={
