@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import "./ExpenseForm.css";
 import { createExpense } from "../utils/api";
-//import { useNavigate } from "react-router-dom";
-
 
 function ExpenseForm({ onAdd }) {
   const [formData, setFormData] = useState({
@@ -62,9 +60,6 @@ function ExpenseForm({ onAdd }) {
 
   return (
     <>
-    {/*<button className="back-btn" onClick={() => navigate("/")}>
-         Back
-  </button>*/}
     <form className="expense-form" onSubmit={handleSubmit}>
       <h2>Add Expense</h2>
 

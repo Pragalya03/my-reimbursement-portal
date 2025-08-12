@@ -9,7 +9,6 @@ import './App.css';
 function App() {
   return (
     <Router>
-      {/* Full-width navbar */}
       <nav className="full-width-navbar">
         <NavLink to="/employee" className="user-type-btn">
           Employee
@@ -19,7 +18,6 @@ function App() {
         </NavLink>
       </nav>
 
-      {/* Rest of the page */}
       <div className="App">
         <Routes>
           <Route

@@ -9,10 +9,10 @@ body {
 
 .page-container {
   display: flex;
-  justify-content: center;  /* centers horizontally */
-  align-items: center;      /* centers vertically */
-  min-height: calc(100vh - 60px); /* viewport minus navbar height */
-  padding: 20px;             /* spacing for small screens */
+  justify-content: center;  
+  align-items: center;      
+  min-height: calc(100vh - 60px); 
+  padding: 20px;             
   box-sizing: border-box;
 }
 

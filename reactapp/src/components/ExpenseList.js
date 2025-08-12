@@ -42,10 +42,10 @@ function ExpenseList() {
             : exp
         )
       );
-      // Reset
+      
       setActiveAction(null);
       setRemarksInput("");
-      setHighlightedId(null); // Remove highlight after submit
+      setHighlightedId(null); 
     } catch (error) {
       console.error("Failed to update status:", error);
     }
@@ -96,7 +96,6 @@ function ExpenseList() {
         <option value="REJECTED">Rejected</option>
       </select>
 
-      {/* Select by Employee ID */}
       <div style={{ marginBottom: "15px", marginTop: "10px" }}>
         <label style={{ marginRight: "8px", fontWeight: "bold" }}>
           Or Select by Employee ID:
@@ -144,7 +143,7 @@ function ExpenseList() {
                 key={expense.id}
                 style={{
                   backgroundColor:
-                    highlightedId === expense.id ? "yellow" : "transparent"
+                    highlightedId === expense.id ? "#fde68a" : "transparent"
                 }}
               >
                 <td>{expense.employeeId}</td>
