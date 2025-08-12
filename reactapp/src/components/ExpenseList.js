@@ -42,9 +42,10 @@ function ExpenseList() {
             : exp
         )
       );
+      // Reset
       setActiveAction(null);
       setRemarksInput("");
-      setHighlightedId(null);
+      setHighlightedId(null); // Remove highlight after submit
     } catch (error) {
       console.error("Failed to update status:", error);
     }
@@ -55,7 +56,7 @@ function ExpenseList() {
       (exp) => String(exp.employeeId) === searchEmployeeId.trim()
     );
     if (foundExpense) {
-      window.location.href = `/ExpenseStatusUpdate/${foundExpense.id}`;
+      setHighlightedId(foundExpense.id);
     } else {
       alert("Employee ID not found.");
     }
@@ -95,7 +96,7 @@ function ExpenseList() {
         <option value="REJECTED">Rejected</option>
       </select>
 
-      {/* Search by Employee ID */}
+      {/* Select by Employee ID */}
       <div style={{ marginBottom: "15px", marginTop: "10px" }}>
         <label style={{ marginRight: "8px", fontWeight: "bold" }}>
           Or Select by Employee ID:
@@ -201,7 +202,7 @@ function ExpenseList() {
                           onClick={() => {
                             setActiveAction(null);
                             setRemarksInput("");
-                            setHighlightedId(null);
+                            setHighlightedId(null); // Remove highlight on cancel
                           }}
                         >
                           Cancel
