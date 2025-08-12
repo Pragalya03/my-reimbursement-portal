@@ -1,7 +1,6 @@
 .App {
   font-family: Arial, sans-serif;
   padding: 20px;
-  background-color: #eef2f3;
   min-height: 100vh;
 }
 
@@ -107,8 +106,7 @@ nav.top-right-nav a.active {
 /* Adjust the rest of the page so content isn't hidden under navbar */
 .App {
   font-family: Arial, sans-serif;
-  padding-top: 60px; /* Same as navbar height */
-  background-color: #eef2f3;
+  padding-top: 90px !important; /* Same as navbar height */
   min-height: 100vh;
 }
 

@@ -21,6 +21,7 @@ body {
   box-sizing: border-box;
   color: #1B1D1E;
   position: relative;
+  justify-content: center;
 }
 
 .page-title {
