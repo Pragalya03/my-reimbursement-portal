@@ -6,33 +6,31 @@ import ExpenseList from "./components/ExpenseList";
 import ExpenseStatusUpdate from "./components/ExpenseStatusUpdate";
 import './App.css';
 
-function Navbar() {
-  return (
-    <nav className="full-width-navbar">
-      <NavLink to="/employee" className="user-type-btn">
-        Employee
-      </NavLink>
-      <NavLink to="/manager" className="user-type-btn">
-        Manager
-      </NavLink>
-    </nav>
-  );
-}
-
-
 function App() {
   return (
     <Router>
-      <Navbar />
+      {/* Full-width navbar */}
+      <nav className="full-width-navbar">
+        <NavLink to="/employee" className="user-type-btn">
+          Employee
+        </NavLink>
+        <NavLink to="/manager" className="user-type-btn">
+          Manager
+        </NavLink>
+      </nav>
 
-      <Routes>
-        <Route path="/" element={<ExpenseForm />} />
-        <Route path="/employee" element={<ExpenseForm />} />
-        <Route path="/manager" element={<ExpenseList />} />
-        <Route path="/expenses/:id/update" element={<ExpenseStatusUpdate />} />
-      </Routes>
+      {/* Rest of the page */}
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<ExpenseForm />} />
+          <Route path="/employee" element={<ExpenseForm />} />
+          <Route path="/manager" element={<ExpenseList />} />
+          <Route path="/expenses/:id/update" element={<ExpenseStatusUpdate />} />
+        </Routes>
+      </div>
     </Router>
   );
 }
+
 
 export default App;
