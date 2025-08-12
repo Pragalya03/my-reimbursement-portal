@@ -88,38 +88,45 @@ nav.top-right-nav a.active {
   background-color: #E2E7E7; /* Softer blue active state */
   color: #2F4F4F;
 }
-/* Full-width navbar */
+/* Full-width top navbar */
 .full-width-navbar {
   width: 100%;
   background-color: #2F4F4F; /* Deep teal */
-  padding: 15px 40px;
+  height: 60px; /* Fixed height like GeeksforGeeks */
   display: flex;
-  justify-content: center;
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
   gap: 25px;
-  position: sticky;
+  position: fixed; /* Stay at the very top */
   top: 0;
+  left: 0;
   z-index: 1000;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Override button styles inside navbar */
+/* Adjust the rest of the page so content isn't hidden under navbar */
+.App {
+  font-family: Arial, sans-serif;
+  padding-top: 60px; /* Same as navbar height */
+  background-color: #eef2f3;
+  min-height: 100vh;
+}
+
+/* Buttons inside navbar */
 .full-width-navbar .user-type-btn {
   color: #fff;
   padding: 10px 25px;
-  border-radius: 8px;
+  border-radius: 6px;
   text-decoration: none;
   font-size: 16px;
   font-weight: 500;
   transition: all 0.3s ease;
 }
 
-/* Hover effect */
 .full-width-navbar .user-type-btn:hover {
   background-color: #4F7777;
-  transform: scale(1.05);
 }
 
-/* Active link */
 .full-width-navbar .user-type-btn.active {
   background-color: #1E3D3D;
 }
