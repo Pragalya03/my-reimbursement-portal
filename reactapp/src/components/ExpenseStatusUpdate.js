@@ -1,17 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
-function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
+function ExpenseStatusUpdate({ onStatusUpdate }) {
+  const { id } = useParams();
+  const [expense, setExpense] = useState(null);
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [remarks, setRemarks] = useState("");
   const [modalError, setModalError] = useState("");
 
+  // Fetch expense details on page load
+  useEffect(() => {
+    const fetchExpense = async () => {
+      try {
+        const res = await fetch(`/api/expenses/${id}`);
+        if (res.ok) {
+          const data = await res.json();
+          setExpense(data);
+        } else {
+          console.error("Failed to fetch expense");
+        }
+      } catch (error) {
+        console.error("Error fetching expense:", error);
+      }
+    };
+    fetchExpense();
+  }, [id]);
+
   const handleApprove = async () => {
     try {
-      const res = await fetch(`/api/expenses/${expense.id}/approve`, {
+      const res = await fetch(`/api/expenses/${id}/approve`, {
         method: "POST",
       });
-      if (res.ok && onStatusUpdate) {
-        onStatusUpdate();
+      if (res.ok) {
+        if (onStatusUpdate) onStatusUpdate();
+        setExpense({ ...expense, status: "APPROVED" });
       }
     } catch (error) {
       console.error("Approve failed", error);
@@ -28,28 +50,46 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
       return;
     }
     try {
-      const res = await fetch(`/api/expenses/${expense.id}/reject`, {
+      const res = await fetch(`/api/expenses/${id}/reject`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ remarks }),
       });
-      if (res.ok && onStatusUpdate) {
+      if (res.ok) {
         setShowRejectModal(false);
         setRemarks("");
         setModalError("");
-        onStatusUpdate();
+        if (onStatusUpdate) onStatusUpdate();
+        setExpense({ ...expense, status: "REJECTED" });
       }
     } catch (error) {
       console.error("Reject failed", error);
     }
   };
 
+  // Loading state
+  if (!expense) {
+    return <p>Loading expense details...</p>;
+  }
+
+  // If not pending, no action buttons
   if (expense.status !== "PENDING") {
-    return null;
+    return <p>Status: {expense.status}</p>;
   }
 
   return (
     <div>
+      <h2>Expense Status Update</h2>
+      <p>
+        <strong>ID:</strong> {expense.id}
+      </p>
+      <p>
+        <strong>Amount:</strong> {expense.amount}
+      </p>
+      <p>
+        <strong>Status:</strong> {expense.status}
+      </p>
+
       <button data-testid={`approve-btn-${expense.id}`} onClick={handleApprove}>
         Approve
       </button>
