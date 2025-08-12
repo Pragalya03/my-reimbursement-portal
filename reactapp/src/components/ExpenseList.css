@@ -54,7 +54,6 @@
   outline: none;
 }
 
-/* Table Styling */
 .expense-list table {
   width: 100%;
   table-layout: fixed;
@@ -101,7 +100,6 @@
   vertical-align: middle;
 }
 
-/* Remarks column scroll */
 .expense-list tbody td.remarks-cell {
   max-height: 40px;
   overflow-y: auto;
@@ -111,7 +109,6 @@
   display: block;
 }
 
-/* Approve button */
 .expense-list button.approve-btn {
   background: #E6F4EA;
   color: #5C7A4B;
@@ -131,7 +128,6 @@
   box-shadow: 0 6px 12px rgba(92, 122, 75, 0.6);
 }
 
-/* Reject button */
 .expense-list button.reject-btn {
   background: #F8D7DA;
   color: #9B3A3A;
@@ -151,7 +147,6 @@
   box-shadow: 0 6px 12px rgba(155, 58, 58, 0.6);
 }
 
-/* Cancel button */
 .expense-list button.cancel-btn {
   background: white;
   color: #2F4F4F;
@@ -167,7 +162,6 @@
   border-color: #2F4F4F;
 }
 
-/* Submit button */
 .expense-list button.submit-btn {
   background: white;
   color: #2F4F4F;
@@ -184,7 +178,6 @@
   border-color: #2F4F4F;
 }
 
-/* Remarks input */
 .expense-list input[type="text"] {
   width: 100%;
   padding: 10px 14px;
@@ -204,7 +197,6 @@
   box-shadow: 0 0 8px #2F4F4F55;
 }
 
-/* Action buttons container */
 .action-buttons {
   display: flex;
   gap: 12px;
