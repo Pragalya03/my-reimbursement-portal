@@ -8,7 +8,6 @@ body {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
 .expense-form {
@@ -22,6 +21,7 @@ body {
   color: #1B1D1E;
   position: relative;
   justify-content: center;
+  margin-top: 80px;
 }
 
 .page-title {
