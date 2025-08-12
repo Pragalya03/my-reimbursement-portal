@@ -88,21 +88,21 @@ nav.top-right-nav a.active {
   background-color: #E2E7E7; /* Softer blue active state */
   color: #2F4F4F;
 }
-/* Full-width navbar */
 .full-width-navbar {
   width: 100%;
   background-color: #2F4F4F; /* Deep teal */
   padding: 15px 40px;
   display: flex;
-  justify-content: center;
+  justify-content: center; /* Center the buttons horizontally */
   gap: 25px;
   position: sticky;
   top: 0;
   z-index: 1000;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin: 0; /* Remove any default margins */
 }
 
-/* Override button styles inside navbar */
+/* Buttons inside navbar */
 .full-width-navbar .user-type-btn {
   color: #fff;
   padding: 10px 25px;
@@ -113,13 +113,11 @@ nav.top-right-nav a.active {
   transition: all 0.3s ease;
 }
 
-/* Hover effect */
 .full-width-navbar .user-type-btn:hover {
   background-color: #4F7777;
   transform: scale(1.05);
 }
 
-/* Active link */
 .full-width-navbar .user-type-btn.active {
   background-color: #1E3D3D;
 }
