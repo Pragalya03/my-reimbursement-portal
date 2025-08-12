@@ -1,15 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
+/* Remove vertical centering from body */
 body {
   background: linear-gradient(135deg, #2F4F4F 0%, #5C7A4B 100%);
   font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
 }
 
+/* Page wrapper to center form */
+.page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 60px); /* Subtract navbar height */
+  padding-top: 60px; /* So content starts below navbar */
+}
+
+/* Your existing form styles */
 .expense-form {
   background: #FFFFFF;
   max-width: 600px;
@@ -19,10 +28,8 @@ body {
   box-shadow: 0 20px 40px rgba(47, 79, 79, 0.3);
   box-sizing: border-box;
   color: #1B1D1E;
-  position: relative;
-  justify-content: center;
-  margin-top: 80px;
 }
+
 
 .page-title {
   text-align: center;
