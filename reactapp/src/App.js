@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, NavLink } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, NavLink, useNavigate } from "react-router-dom";
 
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
@@ -23,22 +23,25 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<ExpenseForm />} />
+
           <Route
-             path="/employee"
-                element={
-                    <div className="page-container">
-                        <ExpenseForm />
-                    </div>
-              }
+            path="/employee"
+            element={
+              <div className="page-container">
+                <ExpenseForm />
+              </div>
+            }
           />
 
+          {/* Manager page where GO button lives */}
           <Route path="/manager" element={<ExpenseList />} />
+
+          {/* Expense status update with dynamic ID */}
           <Route path="/expenses/:id/update" element={<ExpenseStatusUpdate />} />
         </Routes>
       </div>
     </Router>
   );
 }
-
 
 export default App;
