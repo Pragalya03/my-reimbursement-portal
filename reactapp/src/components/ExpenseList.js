@@ -112,10 +112,10 @@ function ExpenseList() {
           onClick={handleGoClick}
           style={{
             padding: "6px 12px",
-            background: "#4f46e5",
-            color: "#fff",
-            border: "none",
-            borderRadius: "4px",
+            background: "#fde68a",
+            color: "#d97706",
+            border: "2px solid #d97706",
+            borderRadius: "20px",
             cursor: "pointer"
           }}
         >
