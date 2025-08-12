@@ -222,7 +222,6 @@
 
 // export default ExpenseList;
 
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -256,7 +255,7 @@ function ExpenseList() {
       return;
     }
 
-    // check if the ID exists in the list (optional)
+    // Optional: check if the ID exists in the current table list
     const exists = expenses.some(
       (expense) => expense.id.toString() === searchExpenseId.trim()
     );
@@ -265,8 +264,8 @@ function ExpenseList() {
       return;
     }
 
-    // navigate to ExpenseStatusUpdate page with the entered ID
-    navigate(`/expense-status/${searchExpenseId.trim()}`);
+    // Navigate to the ExpenseStatusUpdate page
+    navigate(`/expenses/${searchExpenseId.trim()}/update`);
   };
 
   return (
@@ -362,4 +361,3 @@ function ExpenseList() {
 }
 
 export default ExpenseList;
-
