@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+/*import React, { useEffect, useState } from "react";
 import { getExpenses, updateExpenseStatus } from "../utils/api.js";
 import './ExpenseList.css';
 
@@ -216,6 +216,83 @@ function ExpenseList() {
           </tbody>
         </table>
       )}
+    </div>
+  );
+}
+
+export default ExpenseList;
+*/
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getExpenses } from "../utils/api.js";
+
+function ExpenseList() {
+  const [expenses, setExpenses] = useState([]);
+  const [statusFilter, setStatusFilter] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchExpenses();
+  }, []);
+
+  async function fetchExpenses() {
+    try {
+      const data = await getExpenses();
+      setExpenses(data);
+    } catch (error) {
+      console.error("Failed to fetch expenses:", error);
+    }
+  }
+
+  function handleGoClick() {
+    const empId = prompt("Enter Employee ID:");
+    if (!empId) return;
+
+    const foundExpense = expenses.find(
+      (exp) => String(exp.employeeId) === empId.trim()
+    );
+
+    if (foundExpense) {
+      navigate(`/expenses/${foundExpense.id}/update`);
+    } else {
+      alert("Employee ID not found.");
+    }
+  }
+
+  return (
+    <div className="expense-list">
+      <h2>All Expenses</h2>
+
+      {/* Status filter */}
+      <label>Status:</label>
+      <select
+        value={statusFilter}
+        onChange={(e) => setStatusFilter(e.target.value)}
+        style={{ marginBottom: "12px" }}
+      >
+        <option value="">All</option>
+        <option value="PENDING">Pending</option>
+        <option value="APPROVED">Approved</option>
+        <option value="REJECTED">Rejected</option>
+      </select>
+
+      {/* New GO button */}
+      <button
+        onClick={handleGoClick}
+        style={{
+          marginLeft: "12px",
+          padding: "6px 14px",
+          background: "#4f46e5",
+          color: "#fff",
+          border: "none",
+          borderRadius: "6px",
+          cursor: "pointer"
+        }}
+      >
+        GO
+      </button>
+
+      {/* Your table rendering remains unchanged */}
     </div>
   );
 }
