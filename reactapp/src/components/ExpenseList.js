@@ -1,47 +1,92 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import "./ExpenseList.css";
+import { getExpenses, updateExpenseStatus } from "../utils/api.js";
+//import { useNavigate } from "react-router-dom";
+import './ExpenseList.css';
 
 function ExpenseList() {
+  
   const [expenses, setExpenses] = useState([]);
-  const [statusFilter, setStatusFilter] = useState("ALL");
-  const navigate = useNavigate();
+  const [statusFilter, setStatusFilter] = useState("");
+  const [activeAction, setActiveAction] = useState(null); // { id, type }
+  const [remarksInput, setRemarksInput] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/expenses")
-      .then((res) => res.json())
-      .then((data) => setExpenses(data))
-      .catch((err) => console.error(err));
+    fetchExpenses();
   }, []);
 
-  const filteredExpenses =
-    statusFilter === "ALL"
-      ? expenses
-      : expenses.filter((e) => e.status === statusFilter);
+  async function fetchExpenses() {
+    try {
+      const data = await getExpenses();
+      setExpenses(data);
+    } catch (error) {
+      console.error("Failed to fetch expenses:", error);
+      setExpenses([]);
+    }
+  }
 
+  async function submitStatusChange(id, newStatus) {
+    if (newStatus === "REJECTED" && !remarksInput.trim()) {
+      alert("Remarks are required for rejection.");
+      return;
+    }
+
+    try {
+      await updateExpenseStatus(id, {
+        status: newStatus,
+        remarks: remarksInput.trim() || null
+      });
+      setExpenses((prev) =>
+        prev.map((exp) =>
+          exp.id === id
+            ? { ...exp, status: newStatus, remarks: remarksInput.trim() || null }
+            : exp
+        )
+      );
+      // Reset
+      setActiveAction(null);
+      setRemarksInput("");
+    } catch (error) {
+      console.error("Failed to update status:", error);
+    }
+  }
+
+  const filteredExpenses = statusFilter
+    ? expenses.filter((expense) => expense.status === statusFilter)
+    : expenses;
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric"
+    });
+  }
   return (
     <div className="expense-list">
-      <h2>Expense List</h2>
-
-      {/* Status filter */}
-      <label>
-        Filter by Status:{" "}
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-        >
-          <option value="ALL">All</option>
-          <option value="PENDING">Pending</option>
-          <option value="APPROVED">Approved</option>
-          <option value="REJECTED">Rejected</option>
-        </select>
+    {/*<button className="back-btn" onClick={() => navigate("/")}>
+        Back
+      </button>*/}
+      <h2>All Expenses</h2>
+      <label htmlFor="status-filter" style={{ marginRight: "8px" }}>
+        Status:
       </label>
+      <select
+        id="status-filter"
+        data-testid="status-filter"
+        aria-label="Status"
+        value={statusFilter}
+        onChange={(e) => setStatusFilter(e.target.value)}
+      >
+        <option value="">All</option>
+        <option value="PENDING">Pending</option>
+        <option value="APPROVED">Approved</option>
+        <option value="REJECTED">Rejected</option>
+      </select>
 
-      {/* Expense table */}
       {filteredExpenses.length === 0 ? (
         <p>No expenses found</p>
       ) : (
-        <table>
+        <table data-testid="expenses-table">
           <thead>
             <tr>
               <th>Employee ID</th>
@@ -50,23 +95,76 @@ function ExpenseList() {
               <th>Date</th>
               <th>Status</th>
               <th>Remarks</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {filteredExpenses.map((exp) => (
-              <tr key={exp.id}>
-                <td>{exp.employeeId}</td>
-                <td>${exp.amount.toFixed(2)}</td>
-                <td>{exp.description}</td>
+            {filteredExpenses.map((expense) => (
+              <tr key={expense.id}>
+                <td>{expense.employeeId}</td>
+                <td>${Number(expense.amount).toFixed(2)}</td>
+                <td>{expense.description}</td>
+                <td>{formatDate(expense.date)}</td>
+                <td>{expense.status}</td>
+                <td>{expense.remarks || ""}</td>
                 <td>
-                  {new Date(exp.date).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
+                  {expense.status === "PENDING" && activeAction?.id !== expense.id && (
+                    <>
+                      <button
+                      className='approve-btn'
+                        onClick={() =>
+                          setActiveAction({ id: expense.id, type: "APPROVED" })
+                        }
+                      >
+                        Approve
+                      </button>
+                      <button
+                      className='reject-btn'
+                        onClick={() =>
+                          setActiveAction({ id: expense.id, type: "REJECTED" })
+                        }
+                      >
+                        Reject
+                      </button>
+                    </>
+                  )}
+
+                  {/* Input for remarks when action is active */}
+                  {activeAction?.id === expense.id && (
+                    <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                      <input
+                        type="text"
+                        placeholder={
+                          activeAction.type === "REJECTED"
+                            ? "Enter remarks (required)"
+                            : "Enter remarks (optional)"
+                        }
+                        value={remarksInput}
+                        onChange={(e) => setRemarksInput(e.target.value)}
+                      />
+                      <div>
+                        <button
+                        className="submit-btn"
+                          onClick={() =>
+                            submitStatusChange(expense.id, activeAction.type)
+                          }
+                        >
+                          Submit
+                        </button>
+                        
+                        <button
+                        className="cancel-btn"
+                          onClick={() => {
+                            setActiveAction(null);
+                            setRemarksInput("");
+                          }}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </td>
-                <td>{exp.status}</td>
-                <td>{exp.remarks || "-"}</td>
               </tr>
             ))}
           </tbody>
