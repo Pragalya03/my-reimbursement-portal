@@ -23,7 +23,15 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<ExpenseForm />} />
-          <Route path="/employee" element={<ExpenseForm />} />
+          <Route
+             path="/employee"
+                element={
+                    <div className="page-container">
+                        <ExpenseForm />
+                    </div>
+              }
+          />
+
           <Route path="/manager" element={<ExpenseList />} />
           <Route path="/expenses/:id/update" element={<ExpenseStatusUpdate />} />
         </Routes>
