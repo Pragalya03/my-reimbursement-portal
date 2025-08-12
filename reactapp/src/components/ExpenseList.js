@@ -7,8 +7,8 @@ function ExpenseList() {
   const [statusFilter, setStatusFilter] = useState("");
   const [activeAction, setActiveAction] = useState(null);
   const [remarksInput, setRemarksInput] = useState("");
-  const [searchId, setSearchId] = useState(""); // ⬅ Added
-  const [highlightedId, setHighlightedId] = useState(null); // ⬅ Added
+  const [highlightedId, setHighlightedId] = useState(null);
+  const [searchEmployeeId, setSearchEmployeeId] = useState("");
 
   useEffect(() => {
     fetchExpenses();
@@ -42,20 +42,23 @@ function ExpenseList() {
             : exp
         )
       );
+      // Reset
       setActiveAction(null);
       setRemarksInput("");
+      setHighlightedId(null); // Remove highlight after submit
     } catch (error) {
       console.error("Failed to update status:", error);
     }
   }
 
   function handleGoClick() {
-    const found = expenses.find(exp => exp.employeeId.toString() === searchId.trim());
-    if (found) {
-      setHighlightedId(found.id);
+    const foundExpense = expenses.find(
+      (exp) => String(exp.employeeId) === searchEmployeeId.trim()
+    );
+    if (foundExpense) {
+      setHighlightedId(foundExpense.id);
     } else {
-      alert("Employee ID not found");
-      setHighlightedId(null);
+      alert("Employee ID not found.");
     }
   }
 
@@ -75,16 +78,17 @@ function ExpenseList() {
   return (
     <div className="expense-list">
       <h2>All Expenses</h2>
-      
-      {/* Status Filter */}
-      <label htmlFor="status-filter" style={{ marginRight: "8px" }}>Status:</label>
+
+      <label htmlFor="status-filter" style={{ marginRight: "8px" }}>
+        Status:
+      </label>
       <select
         id="status-filter"
         data-testid="status-filter"
         aria-label="Status"
         value={statusFilter}
         onChange={(e) => setStatusFilter(e.target.value)}
-        style={{ marginBottom: "10px" }}
+        style={{ marginBottom: "12px" }}
       >
         <option value="">All</option>
         <option value="PENDING">Pending</option>
@@ -92,29 +96,26 @@ function ExpenseList() {
         <option value="REJECTED">Rejected</option>
       </select>
 
-      {/* Employee ID Search */}
-      <div style={{ marginTop: "10px", marginBottom: "20px" }}>
-        <label style={{ marginRight: "8px" }}>Or Select by Employee ID:</label>
+      {/* Select by Employee ID */}
+      <div style={{ marginBottom: "15px", marginTop: "10px" }}>
+        <label style={{ marginRight: "8px", fontWeight: "bold" }}>
+          Or Select by Employee ID:
+        </label>
         <input
           type="text"
-          value={searchId}
-          onChange={(e) => setSearchId(e.target.value)}
+          value={searchEmployeeId}
+          onChange={(e) => setSearchEmployeeId(e.target.value)}
           placeholder="Enter Employee ID"
-          style={{
-            padding: "5px",
-            borderRadius: "4px",
-            border: "1px solid #ccc",
-            marginRight: "8px"
-          }}
+          style={{ marginRight: "8px", padding: "5px" }}
         />
         <button
           onClick={handleGoClick}
           style={{
             padding: "6px 12px",
-            borderRadius: "4px",
+            background: "#4f46e5",
+            color: "#fff",
             border: "none",
-            backgroundColor: "#4f46e5",
-            color: "white",
+            borderRadius: "4px",
             cursor: "pointer"
           }}
         >
@@ -122,11 +123,10 @@ function ExpenseList() {
         </button>
       </div>
 
-      {/* Expenses Table */}
       {filteredExpenses.length === 0 ? (
         <p>No expenses found</p>
       ) : (
-        <table data-testid="expenses-table" style={{ borderCollapse: "collapse", width: "100%" }}>
+        <table data-testid="expenses-table" style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead>
             <tr>
               <th>Employee ID</th>
@@ -143,7 +143,8 @@ function ExpenseList() {
               <tr
                 key={expense.id}
                 style={{
-                  backgroundColor: highlightedId === expense.id ? "#fff7b2" : "transparent" // highlight
+                  backgroundColor:
+                    highlightedId === expense.id ? "yellow" : "transparent"
                 }}
               >
                 <td>{expense.employeeId}</td>
@@ -156,7 +157,7 @@ function ExpenseList() {
                   {expense.status === "PENDING" && activeAction?.id !== expense.id && (
                     <>
                       <button
-                        className='approve-btn'
+                        className="approve-btn"
                         onClick={() =>
                           setActiveAction({ id: expense.id, type: "APPROVED" })
                         }
@@ -164,7 +165,7 @@ function ExpenseList() {
                         Approve
                       </button>
                       <button
-                        className='reject-btn'
+                        className="reject-btn"
                         onClick={() =>
                           setActiveAction({ id: expense.id, type: "REJECTED" })
                         }
@@ -195,11 +196,13 @@ function ExpenseList() {
                         >
                           Submit
                         </button>
+
                         <button
                           className="cancel-btn"
                           onClick={() => {
                             setActiveAction(null);
                             setRemarksInput("");
+                            setHighlightedId(null); // Remove highlight on cancel
                           }}
                         >
                           Cancel
