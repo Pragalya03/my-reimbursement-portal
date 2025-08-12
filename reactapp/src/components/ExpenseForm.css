@@ -6,7 +6,7 @@ body {
   font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
-  min-height: 100vh;
+  
 }
 
 /* Page wrapper to center form */
@@ -14,8 +14,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 60px); /* Subtract navbar height */
-  padding-top: 60px; /* So content starts below navbar */
+  min-height: 60px; /* Subtract navbar height */
+  padding-top: 40px; /* So content starts below navbar */
 }
 
 /* Your existing form styles */
