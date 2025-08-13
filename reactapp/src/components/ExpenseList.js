@@ -201,7 +201,7 @@ function ExpenseList() {
                           onClick={() => {
                             setActiveAction(null);
                             setRemarksInput("");
-                            setHighlightedId(null); // Remove highlight on cancel
+                            setHighlightedId(null); 
                           }}
                         >
                           Cancel

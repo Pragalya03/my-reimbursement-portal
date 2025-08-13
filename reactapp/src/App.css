@@ -43,13 +43,11 @@
   transition: all 0.3s ease;
 }
 
-/* Hover effect */
 .user-type-btn:hover {
-  background-color: #4F7777; /* Softer teal */
+  background-color: #4F7777; 
   transform: scale(1.05);
 }
 
-/* Active link */
 .user-type-btn.active {
   background-color: #1E3D3D; /* Darker teal */
   border-color: #133030;
@@ -69,8 +67,8 @@ nav.top-right-nav {
 }
 
 nav.top-right-nav a {
-  color: white; /* Dark gray text for readability */
-  background-color: #2F4F4F; /* Light gray background */
+  color: white; 
+  background-color: #2F4F4F; 
   font-weight: 600;
   text-decoration: none;
   padding: 8px 15px;
@@ -79,38 +77,35 @@ nav.top-right-nav a {
 }
 
 nav.top-right-nav a:hover {
-  background-color: #B8C9CA; /* Light sky blue */
-  color: #2F4F4F; /* Deep blue text on hover */
+  background-color: #B8C9CA; 
+  color: #2F4F4F; 
 }
 
 nav.top-right-nav a.active {
-  background-color: #E2E7E7; /* Softer blue active state */
+  background-color: #E2E7E7; 
   color: #2F4F4F;
 }
-/* Full-width top navbar */
 .full-width-navbar {
   width: 100%;
-  background-color: #2F4F4F; /* Deep teal */
-  height: 60px; /* Fixed height like GeeksforGeeks */
+  background-color: #2F4F4F; 
+  height: 60px; 
   display: flex;
-  align-items: center; /* Center vertically */
-  justify-content: center; /* Center horizontally */
+  align-items: center; 
+  justify-content: center; 
   gap: 25px;
-  position: fixed; /* Stay at the very top */
+  position: fixed; 
   top: 0;
   left: 0;
   z-index: 1000;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-/* Adjust the rest of the page so content isn't hidden under navbar */
 .App {
   font-family: Arial, sans-serif;
-  padding-top: 90px !important; /* Same as navbar height */
+  padding-top: 90px !important; 
   min-height: 100vh;
 }
 
-/* Buttons inside navbar */
 .full-width-navbar .user-type-btn {
   color: #fff;
   padding: 10px 25px;
