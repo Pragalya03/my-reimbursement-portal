@@ -186,21 +186,24 @@ import "./ExpenseStatusUpdate.css";
 function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
   const [modalType, setModalType] = useState(null); // 'approve' or 'reject'
   const [remarks, setRemarks] = useState("");
+  const [modalError, setModalError] = useState(""); // <-- add this
 
   const handleOpenModal = (type) => {
     setModalType(type);
     setRemarks("");
+    setModalError("");
   };
 
   const handleCloseModal = () => {
     setModalType(null);
     setRemarks("");
+    setModalError("");
   };
 
   const handleConfirm = async () => {
-    // For reject, remarks are required
+    // Reject requires remarks
     if (modalType === "reject" && remarks.trim() === "") {
-      alert("Remarks are required for rejection.");
+      setModalError("Remarks are required");
       return;
     }
 
@@ -209,10 +212,11 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
       const res = await fetch(`/expenses/${expense.id}/${status.toLowerCase()}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ remarks })
+        body: JSON.stringify({ remarks: remarks.trim() || null }),
       });
+
       if (res.ok) {
-        onStatusUpdate && onStatusUpdate();
+        onStatusUpdate && onStatusUpdate(); // <-- this will now be called
         handleCloseModal();
       } else {
         console.error("Failed to update status");
@@ -245,10 +249,7 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
 
       {/* Modal */}
       {modalType && (
-        <div
-          className="modal-overlay"
-          data-testid={`${modalType}-modal`}
-        >
+        <div className="modal-overlay" data-testid={`${modalType}-modal`}>
           <div className="modal-content">
             <h3>
               {modalType === "approve" ? "Confirm Approval" : "Confirm Rejection"}
@@ -264,6 +265,12 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
               onChange={(e) => setRemarks(e.target.value)}
               data-testid="remarks-input"
             />
+
+            {modalError && (
+              <p data-testid="modal-error" style={{ color: "red" }}>
+                {modalError}
+              </p>
+            )}
 
             <div className="modal-buttons">
               <button
@@ -289,4 +296,3 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
 }
 
 export default ExpenseStatusUpdate;
-
