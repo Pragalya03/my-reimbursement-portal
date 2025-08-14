@@ -184,57 +184,45 @@ import React, { useState } from "react";
 import './ExpenseStatusUpdate.css';
 
 function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
-  const [showApproveModal, setShowApproveModal] = useState(false);
-  const [showRejectModal, setShowRejectModal] = useState(false);
-  const [approveRemarks, setApproveRemarks] = useState("");
-  const [rejectRemarks, setRejectRemarks] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [remarks, setRemarks] = useState("");
   const [modalError, setModalError] = useState("");
+  const [actionType, setActionType] = useState(""); // "APPROVED" or "REJECTED"
 
-  // Open Approve modal
-  const handleApprove = () => {
-    setShowApproveModal(true);
+  const openModal = (type) => {
+    setActionType(type);
+    setShowModal(true);
   };
 
-  const confirmApprove = async () => {
-    try {
-      const res = await fetch(`/api/expenses/${expense.id}/approve`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ remarks: approveRemarks.trim() || null }),
-      });
-      if (res.ok) {
-        setShowApproveModal(false);
-        setApproveRemarks("");
-        setModalError("");
-        if (onStatusUpdate) onStatusUpdate();
-      }
-    } catch (error) {
-      console.error("Approve failed", error);
-    }
+  const closeModal = () => {
+    setShowModal(false);
+    setRemarks("");
+    setModalError("");
+    setActionType("");
   };
 
-  // Open Reject modal
-  const handleReject = () => setShowRejectModal(true);
-
-  const confirmReject = async () => {
-    if (!rejectRemarks.trim()) {
+  const confirmAction = async () => {
+    if (actionType === "REJECTED" && !remarks.trim()) {
       setModalError("Remarks are required");
       return;
     }
+
     try {
-      const res = await fetch(`/api/expenses/${expense.id}/reject`, {
+      const res = await fetch(`/api/expenses/${expense.id}/${actionType.toLowerCase()}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ remarks: rejectRemarks }),
+        body: JSON.stringify({ remarks: remarks.trim() || null }),
       });
+
       if (res.ok) {
-        setShowRejectModal(false);
-        setRejectRemarks("");
-        setModalError("");
+        closeModal();
         if (onStatusUpdate) onStatusUpdate();
+      } else {
+        setModalError("Failed to update expense status");
       }
     } catch (error) {
-      console.error("Reject failed", error);
+      console.error(`${actionType} failed`, error);
+      setModalError("Error occurred. Try again.");
     }
   };
 
@@ -245,80 +233,38 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
       <button
         data-testid={`approve-btn-${expense.id}`}
         className="approve-btn"
-        onClick={handleApprove}
+        onClick={() => openModal("APPROVED")}
       >
         Approve
       </button>
       <button
         data-testid={`reject-btn-${expense.id}`}
         className="reject-btn"
-        onClick={handleReject}
+        onClick={() => openModal("REJECTED")}
       >
         Reject
       </button>
 
-      {/* Approve Modal */}
-      {showApproveModal && (
-        <div className="modal-overlay" data-testid="approve-modal">
+      {showModal && (
+        <div className="modal-overlay" data-testid={`${actionType.toLowerCase()}-modal`}>
           <div className="modal-content">
-            <h3>Confirm Approval</h3>
+            <h3>{actionType === "APPROVED" ? "Confirm Approval" : "Confirm Rejection"}</h3>
             <textarea
-              data-testid="remarks-input"
-              placeholder="Remarks (optional)"
-              value={approveRemarks}
-              onChange={(e) => setApproveRemarks(e.target.value)}
-            />
-            <div className="modal-buttons">
-              <button
-                data-testid="confirm-approve"
-                className="confirm-btn"
-                onClick={confirmApprove}
-              >
-                Confirm Approve
-              </button>
-              <button
-                className="cancel-btn"
-                onClick={() => {
-                  setShowApproveModal(false);
-                  setApproveRemarks("");
-                  setModalError("");
-                }}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Reject Modal */}
-      {showRejectModal && (
-        <div className="modal-overlay" data-testid="reject-modal">
-          <div className="modal-content">
-            <h3>Confirm Rejection</h3>
-            <textarea
-              data-testid="remarks-input"
-              placeholder="Remarks (required)"
-              value={rejectRemarks}
-              onChange={(e) => setRejectRemarks(e.target.value)}
+              data-testid={`${actionType.toLowerCase()}-remarks-input`}
+              placeholder={actionType === "APPROVED" ? "Remarks (optional)" : "Remarks (required)"}
+              value={remarks}
+              onChange={(e) => setRemarks(e.target.value)}
             />
             {modalError && <p data-testid="modal-error">{modalError}</p>}
             <div className="modal-buttons">
               <button
-                data-testid="confirm-reject"
+                data-testid={`confirm-${actionType.toLowerCase()}`}
                 className="confirm-btn"
-                onClick={confirmReject}
+                onClick={confirmAction}
               >
-                Confirm Reject
+                Confirm {actionType === "APPROVED" ? "Approve" : "Reject"}
               </button>
-              <button
-                className="cancel-btn"
-                onClick={() => {
-                  setShowRejectModal(false);
-                  setRejectRemarks("");
-                  setModalError("");
-                }}
-              >
+              <button className="cancel-btn" onClick={closeModal}>
                 Cancel
               </button>
             </div>
