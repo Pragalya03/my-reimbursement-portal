@@ -80,28 +80,20 @@ export default ExpenseStatusUpdate;
 */
 import React, { useState } from "react";
 import { updateExpenseStatus } from "../utils/api.js";
+import "./ExpenseStatusUpdate.css";
 
 function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
   const [showModal, setShowModal] = useState(false);
   const [remarks, setRemarks] = useState("");
   const [modalError, setModalError] = useState("");
-  const [actionType, setActionType] = useState(""); // "APPROVED" or "REJECTED"
+  const [actionType, setActionType] = useState(""); // APPROVED or REJECTED
 
-  // Open modal for Approve
-  const handleApprove = () => {
-    setActionType("APPROVED");
+  const openModal = (type) => {
+    setActionType(type);
     setShowModal(true);
   };
 
-  // Open modal for Reject
-  const handleReject = () => {
-    setActionType("REJECTED");
-    setShowModal(true);
-  };
-
-  // Confirm action
   const confirmAction = async () => {
-    // For reject, remarks are required
     if (actionType === "REJECTED" && !remarks.trim()) {
       setModalError("Remarks are required");
       return;
@@ -113,77 +105,70 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
         remarks: remarks.trim() || null,
       });
 
-      // Reset modal state
-      setShowModal(false);
-      setRemarks("");
-      setModalError("");
-      setActionType("");
-
+      closeModal();
       if (onStatusUpdate) onStatusUpdate();
     } catch (error) {
       console.error(`${actionType} failed`, error);
     }
   };
 
-  // Only show for pending expenses
-  if (expense.status !== "PENDING") {
-    return null;
-  }
+  const closeModal = () => {
+    setShowModal(false);
+    setRemarks("");
+    setModalError("");
+    setActionType("");
+  };
+
+  if (expense.status !== "PENDING") return null;
 
   return (
     <div>
-      <button data-testid={`approve-btn-${expense.id}`} onClick={handleApprove}>
+      <button
+        data-testid={`approve-btn-${expense.id}`}
+        onClick={() => openModal("APPROVED")}
+      >
         Approve
       </button>
-      <button data-testid={`reject-btn-${expense.id}`} onClick={handleReject}>
+      <button
+        data-testid={`reject-btn-${expense.id}`}
+        onClick={() => openModal("REJECTED")}
+      >
         Reject
       </button>
 
       {showModal && (
-        <div
-          data-testid="action-modal"
-          style={{
-            background: "#fff",
-            padding: "10px",
-            border: "1px solid #ccc",
-            marginTop: "8px",
-            borderRadius: "4px",
-          }}
-        >
-          <h4>
-            {actionType === "APPROVED" ? "Approve Expense" : "Reject Expense"}
-          </h4>
-          <textarea
-            data-testid="remarks-input"
-            value={remarks}
-            onChange={(e) => setRemarks(e.target.value)}
-            placeholder={
-              actionType === "APPROVED"
-                ? "Enter optional remarks"
-                : "Enter remarks (required)"
-            }
-            style={{ width: "100%", height: "60px", marginBottom: "6px" }}
-          />
-          {modalError && (
-            <p data-testid="modal-error" style={{ color: "red", marginBottom: "6px" }}>
-              {modalError}
-            </p>
-          )}
-          <div>
-            <button data-testid="confirm-action" onClick={confirmAction}>
-              Confirm {actionType === "APPROVED" ? "Approve" : "Reject"}
-            </button>
-            <button
-              onClick={() => {
-                setShowModal(false);
-                setRemarks("");
-                setModalError("");
-                setActionType("");
-              }}
-              style={{ marginLeft: "8px" }}
-            >
-              Cancel
-            </button>
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>
+              {actionType === "APPROVED" ? "Approve Expense" : "Reject Expense"}
+            </h3>
+            <textarea
+              data-testid="remarks-input"
+              value={remarks}
+              onChange={(e) => setRemarks(e.target.value)}
+              placeholder={
+                actionType === "APPROVED"
+                  ? "Enter optional remarks"
+                  : "Enter remarks (required)"
+              }
+            />
+            {modalError && (
+              <p data-testid="modal-error" className="modal-error">
+                {modalError}
+              </p>
+            )}
+            <div className="modal-buttons">
+              <button
+                data-testid="confirm-action"
+                onClick={confirmAction}
+                className="confirm-btn"
+              >
+                Confirm {actionType === "APPROVED" ? "Approve" : "Reject"}
+              </button>
+              <button onClick={closeModal} className="cancel-btn">
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}
