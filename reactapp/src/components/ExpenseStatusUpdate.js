@@ -184,108 +184,94 @@ import React, { useState } from "react";
 import './ExpenseStatusUpdate.css';
 
 function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
-  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [remarks, setRemarks] = useState("");
   const [modalError, setModalError] = useState("");
+  const [actionType, setActionType] = useState(""); // "APPROVED" or "REJECTED"
 
-  if (expense.status !== "PENDING") return null;
-
-  const handleApprove = async () => {
-    try {
-      const res = await fetch(`/api/expenses/${expense.id}/approve`, {
-        method: "POST",
-      });
-      // Close immediately for test/dev environments
-      if (res.ok || process.env.NODE_ENV === "test") {
-        if (onStatusUpdate) onStatusUpdate();
-      } else {
-        console.error("Approve failed");
-      }
-    } catch (error) {
-      console.error("Approve error", error);
-      if (process.env.NODE_ENV === "test" && onStatusUpdate) onStatusUpdate();
-    }
+  const openModal = (type) => {
+    setActionType(type);
+    setShowModal(true);
   };
 
-  const handleReject = () => {
-    setShowRejectModal(true);
+  const closeModal = () => {
+    setShowModal(false);
+    setRemarks("");
+    setModalError("");
+    setActionType("");
   };
 
-  const confirmReject = async () => {
-    if (!remarks.trim()) {
+  const confirmAction = async () => {
+    if (actionType === "REJECTED" && !remarks.trim()) {
       setModalError("Remarks are required");
       return;
     }
 
     try {
-      const res = await fetch(`/api/expenses/${expense.id}/reject`, {
-        method: "POST",
+      const res = await fetch(`/api/expenses/${expense.id}/status`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ remarks }),
+        body: JSON.stringify({
+          status: actionType,
+          remarks: remarks.trim() || null,
+        }),
       });
 
-      if (res.ok || process.env.NODE_ENV === "test") {
-        setShowRejectModal(false);
-        setRemarks("");
-        setModalError("");
+      if (res.ok) {
+        closeModal();
         if (onStatusUpdate) onStatusUpdate();
       } else {
-        setModalError("Failed to update expense status");
+        const data = await res.json();
+        setModalError(data?.message || "Failed to update expense status");
       }
     } catch (error) {
-      console.error("Reject error", error);
-      if (process.env.NODE_ENV === "test" && onStatusUpdate) {
-        setShowRejectModal(false);
-        onStatusUpdate();
-      } else {
-        setModalError("Error occurred. Try again.");
-      }
+      console.error(`${actionType} failed`, error);
+      setModalError("Error occurred. Try again.");
     }
   };
 
-  const closeRejectModal = () => {
-    setShowRejectModal(false);
-    setRemarks("");
-    setModalError("");
-  };
+  if (expense.status !== "PENDING") return null;
 
   return (
     <div className="expense-status-update">
       <button
         data-testid={`approve-btn-${expense.id}`}
         className="approve-btn"
-        onClick={handleApprove}
+        onClick={() => openModal("APPROVED")}
       >
         Approve
       </button>
       <button
         data-testid={`reject-btn-${expense.id}`}
         className="reject-btn"
-        onClick={handleReject}
+        onClick={() => openModal("REJECTED")}
       >
         Reject
       </button>
 
-      {showRejectModal && (
-        <div className="modal-overlay" data-testid="reject-modal">
+      {showModal && (
+        <div
+          className="modal-overlay"
+          data-testid={actionType === "APPROVED" ? "approve-modal" : "reject-modal"}
+        >
           <div className="modal-content">
-            <h3>Confirm Rejection</h3>
+            <h3>{actionType === "APPROVED" ? "Confirm Approval" : "Confirm Rejection"}</h3>
             <textarea
               data-testid="remarks-input"
+              placeholder={actionType === "APPROVED" ? "Remarks (optional)" : "Remarks (required)"}
               value={remarks}
               onChange={(e) => setRemarks(e.target.value)}
-              placeholder="Remarks (required)"
             />
             {modalError && <p data-testid="modal-error">{modalError}</p>}
             <div className="modal-buttons">
               <button
-                data-testid="confirm-reject"
+                data-testid={actionType === "APPROVED" ? "confirm-approve" : "confirm-reject"}
                 className="confirm-btn"
-                onClick={confirmReject}
+                onClick={confirmAction}
               >
-                Confirm Reject
+                Confirm {actionType === "APPROVED" ? "Approve" : "Reject"}
               </button>
-              <button className="cancel-btn" onClick={closeRejectModal}>
+              <button className="cancel-btn" onClick={closeModal}>
                 Cancel
               </button>
             </div>
