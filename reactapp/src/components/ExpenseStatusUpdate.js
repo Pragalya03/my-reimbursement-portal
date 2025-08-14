@@ -180,106 +180,103 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
 
 export default ExpenseStatusUpdate;
 */
-
 import React, { useState } from "react";
-import axios from "axios";
 import "./ExpenseStatusUpdate.css";
 
-const ExpenseStatusUpdate = ({ expense, onStatusUpdate }) => {
-  const [modalType, setModalType] = useState(null); // "approve" or "reject"
+function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
+  const [modalType, setModalType] = useState(null); // 'approve' or 'reject'
   const [remarks, setRemarks] = useState("");
-  const [error, setError] = useState("");
 
-  const openModal = (type) => {
+  const handleOpenModal = (type) => {
     setModalType(type);
     setRemarks("");
-    setError("");
   };
 
-  const closeModal = () => {
+  const handleCloseModal = () => {
     setModalType(null);
     setRemarks("");
-    setError("");
   };
 
   const handleConfirm = async () => {
-    // Reject requires remarks
-    if (modalType === "reject" && !remarks.trim()) {
-      setError("Remarks are required for rejection.");
+    // For reject, remarks are required
+    if (modalType === "reject" && remarks.trim() === "") {
+      alert("Remarks are required for rejection.");
       return;
     }
 
+    const status = modalType === "approve" ? "APPROVED" : "REJECTED";
     try {
-      await axios.put(
-        `http://localhost:8080/expenses/${expense.id}`,
-        {
-          ...expense,
-          status: modalType === "approve" ? "Approved" : "Rejected",
-          remarks: remarks.trim(),
-        }
-      );
-      if (onStatusUpdate) onStatusUpdate();
-      closeModal();
+      const res = await fetch(`/expenses/${expense.id}/${status.toLowerCase()}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ remarks })
+      });
+      if (res.ok) {
+        onStatusUpdate && onStatusUpdate();
+        handleCloseModal();
+      } else {
+        console.error("Failed to update status");
+      }
     } catch (err) {
-      console.error("Error updating expense:", err);
+      console.error("Error:", err);
     }
   };
 
   return (
-    <div>
-      {expense.status === "Pending" && (
+    <div className="expense-status-update">
+      {expense.status === "PENDING" && (
         <>
           <button
             data-testid={`approve-btn-${expense.id}`}
-            onClick={() => openModal("approve")}
+            onClick={() => handleOpenModal("approve")}
+            className="approve-btn"
           >
             Approve
           </button>
           <button
             data-testid={`reject-btn-${expense.id}`}
-            onClick={() => openModal("reject")}
+            onClick={() => handleOpenModal("reject")}
+            className="reject-btn"
           >
             Reject
           </button>
         </>
       )}
 
+      {/* Modal */}
       {modalType && (
         <div
           className="modal-overlay"
-          data-testid={modalType === "reject" ? "reject-modal" : "approve-modal"}
+          data-testid={`${modalType}-modal`}
         >
           <div className="modal-content">
             <h3>
-              {modalType === "approve" ? "Approve Expense" : "Reject Expense"}
+              {modalType === "approve" ? "Confirm Approval" : "Confirm Rejection"}
             </h3>
+
             <textarea
-              data-testid="remarks-input"
               placeholder={
                 modalType === "approve"
-                  ? "Enter optional remarks"
-                  : "Enter remarks (required)"
+                  ? "Remarks (optional)"
+                  : "Remarks (required)"
               }
               value={remarks}
               onChange={(e) => setRemarks(e.target.value)}
+              data-testid="remarks-input"
             />
-            {error && <div data-testid="modal-error" className="error">{error}</div>}
 
             <div className="modal-buttons">
               <button
-                className="confirm-btn"
-                data-testid={
-                  modalType === "approve"
-                    ? "confirm-approve"
-                    : "confirm-reject"
-                }
+                data-testid={`confirm-${modalType}`}
                 onClick={handleConfirm}
+                className="confirm-btn"
               >
-                Confirm {modalType === "approve" ? "Approve" : "Reject"}
+                {modalType === "approve" ? "Confirm Approve" : "Confirm Reject"}
               </button>
               <button
+                data-testid="cancel-btn"
+                onClick={handleCloseModal}
                 className="cancel-btn"
-                onClick={closeModal}
               >
                 Cancel
               </button>
@@ -289,7 +286,7 @@ const ExpenseStatusUpdate = ({ expense, onStatusUpdate }) => {
       )}
     </div>
   );
-};
+}
 
 export default ExpenseStatusUpdate;
 
