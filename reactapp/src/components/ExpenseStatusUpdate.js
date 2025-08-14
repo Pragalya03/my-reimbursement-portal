@@ -193,20 +193,21 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
 
   const openModal = (type) => {
     setActionType(type);
-    setRemarks(""); // reset remarks
-    setModalError("");
     setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
     setRemarks("");
     setModalError("");
   };
 
-  const handleAction = async () => {
+  const closeModal = () => {
+    setShowModal(false);
+    setActionType("");
+    setRemarks("");
+    setModalError("");
+  };
+
+  const confirmAction = async () => {
     if (actionType === "REJECT" && !remarks.trim()) {
-      setModalError("Remarks are required when rejecting an expense");
+      setModalError("Remarks are required for rejection");
       return;
     }
 
@@ -214,31 +215,39 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
       const res = await fetch(`/api/expenses/${expense.id}/status`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          status: actionType,
-          remarks: remarks.trim() || null,
-        }),
+        body: JSON.stringify({ status: actionType, remarks: remarks.trim() || null }),
       });
 
       if (res.ok) {
-        onStatusUpdate && onStatusUpdate();
         closeModal();
+        if (onStatusUpdate) onStatusUpdate(); // refresh parent
       } else {
-        const data = await res.json();
-        setModalError(data?.message || `Failed to ${actionType.toLowerCase()} expense`);
+        setModalError(`Failed to ${actionType.toLowerCase()} expense`);
       }
-    } catch (err) {
-      console.error(`Failed to ${actionType.toLowerCase()} expense`, err);
+    } catch (error) {
+      console.error(`${actionType} failed`, error);
       setModalError(`Failed to ${actionType.toLowerCase()} expense`);
     }
   };
 
+  const handleApproveDirect=async()=>{
+    try{
+      const res=await fetch(`/api/expenses/${expense.id}/status`,{
+        method:"PUT",
+        headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({status:"APPROVED", remarks:null}),
+      });
+      if(res.ok && onStatusUpdate) onStatusUpdate();
+    } catch(err){
+      console.error(err);
+    }
+  }
   return (
     <div className="expense-status-update">
       <button
         data-testid={`approve-btn-${expense.id}`}
         className="approve-btn"
-        onClick={() => openModal("APPROVE")}
+        onClick={handleApproveDirect}
       >
         Approve
       </button>
@@ -251,9 +260,16 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
       </button>
 
       {showModal && (
-        <div className="modal-overlay" data-testid={`${actionType.toLowerCase()}-modal`}>
+        <div
+          className="modal-overlay"
+          data-testid={actionType === "APPROVE" ? "approve-modal" : "reject-modal"}
+        >
           <div className="modal-content">
-            <h3>{actionType === "APPROVE" ? "Approve Expense" : "Reject Expense"}</h3>
+            <h3>
+              {actionType === "APPROVE" ? "Confirm Approval" : "Confirm Rejection"}
+            </h3>
+
+            {/* Remarks input: optional for approve, required for reject */}
             <textarea
               data-testid="remarks-input"
               placeholder={actionType === "APPROVE" ? "Remarks (optional)" : "Remarks (required)"}
@@ -261,13 +277,14 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
               onChange={(e) => setRemarks(e.target.value)}
             />
             {modalError && <p data-testid="modal-error">{modalError}</p>}
+
             <div className="modal-buttons">
               <button
-                data-testid={`${actionType.toLowerCase()}-confirm`}
+                data-testid={actionType === "APPROVE" ? "confirm-approve" : "confirm-reject"}
                 className="confirm-btn"
-                onClick={handleAction}
+                onClick={confirmAction}
               >
-                {actionType === "APPROVE" ? "Approve" : "Reject"}
+                {actionType === "APPROVE" ? "Confirm Approve" : "Confirm Reject"}
               </button>
               <button className="cancel-btn" onClick={closeModal}>
                 Cancel
@@ -281,4 +298,3 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
 }
 
 export default ExpenseStatusUpdate;
-
