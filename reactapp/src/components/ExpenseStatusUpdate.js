@@ -190,23 +190,21 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
   const [modalError, setModalError] = useState("");
 
   // Approve: call API immediately to satisfy tests, then show modal optionally
-  const handleApprove = async () => {
-    try {
-      const res = await fetch(`/api/expenses/${expense.id}/approve`, {
-        method: "POST",
-      });
+  const confirmApprove = async () => {
+  try {
+    await fetch(`/api/expenses/${expense.id}/approve`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ remarks: remarks.trim() || null }),
+    });
+    setShowApproveModal(false);
+    setRemarks("");
+    setModalError("");
+  } catch (error) {
+    console.error("Approve modal failed", error);
+  }
+};
 
-      if (res.ok && onStatusUpdate) {
-        onStatusUpdate(); // ✅ This makes the test pass
-      }
-
-      // Show optional remarks modal
-      setShowApproveModal(true);
-
-    } catch (error) {
-      console.error("Approve failed", error);
-    }
-  };
 
   // Confirm approve from modal (optional remarks)
   const confirmApprove = async () => {
