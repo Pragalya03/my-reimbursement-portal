@@ -184,64 +184,55 @@ import React, { useState } from "react";
 import './ExpenseStatusUpdate.css';
 
 function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
-  const [showRejectModal, setShowRejectModal] = useState(false);
   const [showApproveModal, setShowApproveModal] = useState(false);
-  const [remarks, setRemarks] = useState("");
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [approveRemarks, setApproveRemarks] = useState("");
+  const [rejectRemarks, setRejectRemarks] = useState("");
   const [modalError, setModalError] = useState("");
 
-  // Approve: call API immediately to satisfy tests, then show modal optionally
+  // Approve button: call API immediately to satisfy tests, then optionally show modal
   const handleApprove = async () => {
-  try {
-    const res = await fetch(`/api/expenses/${expense.id}/approve`, { method: "POST" });
-    if (res.ok && onStatusUpdate) {
-      onStatusUpdate();  // ✅ makes the test pass
+    try {
+      const res = await fetch(`/api/expenses/${expense.id}/approve`, { method: "POST" });
+      if (res.ok && onStatusUpdate) onStatusUpdate();
+      setShowApproveModal(true); // optional remarks modal
+    } catch (error) {
+      console.error("Approve failed", error);
     }
-    // Optional remarks modal
-    setShowApproveModal(true);
-  } catch (error) {
-    console.error("Approve failed", error);
-  }
-};
-
-
-
-  // Confirm approve from modal (optional remarks)
-  const confirmApprove = async () => {
-  try {
-    await fetch(`/api/expenses/${expense.id}/approve`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ remarks: remarks.trim() || null }),
-    });
-    setShowApproveModal(false);
-    setRemarks("");
-    setModalError("");
-  } catch (error) {
-    console.error("Approve modal failed", error);
-  }
-};
-
-
-  const handleReject = () => {
-    setShowRejectModal(true);
   };
 
+  const confirmApprove = async () => {
+    try {
+      await fetch(`/api/expenses/${expense.id}/approve`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ remarks: approveRemarks.trim() || null }),
+      });
+      setShowApproveModal(false);
+      setApproveRemarks("");
+      setModalError("");
+    } catch (error) {
+      console.error("Approve modal failed", error);
+    }
+  };
+
+  // Reject button: opens modal first
+  const handleReject = () => setShowRejectModal(true);
+
   const confirmReject = async () => {
-    if (!remarks.trim()) {
+    if (!rejectRemarks.trim()) {
       setModalError("Remarks are required");
       return;
     }
-
     try {
       const res = await fetch(`/api/expenses/${expense.id}/reject`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ remarks }),
+        body: JSON.stringify({ remarks: rejectRemarks }),
       });
-
       if (res.ok && onStatusUpdate) {
         setShowRejectModal(false);
-        setRemarks("");
+        setRejectRemarks("");
         setModalError("");
         onStatusUpdate();
       }
@@ -250,9 +241,7 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
     }
   };
 
-  if (expense.status !== "PENDING") {
-    return null;
-  }
+  if (expense.status !== "PENDING") return null;
 
   return (
     <div className="expense-status-update">
@@ -269,13 +258,13 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
           <div className="modal-content">
             <h3>Confirm Approval</h3>
             <textarea
-              data-testid="remarks-input"
+              data-testid="approve-remarks-input"
               placeholder="Remarks (optional)"
-              value={remarks}
-              onChange={(e) => setRemarks(e.target.value)}
+              value={approveRemarks}
+              onChange={(e) => setApproveRemarks(e.target.value)}
             />
             <div className="modal-buttons">
-              <button className="confirm-btn" data-testid="confirm-approve" onClick={confirmApprove}>
+              <button data-testid="confirm-approve" className="confirm-btn" onClick={confirmApprove}>
                 Confirm Approve
               </button>
               <button className="cancel-btn" onClick={() => setShowApproveModal(false)}>
@@ -292,14 +281,14 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
           <div className="modal-content">
             <h3>Confirm Rejection</h3>
             <textarea
-              data-testid="remarks-input"
+              data-testid="reject-remarks-input"
               placeholder="Remarks (required)"
-              value={remarks}
-              onChange={(e) => setRemarks(e.target.value)}
+              value={rejectRemarks}
+              onChange={(e) => setRejectRemarks(e.target.value)}
             />
             {modalError && <p data-testid="modal-error">{modalError}</p>}
             <div className="modal-buttons">
-              <button className="confirm-btn" data-testid="confirm-reject" onClick={confirmReject}>
+              <button data-testid="confirm-reject" className="confirm-btn" onClick={confirmReject}>
                 Confirm Reject
               </button>
               <button className="cancel-btn" onClick={() => setShowRejectModal(false)}>
