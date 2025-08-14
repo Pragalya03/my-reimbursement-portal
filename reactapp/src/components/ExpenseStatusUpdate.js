@@ -187,97 +187,69 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
   const [showModal, setShowModal] = useState(false);
   const [remarks, setRemarks] = useState("");
   const [modalError, setModalError] = useState("");
-  const [actionType, setActionType] = useState(""); // "APPROVED" or "REJECTED"
 
   if (expense.status !== "PENDING") return null;
 
-  const openModal = (type) => {
-    setActionType(type);
-    setShowModal(true);
-  };
-
+  const openModal = () => setShowModal(true);
   const closeModal = () => {
     setShowModal(false);
     setRemarks("");
     setModalError("");
-    setActionType("");
   };
 
-  const confirmAction = async () => {
-    // Reject requires remarks
-    if (actionType === "REJECTED" && !remarks.trim()) {
+  const updateStatus = async (status) => {
+    if (status === "REJECTED" && !remarks.trim()) {
       setModalError("Remarks are required");
       return;
     }
 
     try {
-      // ===== Updated: unified endpoint for approve/reject =====
       const res = await fetch(`/api/expenses/${expense.id}/status`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          status: actionType,
-          remarks: remarks.trim() || null,
-        }),
+        body: JSON.stringify({ status, remarks: remarks.trim() || null }),
       });
 
-      if (res.ok) {
+      if (res.ok && onStatusUpdate) {
+        onStatusUpdate();
         closeModal();
-        if (onStatusUpdate) onStatusUpdate(); // triggers test mock
       } else {
-        const data = await res.json();
-        setModalError(data.message || "Failed to update expense status");
+        setModalError("Failed to update expense status");
       }
     } catch (error) {
-      console.error(`${actionType} failed`, error);
+      console.error(`${status} failed`, error);
       setModalError("Error occurred. Try again.");
     }
   };
 
   return (
     <div className="expense-status-update">
-      <button
-        data-testid={`approve-btn-${expense.id}`}
-        className="approve-btn"
-        onClick={() => openModal("APPROVED")}
-      >
-        Approve
-      </button>
-      <button
-        data-testid={`reject-btn-${expense.id}`}
-        className="reject-btn"
-        onClick={() => openModal("REJECTED")}
-      >
-        Reject
-      </button>
+      <button onClick={openModal} className="action-btn">Update Status</button>
 
       {showModal && (
-        <div
-          className="modal-overlay"
-          data-testid={actionType === "APPROVED" ? "approve-modal" : "reject-modal"}
-        >
+        <div className="modal-overlay" data-testid="status-modal">
           <div className="modal-content">
-            <h3>
-              {actionType === "APPROVED" ? "Confirm Approval" : "Confirm Rejection"}
-            </h3>
+            <h3>Update Expense Status</h3>
             <textarea
-              data-testid="remarks-input"
-              placeholder={actionType === "APPROVED" ? "Remarks (optional)" : "Remarks (required)"}
+              placeholder="Remarks (required for rejection)"
               value={remarks}
               onChange={(e) => setRemarks(e.target.value)}
             />
             {modalError && <p data-testid="modal-error">{modalError}</p>}
             <div className="modal-buttons">
               <button
-                data-testid={actionType === "APPROVED" ? "confirm-approve" : "confirm-reject"}
-                className="confirm-btn"
-                onClick={confirmAction}
+                className="approve-btn"
+                onClick={() => updateStatus("APPROVED")}
               >
-                Confirm {actionType === "APPROVED" ? "Approve" : "Reject"}
+                Approve
               </button>
-              <button className="cancel-btn" onClick={closeModal}>
-                Cancel
+              <button
+                className="reject-btn"
+                onClick={() => updateStatus("REJECTED")}
+              >
+                Reject
               </button>
+              <button className="cancel-btn" onClick={closeModal}>Cancel</button>
             </div>
           </div>
         </div>
@@ -287,4 +259,3 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
 }
 
 export default ExpenseStatusUpdate;
-
