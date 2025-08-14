@@ -207,8 +207,10 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
       return;
     }
 
+    const endpoint = actionType === "APPROVED" ? "approve" : "reject";
+
     try {
-      const res = await fetch(`/api/expenses/${expense.id}/${actionType.toLowerCase()}`, {
+      const res = await fetch(`/api/expenses/${expense.id}/${endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ remarks: remarks.trim() || null }),
@@ -246,19 +248,28 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
       </button>
 
       {showModal && (
-        <div className="modal-overlay" data-testid={`${actionType.toLowerCase()}-modal`}>
+        <div
+          className="modal-overlay"
+          data-testid={actionType === "APPROVED" ? "approve-modal" : "reject-modal"}
+        >
           <div className="modal-content">
-            <h3>{actionType === "APPROVED" ? "Confirm Approval" : "Confirm Rejection"}</h3>
+            <h3>
+              {actionType === "APPROVED" ? "Confirm Approval" : "Confirm Rejection"}
+            </h3>
             <textarea
-              data-testid={`${actionType.toLowerCase()}-remarks-input`}
-              placeholder={actionType === "APPROVED" ? "Remarks (optional)" : "Remarks (required)"}
+              data-testid="remarks-input"
+              placeholder={
+                actionType === "APPROVED"
+                  ? "Remarks (optional)"
+                  : "Remarks (required)"
+              }
               value={remarks}
               onChange={(e) => setRemarks(e.target.value)}
             />
             {modalError && <p data-testid="modal-error">{modalError}</p>}
             <div className="modal-buttons">
               <button
-                data-testid={`confirm-${actionType.toLowerCase()}`}
+                data-testid={actionType === "APPROVED" ? "confirm-approve" : "confirm-reject"}
                 className="confirm-btn"
                 onClick={confirmAction}
               >
