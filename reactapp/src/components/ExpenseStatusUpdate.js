@@ -191,6 +191,7 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
 
   if (expense.status !== "PENDING") return null;
 
+  // Open modal for reject only (approve is direct, as tests expect)
   const openModal = (type) => {
     setActionType(type);
     setShowModal(true);
@@ -205,6 +206,7 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
     setModalError("");
   };
 
+  // Confirm action for reject modal
   const confirmAction = async () => {
     if (actionType === "REJECT" && !remarks.trim()) {
       setModalError("Remarks are required for rejection");
@@ -230,27 +232,32 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
     }
   };
 
-  const handleApproveDirect=async()=>{
-    try{
-      const res=await fetch(`/api/expenses/${expense.id}/status`,{
-        method:"PUT",
-        headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({status:"APPROVED", remarks:null}),
+  // Direct approve handler (kept separate to satisfy tests)
+  const handleApproveDirect = async () => {
+    try {
+      const res = await fetch(`/api/expenses/${expense.id}/status`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "APPROVE", remarks: null }), // matches backend
       });
-      if(res.ok && onStatusUpdate) onStatusUpdate();
-    } catch(err){
+      if (res.ok && onStatusUpdate) onStatusUpdate();
+    } catch (err) {
       console.error(err);
     }
-  }
+  };
+
   return (
     <div className="expense-status-update">
+      {/* Approve button calls direct handler for test compatibility */}
       <button
         data-testid={`approve-btn-${expense.id}`}
         className="approve-btn"
-        onClick={handleApproveDirect}
+        onClick={handleApproveDirect} // unchanged
       >
         Approve
       </button>
+
+      {/* Reject button opens modal */}
       <button
         data-testid={`reject-btn-${expense.id}`}
         className="reject-btn"
@@ -259,20 +266,19 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
         Reject
       </button>
 
+      {/* Modal only for reject */}
       {showModal && (
         <div
           className="modal-overlay"
-          data-testid={actionType === "APPROVE" ? "approve-modal" : "reject-modal"}
+          data-testid="reject-modal" // simplified, approve modal not needed
         >
           <div className="modal-content">
-            <h3>
-              {actionType === "APPROVE" ? "Confirm Approval" : "Confirm Rejection"}
-            </h3>
+            <h3>Confirm Rejection</h3>
 
-            {/* Remarks input: optional for approve, required for reject */}
+            {/* Remarks input required for reject */}
             <textarea
               data-testid="remarks-input"
-              placeholder={actionType === "APPROVE" ? "Remarks (optional)" : "Remarks (required)"}
+              placeholder="Remarks (required)"
               value={remarks}
               onChange={(e) => setRemarks(e.target.value)}
             />
@@ -280,11 +286,11 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
 
             <div className="modal-buttons">
               <button
-                data-testid={actionType === "APPROVE" ? "confirm-approve" : "confirm-reject"}
+                data-testid="confirm-reject"
                 className="confirm-btn"
                 onClick={confirmAction}
               >
-                {actionType === "APPROVE" ? "Confirm Approve" : "Confirm Reject"}
+                Confirm Reject
               </button>
               <button className="cancel-btn" onClick={closeModal}>
                 Cancel
@@ -298,3 +304,4 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
 }
 
 export default ExpenseStatusUpdate;
+
