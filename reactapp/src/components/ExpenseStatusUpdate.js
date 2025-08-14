@@ -191,8 +191,15 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
   const [modalError, setModalError] = useState("");
 
   // Approve button opens modal
-  const handleApprove = () => {
-    setShowApproveModal(true);
+  const handleApprove = async () => {
+    try{
+      const res=await fetch(`/api/expenses/${expense.id}/approve`, { method:"POST"});
+      if(res.ok && onStatusUpdate) onStatusUpdate();
+
+      setShowApproveModal(true);
+    } catch (error){
+      console.error("Approve failed", error);
+    }
   };
 
   const confirmApprove = async () => {
@@ -225,10 +232,10 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ remarks: rejectRemarks }),
       });
+      if (res.ok && onStatusUpdate) onStatusUpdate(); // call AFTER modal closes
       setShowRejectModal(false);
       setRejectRemarks("");
       setModalError("");
-      if (res.ok && onStatusUpdate) onStatusUpdate(); // call AFTER modal closes
     } catch (error) {
       console.error("Reject failed", error);
     }
