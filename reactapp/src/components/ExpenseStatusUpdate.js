@@ -190,15 +190,9 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
   const [rejectRemarks, setRejectRemarks] = useState("");
   const [modalError, setModalError] = useState("");
 
-  // Approve button: call API immediately to satisfy tests, then optionally show modal
-  const handleApprove = async () => {
-    try {
-      const res = await fetch(`/api/expenses/${expense.id}/approve`, { method: "POST" });
-      if (res.ok && onStatusUpdate) onStatusUpdate();
-      setShowApproveModal(true); // optional remarks modal
-    } catch (error) {
-      console.error("Approve failed", error);
-    }
+  // Approve button opens modal
+  const handleApprove = () => {
+    setShowApproveModal(true);
   };
 
   const confirmApprove = async () => {
@@ -211,12 +205,13 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
       setShowApproveModal(false);
       setApproveRemarks("");
       setModalError("");
+      if (onStatusUpdate) onStatusUpdate(); // call AFTER modal closes
     } catch (error) {
       console.error("Approve modal failed", error);
     }
   };
 
-  // Reject button: opens modal first
+  // Reject button opens modal
   const handleReject = () => setShowRejectModal(true);
 
   const confirmReject = async () => {
@@ -230,12 +225,10 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ remarks: rejectRemarks }),
       });
-      if (res.ok && onStatusUpdate) {
-        setShowRejectModal(false);
-        setRejectRemarks("");
-        setModalError("");
-        onStatusUpdate();
-      }
+      setShowRejectModal(false);
+      setRejectRemarks("");
+      setModalError("");
+      if (res.ok && onStatusUpdate) onStatusUpdate(); // call AFTER modal closes
     } catch (error) {
       console.error("Reject failed", error);
     }
@@ -245,101 +238,89 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
 
   return (
     <div className="expense-status-update">
-      <button data-testid={`approve-btn-${expense.id}`} className="approve-btn" onClick={handleApprove}>
+      <button
+        data-testid={`approve-btn-${expense.id}`}
+        className="approve-btn"
+        onClick={handleApprove}
+      >
         Approve
       </button>
-      <button data-testid={`reject-btn-${expense.id}`} className="reject-btn" onClick={handleReject}>
+      <button
+        data-testid={`reject-btn-${expense.id}`}
+        className="reject-btn"
+        onClick={handleReject}
+      >
         Reject
       </button>
 
       {/* Approve Modal */}
-{showApproveModal && (
-  <div className="modal-overlay" data-testid="approve-modal">
-    <div className="modal-content">
-      <h3>Confirm Approval</h3>
-      <textarea
-        data-testid="remarks-input"
-        placeholder="Remarks (optional)"
-        value={approveRemarks}           // ✅ reads approve state
-        onChange={(e) => setApproveRemarks(e.target.value)}
-      />
-      <div className="modal-buttons">
-        <button
-          data-testid="confirm-approve"
-          className="confirm-btn"
-          onClick={async () => {
-            try {
-              await fetch(`/api/expenses/${expense.id}/approve`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ remarks: approveRemarks.trim() || null }),
-              });
-              setShowApproveModal(false);
-              setApproveRemarks("");
-              setModalError("");
-            } catch (error) {
-              console.error("Approve modal failed", error);
-            }
-          }}
-        >
-          Confirm Approve
-        </button>
-        <button className="cancel-btn" onClick={() => setShowApproveModal(false)}>
-          Cancel
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+      {showApproveModal && (
+        <div className="modal-overlay" data-testid="approve-modal">
+          <div className="modal-content">
+            <h3>Confirm Approval</h3>
+            <textarea
+              data-testid="remarks-input"
+              placeholder="Remarks (optional)"
+              value={approveRemarks}
+              onChange={(e) => setApproveRemarks(e.target.value)}
+            />
+            <div className="modal-buttons">
+              <button
+                data-testid="confirm-approve"
+                className="confirm-btn"
+                onClick={confirmApprove} // call function instead of inline async
+              >
+                Confirm Approve
+              </button>
+              <button
+                className="cancel-btn"
+                onClick={() => {
+                  setShowApproveModal(false);
+                  setApproveRemarks("");
+                  setModalError("");
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
-{/* Reject Modal */}
-{showRejectModal && (
-  <div className="modal-overlay" data-testid="reject-modal">
-    <div className="modal-content">
-      <h3>Confirm Rejection</h3>
-      <textarea
-        data-testid="remarks-input"
-        placeholder="Remarks (required)"
-        value={rejectRemarks}            // ✅ reads reject state
-        onChange={(e) => setRejectRemarks(e.target.value)}
-      />
-      {modalError && <p data-testid="modal-error">{modalError}</p>}
-      <div className="modal-buttons">
-        <button
-          data-testid="confirm-reject"
-          className="confirm-btn"
-          onClick={async () => {
-            if (!rejectRemarks.trim()) {
-              setModalError("Remarks are required");
-              return;
-            }
-            try {
-              const res = await fetch(`/api/expenses/${expense.id}/reject`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ remarks: rejectRemarks }),
-              });
-              if (res.ok && onStatusUpdate) {
-                setShowRejectModal(false);
-                setRejectRemarks("");
-                setModalError("");
-                onStatusUpdate();
-              }
-            } catch (error) {
-              console.error("Reject failed", error);
-            }
-          }}
-        >
-          Confirm Reject
-        </button>
-        <button className="cancel-btn" onClick={() => setShowRejectModal(false)}>
-          Cancel
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
+      {/* Reject Modal */}
+      {showRejectModal && (
+        <div className="modal-overlay" data-testid="reject-modal">
+          <div className="modal-content">
+            <h3>Confirm Rejection</h3>
+            <textarea
+              data-testid="remarks-input"
+              placeholder="Remarks (required)"
+              value={rejectRemarks}
+              onChange={(e) => setRejectRemarks(e.target.value)}
+            />
+            {modalError && <p data-testid="modal-error">{modalError}</p>}
+            <div className="modal-buttons">
+              <button
+                data-testid="confirm-reject"
+                className="confirm-btn"
+                onClick={confirmReject} // call function instead of inline async
+              >
+                Confirm Reject
+              </button>
+              <button
+                className="cancel-btn"
+                onClick={() => {
+                  setShowRejectModal(false);
+                  setRejectRemarks("");
+                  setModalError("");
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
