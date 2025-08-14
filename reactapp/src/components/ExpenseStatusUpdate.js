@@ -187,22 +187,26 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [remarks, setRemarks] = useState("");
   const [modalError, setModalError] = useState("");
+  const [showApproveModal, setShowApproveModal] = useState(false); // new state for approve modal
 
-  // Only show buttons for PENDING expenses
-  if (expense.status !== "PENDING") return null;
+  if (expense.status !== "PENDING") return null; // only show for pending
 
-  // -------------------- APPROVE --------------------
-  // Direct approval, no modal
-  const handleApprove = async () => {
+  // Handle Approve: open modal to confirm
+  const handleApprove = () => {
+    setShowApproveModal(true); // open modal instead of direct API call
+  };
+
+  const confirmApprove = async () => {
     try {
       const res = await fetch(`/api/expenses/${expense.id}/status`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: "APPROVED", remarks: null }),
+        body: JSON.stringify({ status: "APPROVED", remarks: null }), // backend expects remarks field
       });
 
-      if (res.ok && onStatusUpdate) {
-        onStatusUpdate(); // test expects this to be called
+      if (res.ok) {
+        setShowApproveModal(false);
+        if (onStatusUpdate) onStatusUpdate(); // notify parent
       } else {
         setModalError("Failed to approve expense");
       }
@@ -212,9 +216,9 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
     }
   };
 
-  // -------------------- REJECT --------------------
+  // Handle Reject: open modal
   const handleReject = () => {
-    setShowRejectModal(true); // open modal for remarks
+    setShowRejectModal(true);
   };
 
   const confirmReject = async () => {
@@ -230,11 +234,11 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
         body: JSON.stringify({ status: "REJECTED", remarks: remarks.trim() }),
       });
 
-      if (res.ok && onStatusUpdate) {
+      if (res.ok) {
         setShowRejectModal(false);
         setRemarks("");
         setModalError("");
-        onStatusUpdate(); // test expects this to be called
+        if (onStatusUpdate) onStatusUpdate();
       } else {
         setModalError("Failed to reject expense");
       }
@@ -242,6 +246,11 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
       console.error("Reject failed", error);
       setModalError("Failed to reject expense");
     }
+  };
+
+  const closeApproveModal = () => {
+    setShowApproveModal(false);
+    setModalError("");
   };
 
   const closeRejectModal = () => {
@@ -252,25 +261,44 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
 
   return (
     <div className="expense-status-update">
-      {/* APPROVE BUTTON - must have exact test id for test */}
       <button
-        data-testid={`approve-btn-${expense.id}`} // <-- test id matches
+        data-testid={`approve-btn-${expense.id}`} // matches your test
         className="approve-btn"
         onClick={handleApprove}
       >
         Approve
       </button>
-
-      {/* REJECT BUTTON - must have exact test id for test */}
       <button
-        data-testid={`reject-btn-${expense.id}`} // <-- test id matches
+        data-testid={`reject-btn-${expense.id}`} // matches your test
         className="reject-btn"
         onClick={handleReject}
       >
         Reject
       </button>
 
-      {/* Modal only for reject */}
+      {/* Approve Modal */}
+      {showApproveModal && (
+        <div className="modal-overlay" data-testid="approve-modal">
+          <div className="modal-content">
+            <h3>Confirm Approval</h3>
+            {modalError && <p data-testid="modal-error">{modalError}</p>}
+            <div className="modal-buttons">
+              <button
+                data-testid="confirm-approve"
+                className="confirm-btn"
+                onClick={confirmApprove} // confirm approve
+              >
+                Confirm Approve
+              </button>
+              <button className="cancel-btn" onClick={closeApproveModal}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reject Modal */}
       {showRejectModal && (
         <div className="modal-overlay" data-testid="reject-modal">
           <div className="modal-content">
@@ -284,7 +312,7 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
             {modalError && <p data-testid="modal-error">{modalError}</p>}
             <div className="modal-buttons">
               <button
-                data-testid="confirm-reject" // <-- test expects this
+                data-testid="confirm-reject"
                 className="confirm-btn"
                 onClick={confirmReject}
               >
@@ -302,4 +330,3 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
 }
 
 export default ExpenseStatusUpdate;
-
