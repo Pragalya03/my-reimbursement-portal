@@ -210,17 +210,12 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
     const endpoint = actionType === "APPROVED" ? "approve" : "reject";
 
     try {
-      // Mock fetch in Jest tests
-      let res;
-      if (typeof window !== "undefined" && window.JEST_WORKER_ID) {
-        res = { ok: true };
-      } else {
-        res = await fetch(`/api/expenses/${expense.id}/${endpoint}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ remarks: remarks.trim() || null }),
-        });
-      }
+      // Always call fetch normally; tests should mock it externally
+      const res = await fetch(`/api/expenses/${expense.id}/${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ remarks: remarks.trim() || null }),
+      });
 
       if (res.ok) {
         closeModal();
@@ -287,3 +282,4 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
 }
 
 export default ExpenseStatusUpdate;
+
