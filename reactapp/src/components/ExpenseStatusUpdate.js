@@ -181,6 +181,7 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
 export default ExpenseStatusUpdate;
 */
 import React, { useState } from "react";
+import { updateExpenseStatus } from "../utils/api.js";
 import './ExpenseStatusUpdate.css';
 
 function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
@@ -207,21 +208,14 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
       return;
     }
 
-    const endpoint = actionType === "APPROVED" ? "approve" : "reject";
-
     try {
-      const res = await fetch(`/api/expenses/${expense.id}/${endpoint}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ remarks: remarks.trim() || null }),
+      await updateExpenseStatus(expense.id, {
+        status: actionType,
+        remarks: remarks.trim() || null,
       });
 
-      if (res.ok) {
-        closeModal();
-        if (onStatusUpdate) onStatusUpdate();
-      } else {
-        setModalError("Failed to update expense status");
-      }
+      closeModal();
+      if (onStatusUpdate) onStatusUpdate();
     } catch (error) {
       console.error(`${actionType} failed`, error);
       setModalError("Error occurred. Try again.");
@@ -248,28 +242,19 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
       </button>
 
       {showModal && (
-        <div
-          className="modal-overlay"
-          data-testid={actionType === "APPROVED" ? "approve-modal" : "reject-modal"}
-        >
+        <div className="modal-overlay" data-testid={`${actionType.toLowerCase()}-modal`}>
           <div className="modal-content">
-            <h3>
-              {actionType === "APPROVED" ? "Confirm Approval" : "Confirm Rejection"}
-            </h3>
+            <h3>{actionType === "APPROVED" ? "Confirm Approval" : "Confirm Rejection"}</h3>
             <textarea
               data-testid="remarks-input"
-              placeholder={
-                actionType === "APPROVED"
-                  ? "Remarks (optional)"
-                  : "Remarks (required)"
-              }
+              placeholder={actionType === "APPROVED" ? "Remarks (optional)" : "Remarks (required)"}
               value={remarks}
               onChange={(e) => setRemarks(e.target.value)}
             />
             {modalError && <p data-testid="modal-error">{modalError}</p>}
             <div className="modal-buttons">
               <button
-                data-testid={actionType === "APPROVED" ? "confirm-approve" : "confirm-reject"}
+                data-testid={`confirm-${actionType.toLowerCase()}`}
                 className="confirm-btn"
                 onClick={confirmAction}
               >
