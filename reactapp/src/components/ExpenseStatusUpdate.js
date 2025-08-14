@@ -190,35 +190,30 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
   const [rejectRemarks, setRejectRemarks] = useState("");
   const [modalError, setModalError] = useState("");
 
-  // Approve button opens modal
-  const handleApprove = async () => {
-    try{
-      const res=await fetch(`/api/expenses/${expense.id}/approve`, { method:"POST"});
-      if(res.ok && onStatusUpdate) onStatusUpdate();
-
-      setShowApproveModal(true);
-    } catch (error){
-      console.error("Approve failed", error);
-    }
+  // Open Approve modal
+  const handleApprove = () => {
+    setShowApproveModal(true);
   };
 
   const confirmApprove = async () => {
     try {
-      await fetch(`/api/expenses/${expense.id}/approve`, {
+      const res = await fetch(`/api/expenses/${expense.id}/approve`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ remarks: approveRemarks.trim() || null }),
       });
-      setShowApproveModal(false);
-      setApproveRemarks("");
-      setModalError("");
-      if (onStatusUpdate) onStatusUpdate(); // call AFTER modal closes
+      if (res.ok) {
+        setShowApproveModal(false);
+        setApproveRemarks("");
+        setModalError("");
+        if (onStatusUpdate) onStatusUpdate();
+      }
     } catch (error) {
-      console.error("Approve modal failed", error);
+      console.error("Approve failed", error);
     }
   };
 
-  // Reject button opens modal
+  // Open Reject modal
   const handleReject = () => setShowRejectModal(true);
 
   const confirmReject = async () => {
@@ -232,10 +227,12 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ remarks: rejectRemarks }),
       });
-      if (res.ok && onStatusUpdate) onStatusUpdate(); // call AFTER modal closes
-      setShowRejectModal(false);
-      setRejectRemarks("");
-      setModalError("");
+      if (res.ok) {
+        setShowRejectModal(false);
+        setRejectRemarks("");
+        setModalError("");
+        if (onStatusUpdate) onStatusUpdate();
+      }
     } catch (error) {
       console.error("Reject failed", error);
     }
@@ -275,7 +272,7 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
               <button
                 data-testid="confirm-approve"
                 className="confirm-btn"
-                onClick={confirmApprove} // call function instead of inline async
+                onClick={confirmApprove}
               >
                 Confirm Approve
               </button>
@@ -310,7 +307,7 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
               <button
                 data-testid="confirm-reject"
                 className="confirm-btn"
-                onClick={confirmReject} // call function instead of inline async
+                onClick={confirmReject}
               >
                 Confirm Reject
               </button>
