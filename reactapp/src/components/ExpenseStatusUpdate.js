@@ -82,39 +82,46 @@ import React, { useState } from "react";
 import { updateExpenseStatus } from "../utils/api.js";
 
 function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
-  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [remarks, setRemarks] = useState("");
   const [modalError, setModalError] = useState("");
+  const [actionType, setActionType] = useState(""); // "APPROVED" or "REJECTED"
 
-  // Approve handler
-  const handleApprove = async () => {
-    try {
-      await updateExpenseStatus(expense.id, { status: "APPROVED", remarks: null });
-      if (onStatusUpdate) onStatusUpdate();
-    } catch (error) {
-      console.error("Approve failed", error);
-    }
+  // Open modal for Approve
+  const handleApprove = () => {
+    setActionType("APPROVED");
+    setShowModal(true);
   };
 
-  // Reject button click
+  // Open modal for Reject
   const handleReject = () => {
-    setShowRejectModal(true);
+    setActionType("REJECTED");
+    setShowModal(true);
   };
 
-  // Confirm reject handler
-  const confirmReject = async () => {
-    if (!remarks.trim()) {
+  // Confirm action
+  const confirmAction = async () => {
+    // For reject, remarks are required
+    if (actionType === "REJECTED" && !remarks.trim()) {
       setModalError("Remarks are required");
       return;
     }
+
     try {
-      await updateExpenseStatus(expense.id, { status: "REJECTED", remarks: remarks.trim() });
-      setShowRejectModal(false);
+      await updateExpenseStatus(expense.id, {
+        status: actionType,
+        remarks: remarks.trim() || null,
+      });
+
+      // Reset modal state
+      setShowModal(false);
       setRemarks("");
       setModalError("");
+      setActionType("");
+
       if (onStatusUpdate) onStatusUpdate();
     } catch (error) {
-      console.error("Reject failed", error);
+      console.error(`${actionType} failed`, error);
     }
   };
 
@@ -132,9 +139,9 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
         Reject
       </button>
 
-      {showRejectModal && (
+      {showModal && (
         <div
-          data-testid="reject-modal"
+          data-testid="action-modal"
           style={{
             background: "#fff",
             padding: "10px",
@@ -143,11 +150,18 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
             borderRadius: "4px",
           }}
         >
+          <h4>
+            {actionType === "APPROVED" ? "Approve Expense" : "Reject Expense"}
+          </h4>
           <textarea
             data-testid="remarks-input"
             value={remarks}
             onChange={(e) => setRemarks(e.target.value)}
-            placeholder="Enter remarks"
+            placeholder={
+              actionType === "APPROVED"
+                ? "Enter optional remarks"
+                : "Enter remarks (required)"
+            }
             style={{ width: "100%", height: "60px", marginBottom: "6px" }}
           />
           {modalError && (
@@ -156,10 +170,18 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
             </p>
           )}
           <div>
-            <button data-testid="confirm-reject" onClick={confirmReject}>
-              Confirm Reject
+            <button data-testid="confirm-action" onClick={confirmAction}>
+              Confirm {actionType === "APPROVED" ? "Approve" : "Reject"}
             </button>
-            <button onClick={() => setShowRejectModal(false)} style={{ marginLeft: "8px" }}>
+            <button
+              onClick={() => {
+                setShowModal(false);
+                setRemarks("");
+                setModalError("");
+                setActionType("");
+              }}
+              style={{ marginLeft: "8px" }}
+            >
               Cancel
             </button>
           </div>
