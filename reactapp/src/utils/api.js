@@ -1,7 +1,7 @@
-const BASE_URL = "https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io/api/expenses";
+const BASE_URL = "https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io";
 
 export async function createExpense(expense) {
-  const res = await fetch(BASE_URL, {
+  const res = await fetch(`${BASE_URL}/api/expenses`, {
     method: "POST",
     headers: {"Content-Type" : "application/json"},
     body: JSON.stringify(expense),
@@ -14,7 +14,7 @@ export async function createExpense(expense) {
 }
 
 export async function getExpenses() {
-  const res = await fetch(BASE_URL, {
+  const res = await fetch(`${BASE_URL}/api/expenses`, {
     method: "GET",
     headers: {"Content-Type" : "application/json"},
   });
@@ -27,7 +27,7 @@ export async function getExpenses() {
 
 
 export async function updateExpenseStatus(id, updateData) {
-  const res = await fetch(`${BASE_URL}/${id}/status`, {
+  const res = await fetch(`${BASE_URL}/api/expenses/${id}/status`, {
     method: "PUT",
     headers: {"Content-Type" : "application/json"},
     body: JSON.stringify(updateData),
@@ -40,8 +40,14 @@ export async function updateExpenseStatus(id, updateData) {
 }
 
 export const getDepartments = async () => {
-  const res = await fetch(`${BASE_URL}/departments`);
-  return res.json();
+  try {
+    const res = await fetch(`${BASE_URL}/departments`);
+    if(!res.ok) throw new Error("HTTP error "+res.status);
+    return res.json();
+  } catch (err){
+    console.error("Failed to fetch departments: ", err);
+    return [];
+  }
 };
 export const createDepartment = async (data) => {
   const res = await fetch(`${BASE_URL}/departments`, {
@@ -65,8 +71,14 @@ export const deleteDepartment = async (id) => {
 
 // Users
 export const getUsers = async () => {
-  const res = await fetch(`${BASE_URL}/users`);
-  return res.json();
+  try {
+    const res = await fetch(`${BASE_URL}/users`);
+    if(!res.ok) throw new Error("HTTP error "+res.status);
+    return res.json();
+  } catch (err){
+    console.error("Failed to fetch users: ", err);
+    return [];
+  }
 };
 export const createUser = async (data) => {
   const res = await fetch(`${BASE_URL}/users`, {
@@ -89,9 +101,15 @@ export const deleteUser = async (id) => {
 };
 
 // Expense Policies
-export const getPolicies = async () => {
-  const res = await fetch(`${BASE_URL}/policies`);
-  return res.json();
+export const getPolicies= async () => {
+  try {
+    const res = await fetch(`${BASE_URL}/policies`);
+    if(!res.ok) throw new Error("HTTP error "+res.status);
+    return res.json();
+  } catch (err){
+    console.error("Failed to fetch policies: ", err);
+    return [];
+  }
 };
 export const createPolicy = async (data) => {
   const res = await fetch(`${BASE_URL}/policies`, {
@@ -114,9 +132,15 @@ export const deletePolicy = async (id) => {
 };
 
 // Expense Categories
-export const getCategories = async () => {
-  const res = await fetch(`${BASE_URL}/categories`);
-  return res.json();
+export const getCategories= async () => {
+  try {
+    const res = await fetch(`${BASE_URL}/categories`);
+    if(!res.ok) throw new Error("HTTP error "+res.status);
+    return res.json();
+  } catch (err){
+    console.error("Failed to fetch categories: ", err);
+    return [];
+  }
 };
 export const createCategory = async (data) => {
   const res = await fetch(`${BASE_URL}/categories`, {
