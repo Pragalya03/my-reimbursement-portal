@@ -1,0 +1,22 @@
+.receipt-management {
+  padding: 20px;
+  background-color: #F2EFEA;
+  color: #333333;
+}
+
+.receipt-management h2 {
+  color: #556B2F;
+}
+
+.upload-btn {
+  background-color: #D2691E; /* Burnt Orange */
+  color: #F2EFEA;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.upload-btn:hover {
+  background-color: #DAA520; /* Goldenrod */
+}
