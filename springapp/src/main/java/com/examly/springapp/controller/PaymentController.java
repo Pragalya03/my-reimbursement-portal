@@ -16,12 +16,14 @@ public class PaymentController {
 
     @GetMapping
     public List<Payment> getAllPayments() {
-        return paymentService.getAllPayments();
+        List<Payment> payments = paymentService.getAllPayments();
+        return payments != null ? payments : List.of(); // return empty list if null
     }
 
     @GetMapping("/{id}")
     public Payment getPaymentById(@PathVariable Long id) {
-        return paymentService.getPaymentById(id);
+        Payment payment = paymentService.getPaymentById(id);
+        return payment != null ? payment : new Payment(); // return empty object if null
     }
 
     @PostMapping
