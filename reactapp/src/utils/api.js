@@ -33,6 +33,7 @@ export async function getExpenses() {
   return res.json();
 }
 
+
 export async function updateExpenseStatus(id, updateData) {
   const res = await fetch(`${BASE_URL}/${id}/status`, {
     method: "PUT",
