@@ -79,10 +79,17 @@ const AdminPanel = () => {
       { name: "username", label: "Username", type: "text" },
       { name: "email", label: "Email", type: "email" },
       { name: "passwordHash", label: "Password", type: "password" },
+      { name: "employeeId", label: "Employee ID", type: "text" },
       { name: "role", label: "Role", type: "select", options: roleOptions },
+      { name: "departmentId", label: "Department", type: "select", options: departments.map(d => ({ label: d.departmentName, value: d.id })) },
       { name: "isActive", label: "Active", type: "checkbox", default: true }
     ],
-    async (data) => { await api.createUser(data); closeModal(); fetchUsers(); }
+    async (data) => {
+      if (data.departmentId) data.department = { id: data.departmentId };
+      await api.createUser(data);
+      closeModal();
+      fetchUsers();
+    }
   );
 
   const handleUserEdit = (row) => openModal(
@@ -90,11 +97,18 @@ const AdminPanel = () => {
       { name: "username", label: "Username", type: "text" },
       { name: "email", label: "Email", type: "email" },
       { name: "passwordHash", label: "Password", type: "password" },
+      { name: "employeeId", label: "Employee ID", type: "text" },
       { name: "role", label: "Role", type: "select", options: roleOptions },
+      { name: "departmentId", label: "Department", type: "select", options: departments.map(d => ({ label: d.departmentName, value: d.id })) },
       { name: "isActive", label: "Active", type: "checkbox" }
     ],
-    async (data) => { await api.updateUser(row.id, data); closeModal(); fetchUsers(); },
-    row
+    async (data) => {
+      if (data.departmentId) data.department = { id: data.departmentId };
+      await api.updateUser(row.id, data);
+      closeModal();
+      fetchUsers();
+    },
+    { ...row, departmentId: row.department?.id }
   );
 
   const handleUserDelete = async (id) => { await api.deleteUser(id); fetchUsers(); };
@@ -172,8 +186,12 @@ const AdminPanel = () => {
         <h3>Users</h3>
         <button onClick={handleUserAdd}>Add User</button>
         <TableView
-          columns={["id", "username", "email", "role", "isActive"]}
-          data={users}
+          columns={["id", "username", "email", "role", "employeeId", "department", "isActive"]}
+          data={users.map(u => ({
+            ...u,
+            department: u.department?.departmentName || "",
+            isActive: u.isActive ? "Yes" : "No"
+          }))}
           onEdit={handleUserEdit}
           onDelete={handleUserDelete}
         />
