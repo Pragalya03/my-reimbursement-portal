@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ExpenseService {
@@ -22,21 +21,41 @@ public class ExpenseService {
         return expenseRepository.findAll();
     }
 
-    public Optional<Expense> getExpenseById(Long id) {
-        return expenseRepository.findById(id);
+    public Expense getExpenseById(Long id) {
+        return expenseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Expense not found with id " + id));
+    }
+
+    public Expense createExpense(Expense expense) {
+        return expenseRepository.save(expense);
+    }
+
+    public Expense updateExpense(Long id, Expense expenseDetails) {
+        Expense expense = getExpenseById(id);
+        expense.setEmployeeId(expenseDetails.getEmployeeId());
+        expense.setAmount(expenseDetails.getAmount());
+        expense.setDescription(expenseDetails.getDescription());
+        expense.setDate(expenseDetails.getDate());
+        expense.setStatus(expenseDetails.getStatus());
+        expense.setRemarks(expenseDetails.getRemarks());
+        return expenseRepository.save(expense);
+    }
+
+    public void deleteExpense(Long id) {
+        Expense expense = getExpenseById(id);
+        expenseRepository.delete(expense);
+    }
+
+    @Transactional
+    public Expense updateExpenseStatus(Long id, String status, String remarks) {
+        Expense expense = getExpenseById(id);
+        expense.setStatus(status);
+        if (remarks != null) expense.setRemarks(remarks);
+        return expenseRepository.save(expense);
     }
 
     public List<Expense> getExpensesByEmployee(Long employeeId) {
         return expenseRepository.findByEmployeeId(employeeId);
-    }
-
-    public Expense saveExpense(Expense expense) {
-        return expenseRepository.save(expense);
-    }
-
-    @Transactional
-    public int updateExpenseStatus(Long id, String status, String remarks) {
-        return expenseRepository.updateExpenseStatusAndRemarks(id, status, remarks);
     }
 
     public List<Expense> getExpensesByDateRange(LocalDate start, LocalDate end) {
