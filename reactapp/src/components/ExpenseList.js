@@ -370,7 +370,7 @@ export default ExpenseList;
 import React, { useEffect, useState } from "react";
 import { getExpenses } from "../utils/api.js";
 import ExpenseStatusUpdate from "./ExpenseStatusUpdate";
-import "./ExpenseList.css";
+import "../styles/ExpenseList.css";
 
 function ExpenseList() {
   const [expenses, setExpenses] = useState([]);

@@ -181,7 +181,7 @@ function ExpenseStatusUpdate({ expense, onStatusUpdate }) {
 export default ExpenseStatusUpdate;
 */
 import React, { useState } from "react";
-import './ExpenseStatusUpdate.css';
+import '../styles/ExpenseStatusUpdate.css';
 import { updateExpenseStatus } from "../utils/api.js"; // make sure this import exists
 
 function ExpenseStatusUpdate({ expense, onStatusUpdate }) {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./ExpenseForm.css";
+import "../styles/ExpenseForm.css";
 import { createExpense } from "../utils/api";
 
 function ExpenseForm({ onAdd }) {
