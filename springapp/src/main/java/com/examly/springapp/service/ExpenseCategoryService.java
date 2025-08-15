@@ -5,7 +5,6 @@ import com.examly.springapp.repository.ExpenseCategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ExpenseCategoryService {
@@ -20,16 +19,33 @@ public class ExpenseCategoryService {
         return expenseCategoryRepository.findAll();
     }
 
-    public Optional<ExpenseCategory> getCategoryById(Long id) {
-        return expenseCategoryRepository.findById(id);
+    public ExpenseCategory getCategoryById(Long id) {
+        return expenseCategoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("ExpenseCategory not found with id " + id));
     }
 
-    public ExpenseCategory saveCategory(ExpenseCategory category) {
+    public ExpenseCategory createCategory(ExpenseCategory category) {
         return expenseCategoryRepository.save(category);
+    }
+
+    public ExpenseCategory updateCategory(Long id, ExpenseCategory categoryDetails) {
+        ExpenseCategory category = getCategoryById(id);
+        category.setCategoryName(categoryDetails.getCategoryName());
+        category.setCategoryCode(categoryDetails.getCategoryCode());
+        category.setPolicyLimit(categoryDetails.getPolicyLimit());
+        category.setRequiresReceipt(categoryDetails.getRequiresReceipt());
+        category.setRequiresBusinessPurpose(categoryDetails.getRequiresBusinessPurpose());
+        category.setIsActive(categoryDetails.getIsActive());
+        category.setParentCategory(categoryDetails.getParentCategory());
+        return expenseCategoryRepository.save(category);
+    }
+
+    public void deleteCategory(Long id) {
+        ExpenseCategory category = getCategoryById(id);
+        expenseCategoryRepository.delete(category);
     }
 
     public List<ExpenseCategory> getActiveCategories() {
         return expenseCategoryRepository.findByIsActiveTrue();
     }
 }
-
