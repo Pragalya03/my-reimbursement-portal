@@ -1,53 +1,46 @@
 package com.examly.springapp.controller;
 
 import com.examly.springapp.model.Expense;
-import com.examly.springapp.repository.ExpenseRepository;
+import com.examly.springapp.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/expenses")
 public class ExpenseController {
 
     @Autowired
-    private ExpenseRepository expenseRepository;
+    private ExpenseService expenseService;
 
     @GetMapping
     public List<Expense> getAllExpenses() {
-        return expenseRepository.findAll();
+        return expenseService.getAllExpenses();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Expense> getExpenseById(@PathVariable Long id) {
-        Optional<Expense> expense = expenseRepository.findById(id);
-        return expense.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public Expense getExpenseById(@PathVariable Long id) {
+        return expenseService.getExpenseById(id);
     }
 
     @PostMapping
     public Expense createExpense(@RequestBody Expense expense) {
-        return expenseRepository.save(expense);
+        return expenseService.createExpense(expense);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Expense> updateExpense(@PathVariable Long id, @RequestBody Expense expenseDetails) {
-        return expenseRepository.findById(id).map(expense -> {
-            expense.setAmount(expenseDetails.getAmount());
-            expense.setDescription(expenseDetails.getDescription());
-            expense.setStatus(expenseDetails.getStatus());
-            expense.setRemarks(expenseDetails.getRemarks());
-            return ResponseEntity.ok(expenseRepository.save(expense));
-        }).orElseGet(() -> ResponseEntity.notFound().build());
+    public Expense updateExpense(@PathVariable Long id, @RequestBody Expense expense) {
+        return expenseService.updateExpense(id, expense);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteExpense(@PathVariable Long id) {
-        return expenseRepository.findById(id).map(expense -> {
-            expenseRepository.delete(expense);
-            return ResponseEntity.ok().build();
-        }).orElseGet(() -> ResponseEntity.notFound().build());
+    public void deleteExpense(@PathVariable Long id) {
+        expenseService.deleteExpense(id);
+    }
+
+    @PutMapping("/{id}/status")
+    public Expense updateExpenseStatus(@PathVariable Long id, @RequestParam String status, @RequestParam(required = false) String remarks) {
+        return expenseService.updateExpenseStatus(id, status, remarks);
     }
 }
