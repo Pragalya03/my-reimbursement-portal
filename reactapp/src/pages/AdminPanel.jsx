@@ -79,25 +79,28 @@ const handleUserAdd = () => openModal(
   [
     { name: "username", label: "Username", type: "text" },
     { name: "email", label: "Email", type: "email" },
-    { name: "password", label: "Password", type: "password" },
+    { name: "password", label: "Password", type: "password" },  // user enters 'password'
     { name: "employeeId", label: "Employee ID", type: "text" },
     { name: "role", label: "Role", type: "select", options: roleOptions },
     { name: "departmentId", label: "Department", type: "select", options: departments.map(d => ({ label: d.departmentName, value: d.id })) },
     { name: "isActive", label: "Active", type: "checkbox", default: true }
   ],
   async (data) => {
-    // Rename password to passwordHash if backend expects hashed field
-    if (data.password) data.passwordHash = data.password;
-    delete data.password;
+    const payload = {
+      ...data,
+      passwordHash: data.password,
+      department: data.departmentId ? { id: data.departmentId } : null
+    };
+    delete payload.password;
+    delete payload.departmentId;
 
-    // Only send departmentId
-    if (!data.departmentId) delete data.departmentId;
-
-    await api.createUser(data);
+    console.log("Creating user with payload:", payload); // ✅ debug
+    await api.createUser(payload);
     closeModal();
     fetchUsers();
   }
 );
+
 
 const handleUserEdit = (row) => openModal(
   [
@@ -249,4 +252,5 @@ const handleUserDelete = async (id) => {
 };
 
 export default AdminPanel;
+
 
