@@ -1,125 +1,31 @@
 .App {
   font-family: Arial, sans-serif;
   padding: 20px;
-  min-height: 100vh;
 }
 
-.user-type-selection {
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.full-width-navbar {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  height: 180px;
-  background: white;
-  max-width: 600px;
-  width: 90%;
-  padding: 40px 35px 45px;
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(47, 79, 79, 0.3);
-  box-sizing: border-box;
-  color: #1B1D1E;
-  position: relative;
-}  
-.user-type-selection h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.user-type-buttons {
-  display: flex;
-  gap: 20px;
+  gap: 15px;
+  background-color: #1e40af; /* Indigo dark */
+  padding: 10px;
 }
 
 .user-type-btn {
-  padding: 14px 28px;
-  border-radius: 8px;
-  background-color: #2F4F4F; /* Deep Teal */
-  color: #fff;
-  font-size: 16px;
+  color: #ffffff;
   text-decoration: none;
-  font-weight: 500;
-  border: 2px solid transparent;
-  transition: all 0.3s ease;
+  padding: 8px 20px;
+  border-radius: 5px;
+  background-color: #3b82f6; /* Light blue */
+  transition: background 0.3s;
 }
 
+.user-type-btn.active,
 .user-type-btn:hover {
-  background-color: #4F7777; 
-  transform: scale(1.05);
-}
-
-.user-type-btn.active {
-  background-color: #1E3D3D; /* Darker teal */
-  border-color: #133030;
-  font-weight: 600;
-}
-
-
-nav.top-right-nav {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  padding: 12px 20px;
-  border-radius: 8px;
-  z-index: 1000;
-  display: flex;
-  gap: 15px;
-}
-
-nav.top-right-nav a {
-  color: white; 
-  background-color: #2F4F4F; 
-  font-weight: 600;
-  text-decoration: none;
-  padding: 8px 15px;
-  border-radius: 8px;
-  transition: all 0.25s ease;
-}
-
-nav.top-right-nav a:hover {
-  background-color: #B8C9CA; 
-  color: #2F4F4F; 
-}
-
-nav.top-right-nav a.active {
-  background-color: #E2E7E7; 
-  color: #2F4F4F;
-}
-.full-width-navbar {
-  width: 100%;
-  background-color: #2F4F4F; 
-  height: 60px; 
-  display: flex;
-  align-items: center; 
-  justify-content: center; 
-  gap: 25px;
-  position: fixed; 
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.App {
-  font-family: Arial, sans-serif;
-  padding-top: 90px !important; 
-  min-height: 100vh;
-}
-
-.full-width-navbar .user-type-btn {
-  color: #fff;
-  padding: 10px 25px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-size: 16px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.full-width-navbar .user-type-btn:hover {
-  background-color: #4F7777;
-}
-
-.full-width-navbar .user-type-btn.active {
-  background-color: #1E3D3D;
+  background-color: #60a5fa;
 }
