@@ -6,19 +6,15 @@ const ModalForm = ({ fields, initialData, onSubmit, onClose }) => {
   useEffect(() => {
     const defaults = {};
     fields.forEach(f => {
-      if (f.type === "checkbox" && initialData && initialData[f.name] === undefined) {
-        defaults[f.name] = f.default || false;
-      }
-      if (f.type === "select" && initialData && initialData[f.name] === undefined) {
-        defaults[f.name] = f.default || "";
-      }
+      if (f.type === "checkbox") defaults[f.name] = f.default || false;
+      if (f.type === "select" && initialData?.[f.name] === undefined) defaults[f.name] = f.options?.[0]?.value || "";
     });
     setFormData({ ...defaults, ...(initialData || {}) });
   }, [initialData, fields]);
 
   const handleChange = (e) => {
     const { name, type, value, checked } = e.target;
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value
     }));
@@ -38,28 +34,19 @@ const ModalForm = ({ fields, initialData, onSubmit, onClose }) => {
     <div className="modal-overlay">
       <div className="modal-content">
         <form onSubmit={handleSubmit}>
-          {fields.map((field) => (
-            <div key={field.name} className="form-group">
-              <label>{field.label}</label>
-              {field.type === "select" ? (
-                <select
-                  name={field.name}
-                  value={formData[field.name] || ""}
-                  onChange={handleChange}
-                >
-                  {field.options && field.options.map((opt) => {
-                    if (typeof opt === "object") {
-                      return <option key={opt.value} value={opt.value}>{opt.label}</option>;
-                    }
-                    return <option key={opt} value={opt}>{opt}</option>;
-                  })}
+          {fields.map(f => (
+            <div key={f.name} className="form-group">
+              <label>{f.label}</label>
+              {f.type === "select" ? (
+                <select name={f.name} value={formData[f.name] || ""} onChange={handleChange}>
+                  {f.options.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                 </select>
               ) : (
                 <input
-                  type={field.type || "text"}
-                  name={field.name}
-                  value={field.type === "checkbox" ? undefined : formData[field.name] || ""}
-                  checked={field.type === "checkbox" ? !!formData[field.name] : undefined}
+                  type={f.type || "text"}
+                  name={f.name}
+                  value={f.type === "checkbox" ? undefined : formData[f.name] || ""}
+                  checked={f.type === "checkbox" ? !!formData[f.name] : undefined}
                   onChange={handleChange}
                 />
               )}
