@@ -19,7 +19,11 @@ const AdminPanel = () => {
   const [showModal, setShowModal] = useState(false);
 
   // Individual fetch functions
-  const fetchDepartments = async () => setDepartments(await api.getDepartments());
+  const fetchDepartments = async () => {
+    const data = await api.getDepartments();
+    // Map isActive to "Yes"/"No" for table display
+    setDepartments(data.map(d => ({ ...d, isActive: d.isActive ? "Yes" : "No" })));
+  };
   const fetchUsers = async () => setUsers(await api.getUsers());
   const fetchPolicies = async () => setPolicies(await api.getPolicies());
   const fetchCategories = async () => setCategories(await api.getCategories());
@@ -168,7 +172,7 @@ const AdminPanel = () => {
         <h3>Departments</h3>
         <button onClick={handleDepartmentAdd}>Add Department</button>
         <TableView
-          columns={["id", "departmentName", "departmentCode"]}
+          columns={["id", "departmentName", "departmentCode", "budgetLimit", "costCenter", "isActive"]}
           data={departments}
           onEdit={handleDepartmentEdit}
           onDelete={handleDepartmentDelete}
