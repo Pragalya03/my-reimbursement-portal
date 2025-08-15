@@ -1,55 +1,41 @@
 package com.examly.springapp.controller;
 
 import com.examly.springapp.model.Payment;
-import com.examly.springapp.repository.PaymentRepository;
+import com.examly.springapp.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/payments")
 public class PaymentController {
 
     @Autowired
-    private PaymentRepository paymentRepository;
+    private PaymentService paymentService;
 
     @GetMapping
     public List<Payment> getAllPayments() {
-        return paymentRepository.findAll();
+        return paymentService.getAllPayments();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Payment> getPaymentById(@PathVariable Long id) {
-        Optional<Payment> payment = paymentRepository.findById(id);
-        return payment.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public Payment getPaymentById(@PathVariable Long id) {
+        return paymentService.getPaymentById(id);
     }
 
     @PostMapping
     public Payment createPayment(@RequestBody Payment payment) {
-        return paymentRepository.save(payment);
+        return paymentService.createPayment(payment);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Payment> updatePayment(@PathVariable Long id, @RequestBody Payment paymentDetails) {
-        return paymentRepository.findById(id).map(payment -> {
-            payment.setExpenseId(paymentDetails.getExpenseId());
-            payment.setPaymentDate(paymentDetails.getPaymentDate());
-            payment.setPaymentMethod(paymentDetails.getPaymentMethod());
-            payment.setTransactionId(paymentDetails.getTransactionId());
-            payment.setAmountPaid(paymentDetails.getAmountPaid());
-            payment.setPaymentStatus(paymentDetails.getPaymentStatus());
-            return ResponseEntity.ok(paymentRepository.save(payment));
-        }).orElseGet(() -> ResponseEntity.notFound().build());
+    public Payment updatePayment(@PathVariable Long id, @RequestBody Payment payment) {
+        return paymentService.updatePayment(id, payment);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePayment(@PathVariable Long id) {
-        return paymentRepository.findById(id).map(payment -> {
-            paymentRepository.delete(payment);
-            return ResponseEntity.ok().build();
-        }).orElseGet(() -> ResponseEntity.notFound().build());
+    public void deletePayment(@PathVariable Long id) {
+        paymentService.deletePayment(id);
     }
 }
