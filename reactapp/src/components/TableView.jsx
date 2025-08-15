@@ -1,0 +1,32 @@
+// src/components/TableView.jsx
+import React from "react";
+
+const TableView = ({ columns, data, onEdit, onDelete }) => {
+  return (
+    <table className="admin-table">
+      <thead>
+        <tr>
+          {columns.map((col) => (
+            <th key={col}>{col}</th>
+          ))}
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((row) => (
+          <tr key={row.id}>
+            {columns.map((col) => (
+              <td key={col}>{row[col.toLowerCase()] || ""}</td>
+            ))}
+            <td>
+              <button onClick={() => onEdit(row)}>Edit</button>
+              <button onClick={() => onDelete(row.id)}>Delete</button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+export default TableView;
