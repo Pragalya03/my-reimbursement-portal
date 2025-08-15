@@ -47,16 +47,15 @@ function App() {
 
 
 export default App;
-*/
-import React from "react";
+*/import React from "react";
 import { BrowserRouter as Router, Routes, Route, NavLink } from "react-router-dom";
 import { appRoutes } from "./routes";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { getCurrentUser } from "./utils/auth";
 import './App.css';
 
 function App() {
-  // Placeholder: Replace with actual auth logic
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const currentUser = getCurrentUser();
 
   return (
     <Router>
@@ -72,7 +71,6 @@ function App() {
           {appRoutes.map((route, idx) => {
             const Element = route.element;
             if (route.roles) {
-              // Protected route
               return (
                 <Route
                   key={idx}
@@ -87,7 +85,6 @@ function App() {
                 />
               );
             } else {
-              // Public route
               return <Route key={idx} path={route.path} element={<Element />} />;
             }
           })}
