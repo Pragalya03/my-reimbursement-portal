@@ -5,7 +5,6 @@ import com.examly.springapp.repository.ApprovalRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ApprovalService {
@@ -20,16 +19,33 @@ public class ApprovalService {
         return approvalRepository.findAll();
     }
 
-    public Optional<Approval> getApprovalById(Long id) {
-        return approvalRepository.findById(id);
+    public Approval getApprovalById(Long id) {
+        return approvalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Approval not found with id " + id));
     }
 
-    public Approval saveApproval(Approval approval) {
+    public Approval createApproval(Approval approval) {
         return approvalRepository.save(approval);
+    }
+
+    public Approval updateApproval(Long id, Approval approvalDetails) {
+        Approval approval = getApprovalById(id);
+        approval.setApprovalStatus(approvalDetails.getApprovalStatus());
+        approval.setComments(approvalDetails.getComments());
+        approval.setApprovalDate(approvalDetails.getApprovalDate());
+        approval.setIsFinalApproval(approvalDetails.getIsFinalApproval());
+        approval.setApprovalLevel(approvalDetails.getApprovalLevel());
+        approval.setApprover(approvalDetails.getApprover());
+        approval.setExpense(approvalDetails.getExpense());
+        return approvalRepository.save(approval);
+    }
+
+    public void deleteApproval(Long id) {
+        Approval approval = getApprovalById(id);
+        approvalRepository.delete(approval);
     }
 
     public List<Approval> getApprovalsByExpense(Long expenseId) {
         return approvalRepository.findByExpenseId(expenseId);
     }
 }
-
