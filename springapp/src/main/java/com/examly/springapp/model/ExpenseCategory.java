@@ -123,8 +123,5 @@ public class ExpenseCategory {
         this.isActive = isActive;
         this.parentCategory = parentCategory;
         this.subCategories = subCategories!=null?subCategories:new ArrayList<>();
-    }
-
-    // Getters and setters
-    
+    }   
 }
