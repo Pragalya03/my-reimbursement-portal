@@ -39,32 +39,6 @@ const AdminPanel = () => {
   };
   const closeModal = () => setShowModal(false);
 
-  // ---------------- Departments ----------------
-  const handleDepartmentAdd = () => openModal(
-    [
-      { name: "departmentName", label: "Name", type: "text" },
-      { name: "departmentCode", label: "Code", type: "text" },
-      { name: "budgetLimit", label: "Budget Limit", type: "number" },
-      { name: "costCenter", label: "Cost Center", type: "text" },
-      { name: "isActive", label: "Active", type: "checkbox", default: true }
-    ],
-    async (data) => { await api.createDepartment(data); closeModal(); fetchDepartments(); }
-  );
-
-  const handleDepartmentEdit = (row) => openModal(
-    [
-      { name: "departmentName", label: "Name", type: "text" },
-      { name: "departmentCode", label: "Code", type: "text" },
-      { name: "budgetLimit", label: "Budget Limit", type: "number" },
-      { name: "costCenter", label: "Cost Center", type: "text" },
-      { name: "isActive", label: "Active", type: "checkbox" }
-    ],
-    async (data) => { await api.updateDepartment(row.id, data); closeModal(); fetchDepartments(); },
-    row
-  );
-
-  const handleDepartmentDelete = async (id) => { await api.deleteDepartment(id); fetchDepartments(); };
-
   // ---------------- Users ----------------
   const roleOptions = [
     { label: "EMPLOYEE", value: "EMPLOYEE" },
@@ -79,10 +53,18 @@ const AdminPanel = () => {
       { name: "username", label: "Username", type: "text" },
       { name: "email", label: "Email", type: "email" },
       { name: "passwordHash", label: "Password", type: "password" },
+      { name: "employeeId", label: "Employee ID", type: "text" },
       { name: "role", label: "Role", type: "select", options: roleOptions },
+      { name: "departmentId", label: "Department", type: "select", options: departments.map(d => ({ label: d.departmentName, value: d.id })) },
       { name: "isActive", label: "Active", type: "checkbox", default: true }
     ],
-    async (data) => { await api.createUser(data); closeModal(); fetchUsers(); }
+    async (data) => {
+      // Convert departmentId to department object if exists
+      if (data.departmentId) data.department = { id: data.departmentId };
+      await api.createUser(data);
+      closeModal();
+      fetchUsers();
+    }
   );
 
   const handleUserEdit = (row) => openModal(
@@ -90,114 +72,41 @@ const AdminPanel = () => {
       { name: "username", label: "Username", type: "text" },
       { name: "email", label: "Email", type: "email" },
       { name: "passwordHash", label: "Password", type: "password" },
+      { name: "employeeId", label: "Employee ID", type: "text" },
       { name: "role", label: "Role", type: "select", options: roleOptions },
+      { name: "departmentId", label: "Department", type: "select", options: departments.map(d => ({ label: d.departmentName, value: d.id })) },
       { name: "isActive", label: "Active", type: "checkbox" }
     ],
-    async (data) => { await api.updateUser(row.id, data); closeModal(); fetchUsers(); },
-    row
+    async (data) => {
+      if (data.departmentId) data.department = { id: data.departmentId };
+      await api.updateUser(row.id, data);
+      closeModal();
+      fetchUsers();
+    },
+    {
+      ...row,
+      departmentId: row.department?.id
+    }
   );
 
   const handleUserDelete = async (id) => { await api.deleteUser(id); fetchUsers(); };
-
-  // ---------------- Expense Policies ----------------
-  const handlePolicyAdd = () => openModal(
-    [
-      { name: "policyName", label: "Name", type: "text" },
-      { name: "spendingLimit", label: "Spending Limit", type: "number" },
-      { name: "approvalRequired", label: "Approval Required", type: "checkbox", default: true },
-      { name: "receiptRequired", label: "Receipt Required", type: "checkbox", default: true },
-      { name: "isActive", label: "Active", type: "checkbox", default: true }
-    ],
-    async (data) => { await api.createPolicy(data); closeModal(); fetchPolicies(); }
-  );
-
-  const handlePolicyEdit = (row) => openModal(
-    [
-      { name: "policyName", label: "Name", type: "text" },
-      { name: "spendingLimit", label: "Spending Limit", type: "number" },
-      { name: "approvalRequired", label: "Approval Required", type: "checkbox" },
-      { name: "receiptRequired", label: "Receipt Required", type: "checkbox" },
-      { name: "isActive", label: "Active", type: "checkbox" }
-    ],
-    async (data) => { await api.updatePolicy(row.id, data); closeModal(); fetchPolicies(); },
-    row
-  );
-
-  const handlePolicyDelete = async (id) => { await api.deletePolicy(id); fetchPolicies(); };
-
-  // ---------------- Expense Categories ----------------
-  const handleCategoryAdd = () => openModal(
-    [
-      { name: "categoryName", label: "Name", type: "text" },
-      { name: "categoryCode", label: "Code", type: "text" },
-      { name: "policyLimit", label: "Policy Limit", type: "number" },
-      { name: "requiresReceipt", label: "Requires Receipt", type: "checkbox", default: true },
-      { name: "requiresBusinessPurpose", label: "Requires Business Purpose", type: "checkbox", default: true },
-      { name: "isActive", label: "Active", type: "checkbox", default: true }
-    ],
-    async (data) => { await api.createCategory(data); closeModal(); fetchCategories(); }
-  );
-
-  const handleCategoryEdit = (row) => openModal(
-    [
-      { name: "categoryName", label: "Name", type: "text" },
-      { name: "categoryCode", label: "Code", type: "text" },
-      { name: "policyLimit", label: "Policy Limit", type: "number" },
-      { name: "requiresReceipt", label: "Requires Receipt", type: "checkbox" },
-      { name: "requiresBusinessPurpose", label: "Requires Business Purpose", type: "checkbox" },
-      { name: "isActive", label: "Active", type: "checkbox" }
-    ],
-    async (data) => { await api.updateCategory(row.id, data); closeModal(); fetchCategories(); },
-    row
-  );
-
-  const handleCategoryDelete = async (id) => { await api.deleteCategory(id); fetchCategories(); };
 
   return (
     <div className="admin-panel">
       <h2>Admin Panel</h2>
 
       <section>
-        <h3>Departments</h3>
-        <button onClick={handleDepartmentAdd}>Add Department</button>
-        <TableView
-          columns={["id", "departmentName", "departmentCode", "budgetLimit", "costCenter", "isActive"]}
-          data={departments}
-          onEdit={handleDepartmentEdit}
-          onDelete={handleDepartmentDelete}
-        />
-      </section>
-
-      <section>
         <h3>Users</h3>
         <button onClick={handleUserAdd}>Add User</button>
         <TableView
-          columns={["id", "username", "email", "role", "isActive"]}
-          data={users}
+          columns={["id", "username", "email", "role", "employeeId", "department", "isActive"]}
+          data={users.map(u => ({
+            ...u,
+            department: u.department?.departmentName || "",
+            isActive: u.isActive ? "Yes" : "No"
+          }))}
           onEdit={handleUserEdit}
           onDelete={handleUserDelete}
-        />
-      </section>
-
-      <section>
-        <h3>Expense Policies</h3>
-        <button onClick={handlePolicyAdd}>Add Policy</button>
-        <TableView
-          columns={["id", "policyName", "spendingLimit", "approvalRequired", "receiptRequired", "isActive"]}
-          data={policies}
-          onEdit={handlePolicyEdit}
-          onDelete={handlePolicyDelete}
-        />
-      </section>
-
-      <section>
-        <h3>Expense Categories</h3>
-        <button onClick={handleCategoryAdd}>Add Category</button>
-        <TableView
-          columns={["id", "categoryName", "categoryCode", "policyLimit", "requiresReceipt", "requiresBusinessPurpose", "isActive"]}
-          data={categories}
-          onEdit={handleCategoryEdit}
-          onDelete={handleCategoryDelete}
         />
       </section>
 
