@@ -41,6 +41,7 @@ const AdminPanel = () => {
     setModalData(initialData);
     setShowModal(true);
   };
+
   const closeModal = () => setShowModal(false);
 
   // ---------------- Departments ----------------
@@ -52,8 +53,13 @@ const AdminPanel = () => {
       { name: "costCenter", label: "Cost Center", type: "text" },
       { name: "isActive", label: "Active", type: "checkbox", default: true }
     ],
-    async (data) => { await api.createDepartment(data); closeModal(); fetchDepartments(); }
+    async (data) => {
+      await api.createDepartment(data);
+      closeModal();
+      fetchDepartments();
+    }
   );
+
   const handleDepartmentEdit = (row) => openModal(
     [
       { name: "departmentName", label: "Name", type: "text" },
@@ -62,44 +68,86 @@ const AdminPanel = () => {
       { name: "costCenter", label: "Cost Center", type: "text" },
       { name: "isActive", label: "Active", type: "checkbox" }
     ],
-    async (data) => { await api.updateDepartment(row.id, data); closeModal(); fetchDepartments(); },
+    async (data) => {
+      await api.updateDepartment(row.id, data);
+      closeModal();
+      fetchDepartments();
+    },
     row
   );
-  const handleDepartmentDelete = async (id) => { await api.deleteDepartment(id); fetchDepartments(); };
+
+  const handleDepartmentDelete = async (id) => {
+    await api.deleteDepartment(id);
+    fetchDepartments();
+  };
 
   // ---------------- Users ----------------
   const handleUserAdd = () => openModal(
     [
       { name: "username", label: "Username", type: "text" },
       { name: "email", label: "Email", type: "email" },
-      { name: "passwordHash", label: "Password", type: "password" },
-      { name: "role", label: "Role", type: "select", options: ["EMPLOYEE","MANAGER","FINANCE_MANAGER","ADMIN","AUDITOR"] },
+      { name: "passwordHash", label: "Password", type: "text" },
+      { name: "role", label: "Role", type: "select", options: ["EMPLOYEE", "MANAGER", "FINANCE_MANAGER"] },
       { name: "employeeId", label: "Employee ID", type: "text" },
-      { name: "department", label: "Department ID", type: "number" },
+      { name: "department", label: "Department", type: "select", options: departments.map(d => ({ label: d.departmentName, value: d.id })) },
       { name: "isActive", label: "Active", type: "checkbox", default: true }
     ],
-    async (data) => { await api.createUser(data); closeModal(); fetchUsers(); }
+    async (data) => {
+      const payload = {
+        username: data.username,
+        email: data.email,
+        passwordHash: data.passwordHash,
+        role: data.role,
+        employeeId: data.employeeId,
+        department: data.department ? { id: data.department } : null,
+        isActive: !!data.isActive
+      };
+      await api.createUser(payload);
+      closeModal();
+      fetchUsers();
+    }
   );
+
   const handleUserEdit = (row) => openModal(
     [
       { name: "username", label: "Username", type: "text" },
       { name: "email", label: "Email", type: "email" },
-      { name: "passwordHash", label: "Password", type: "password" },
-      { name: "role", label: "Role", type: "select", options: ["EMPLOYEE","MANAGER","FINANCE_MANAGER","ADMIN","AUDITOR"] },
+      { name: "passwordHash", label: "Password", type: "text" },
+      { name: "role", label: "Role", type: "select", options: ["EMPLOYEE", "MANAGER", "FINANCE_MANAGER"] },
       { name: "employeeId", label: "Employee ID", type: "text" },
-      { name: "department", label: "Department ID", type: "number" },
+      { name: "department", label: "Department", type: "select", options: departments.map(d => ({ label: d.departmentName, value: d.id })) },
       { name: "isActive", label: "Active", type: "checkbox" }
     ],
-    async (data) => { await api.updateUser(row.id, data); closeModal(); fetchUsers(); },
-    row
+    async (data) => {
+      const payload = {
+        username: data.username,
+        email: data.email,
+        passwordHash: data.passwordHash || row.passwordHash,
+        role: data.role,
+        employeeId: data.employeeId,
+        department: data.department ? { id: data.department } : null,
+        isActive: !!data.isActive
+      };
+      await api.updateUser(row.id, payload);
+      closeModal();
+      fetchUsers();
+    },
+    {
+      ...row,
+      department: row.department?.id
+    }
   );
-  const handleUserDelete = async (id) => { await api.deleteUser(id); fetchUsers(); };
+
+  const handleUserDelete = async (id) => {
+    await api.deleteUser(id);
+    fetchUsers();
+  };
 
   // ---------------- Policies ----------------
   const handlePolicyAdd = () => openModal(
     [
-      { name: "policyName", label: "Policy Name", type: "text" },
-      { name: "category", label: "Category ID", type: "number" },
+      { name: "policyName", label: "Name", type: "text" },
+      { name: "category", label: "Category", type: "select", options: categories.map(c => ({ label: c.categoryName, value: c.id })) },
       { name: "spendingLimit", label: "Spending Limit", type: "number" },
       { name: "approvalRequired", label: "Approval Required", type: "checkbox" },
       { name: "receiptRequired", label: "Receipt Required", type: "checkbox" },
@@ -107,12 +155,27 @@ const AdminPanel = () => {
       { name: "expiryDate", label: "Expiry Date", type: "date" },
       { name: "isActive", label: "Active", type: "checkbox", default: true }
     ],
-    async (data) => { await api.createPolicy(data); closeModal(); fetchPolicies(); }
+    async (data) => {
+      const payload = {
+        policyName: data.policyName,
+        category: data.category ? { id: data.category } : null,
+        spendingLimit: data.spendingLimit,
+        approvalRequired: !!data.approvalRequired,
+        receiptRequired: !!data.receiptRequired,
+        effectiveDate: data.effectiveDate,
+        expiryDate: data.expiryDate,
+        isActive: !!data.isActive
+      };
+      await api.createPolicy(payload);
+      closeModal();
+      fetchPolicies();
+    }
   );
+
   const handlePolicyEdit = (row) => openModal(
     [
-      { name: "policyName", label: "Policy Name", type: "text" },
-      { name: "category", label: "Category ID", type: "number" },
+      { name: "policyName", label: "Name", type: "text" },
+      { name: "category", label: "Category", type: "select", options: categories.map(c => ({ label: c.categoryName, value: c.id })) },
       { name: "spendingLimit", label: "Spending Limit", type: "number" },
       { name: "approvalRequired", label: "Approval Required", type: "checkbox" },
       { name: "receiptRequired", label: "Receipt Required", type: "checkbox" },
@@ -120,10 +183,31 @@ const AdminPanel = () => {
       { name: "expiryDate", label: "Expiry Date", type: "date" },
       { name: "isActive", label: "Active", type: "checkbox" }
     ],
-    async (data) => { await api.updatePolicy(row.id, data); closeModal(); fetchPolicies(); },
-    row
+    async (data) => {
+      const payload = {
+        policyName: data.policyName,
+        category: data.category ? { id: data.category } : null,
+        spendingLimit: data.spendingLimit,
+        approvalRequired: !!data.approvalRequired,
+        receiptRequired: !!data.receiptRequired,
+        effectiveDate: data.effectiveDate,
+        expiryDate: data.expiryDate,
+        isActive: !!data.isActive
+      };
+      await api.updatePolicy(row.id, payload);
+      closeModal();
+      fetchPolicies();
+    },
+    {
+      ...row,
+      category: row.category?.id
+    }
   );
-  const handlePolicyDelete = async (id) => { await api.deletePolicy(id); fetchPolicies(); };
+
+  const handlePolicyDelete = async (id) => {
+    await api.deletePolicy(id);
+    fetchPolicies();
+  };
 
   // ---------------- Categories ----------------
   const handleCategoryAdd = () => openModal(
@@ -134,10 +218,24 @@ const AdminPanel = () => {
       { name: "requiresReceipt", label: "Requires Receipt", type: "checkbox" },
       { name: "requiresBusinessPurpose", label: "Requires Business Purpose", type: "checkbox" },
       { name: "isActive", label: "Active", type: "checkbox", default: true },
-      { name: "parentCategory", label: "Parent Category ID", type: "number" }
+      { name: "parentCategory", label: "Parent Category", type: "select", options: categories.map(c => ({ label: c.categoryName, value: c.id })) }
     ],
-    async (data) => { await api.createCategory(data); closeModal(); fetchCategories(); }
+    async (data) => {
+      const payload = {
+        categoryName: data.categoryName,
+        categoryCode: data.categoryCode,
+        policyLimit: data.policyLimit,
+        requiresReceipt: !!data.requiresReceipt,
+        requiresBusinessPurpose: !!data.requiresBusinessPurpose,
+        isActive: !!data.isActive,
+        parentCategory: data.parentCategory ? { id: data.parentCategory } : null
+      };
+      await api.createCategory(payload);
+      closeModal();
+      fetchCategories();
+    }
   );
+
   const handleCategoryEdit = (row) => openModal(
     [
       { name: "categoryName", label: "Name", type: "text" },
@@ -146,12 +244,32 @@ const AdminPanel = () => {
       { name: "requiresReceipt", label: "Requires Receipt", type: "checkbox" },
       { name: "requiresBusinessPurpose", label: "Requires Business Purpose", type: "checkbox" },
       { name: "isActive", label: "Active", type: "checkbox" },
-      { name: "parentCategory", label: "Parent Category ID", type: "number" }
+      { name: "parentCategory", label: "Parent Category", type: "select", options: categories.map(c => ({ label: c.categoryName, value: c.id })) }
     ],
-    async (data) => { await api.updateCategory(row.id, data); closeModal(); fetchCategories(); },
-    row
+    async (data) => {
+      const payload = {
+        categoryName: data.categoryName,
+        categoryCode: data.categoryCode,
+        policyLimit: data.policyLimit,
+        requiresReceipt: !!data.requiresReceipt,
+        requiresBusinessPurpose: !!data.requiresBusinessPurpose,
+        isActive: !!data.isActive,
+        parentCategory: data.parentCategory ? { id: data.parentCategory } : null
+      };
+      await api.updateCategory(row.id, payload);
+      closeModal();
+      fetchCategories();
+    },
+    {
+      ...row,
+      parentCategory: row.parentCategory?.id
+    }
   );
-  const handleCategoryDelete = async (id) => { await api.deleteCategory(id); fetchCategories(); };
+
+  const handleCategoryDelete = async (id) => {
+    await api.deleteCategory(id);
+    fetchCategories();
+  };
 
   return (
     <div className="admin-panel">
