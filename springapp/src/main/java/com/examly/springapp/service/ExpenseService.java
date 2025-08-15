@@ -1,64 +1,42 @@
 package com.examly.springapp.service;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.examly.springapp.model.Expense;
 import com.examly.springapp.repository.ExpenseRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Service
 public class ExpenseService {
-
-    private final ExpenseRepository expenseRepository;
-
-    public ExpenseService(ExpenseRepository expenseRepository) {
-        this.expenseRepository = expenseRepository;
+    @Autowired
+    private ExpenseRepository expenseRepository;
+    
+    public Expense createExpense(Expense expense){
+        expense.setStatus("PENDING");
+        return expenseRepository.save(expense);
     }
 
-    public List<Expense> getAllExpenses() {
+    public List<Expense> getAllExpenses(){
         return expenseRepository.findAll();
     }
 
-    public Expense getExpenseById(Long id) {
-        return expenseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Expense not found with id " + id));
+    public Optional<Expense> updateExpenseStatus(Long id, String status, String remarks){
+        Optional<Expense> optionalExpense=expenseRepository.findById(id);
+        if(optionalExpense.isPresent()){
+            Expense expense=optionalExpense.get();
+            expense.setStatus(status);
+            expense.setRemarks(remarks);
+            expenseRepository.save(expense);
+        }
+
+        return optionalExpense;
     }
 
-    public Expense createExpense(Expense expense) {
-        return expenseRepository.save(expense);
+    public Optional<Expense> getExpenseById(Long id) {
+        return expenseRepository.findById(id);
     }
 
-    public Expense updateExpense(Long id, Expense expenseDetails) {
-        Expense expense = getExpenseById(id);
-        expense.setEmployeeId(expenseDetails.getEmployeeId());
-        expense.setAmount(expenseDetails.getAmount());
-        expense.setDescription(expenseDetails.getDescription());
-        expense.setDate(expenseDetails.getDate());
-        expense.setStatus(expenseDetails.getStatus());
-        expense.setRemarks(expenseDetails.getRemarks());
-        return expenseRepository.save(expense);
-    }
-
-    public void deleteExpense(Long id) {
-        Expense expense = getExpenseById(id);
-        expenseRepository.delete(expense);
-    }
-
-    @Transactional
-    public Expense updateExpenseStatus(Long id, String status, String remarks) {
-        Expense expense = getExpenseById(id);
-        expense.setStatus(status);
-        if (remarks != null) expense.setRemarks(remarks);
-        return expenseRepository.save(expense);
-    }
-
-    public List<Expense> getExpensesByEmployee(Long employeeId) {
-        return expenseRepository.findByEmployeeId(employeeId);
-    }
-
-    public List<Expense> getExpensesByDateRange(LocalDate start, LocalDate end) {
-        return expenseRepository.findByExpenseDateBetween(start, end);
-    }
 }
