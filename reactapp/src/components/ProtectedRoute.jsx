@@ -1,11 +1,17 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 
-// Only renders the component if user role matches
-function ProtectedRoute({ user, roles, children }) {
-  if (!user) return <Navigate to="/login" />;
-  if (!roles.includes(user.role)) return <Navigate to="/" />;
-  return children;
-}
+// role is a string, allowedRoles is an array of strings
+const ProtectedRoute = ({ element: Component, allowedRoles, currentUser }) => {
+  if (!currentUser) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (allowedRoles && !allowedRoles.includes(currentUser.role)) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <Component />;
+};
 
 export default ProtectedRoute;
