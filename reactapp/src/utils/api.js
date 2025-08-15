@@ -104,31 +104,66 @@ export const getUsers = async () => {
 
 export const createUser = async (data) => {
   try {
+    // Transform departmentId into department object
+    const payload = { ...data };
+    if (payload.departmentId) {
+      payload.department = { id: payload.departmentId };
+    }
+    delete payload.departmentId;
+
+    // Convert password field to passwordHash if exists
+    if (payload.password) {
+      payload.passwordHash = payload.password;
+      delete payload.password;
+    }
+
     const res = await fetch(`${BASE_URL}/users`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     });
-    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => null);
+      throw new Error(errorData?.message || `HTTP error ${res.status}`);
+    }
+
     return await res.json();
   } catch (err) {
     console.error("Failed to create user:", err);
-    return null;
+    throw err;  // important to propagate the error
   }
 };
 
+
 export const updateUser = async (id, data) => {
   try {
+    const payload = { ...data };
+    if (payload.departmentId) {
+      payload.department = { id: payload.departmentId };
+    }
+    delete payload.departmentId;
+
+    if (payload.password) {
+      payload.passwordHash = payload.password;
+      delete payload.password;
+    }
+
     const res = await fetch(`${BASE_URL}/users/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     });
-    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => null);
+      throw new Error(errorData?.message || `HTTP error ${res.status}`);
+    }
+
     return await res.json();
   } catch (err) {
     console.error("Failed to update user:", err);
-    return null;
+    throw err;
   }
 };
 
