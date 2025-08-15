@@ -46,14 +46,20 @@ const AdminPanel = () => {
     fetchAll();
   }, row);
 
-  const handleDepartmentAdd = () => openModal([
-    { name: "departmentName", label: "Name" },
-    { name: "departmentCode", label: "Code" },
-  ], async (data) => {
+  const handleDepartmentAdd = () => openModal(
+  [
+    { name: "departmentName", label: "Name", type: "text" },
+    { name: "departmentCode", label: "Code", type: "text" },
+    { name: "budgetLimit", label: "Budget Limit", type: "number" },
+    { name: "costCenter", label: "Cost Center", type: "text" },
+    { name: "isActive", label: "Active", type: "checkbox", default: true }
+  ],
+  async (data) => {
     await api.createDepartment(data);
     closeModal();
     fetchAll();
-  });
+  }
+);
 
   const handleDepartmentDelete = async (id) => {
     await api.deleteDepartment(id);
@@ -185,3 +191,4 @@ const AdminPanel = () => {
 };
 
 export default AdminPanel;
+
