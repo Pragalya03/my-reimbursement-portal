@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import TableView from "../components/TableView";
 import ModalForm from "../components/ModalForm";
-import * as api from "../services/adminApi";
+import * as api from "../utils/api.js";
 
 const AdminPanel = () => {
   const [departments, setDepartments] = useState([]);

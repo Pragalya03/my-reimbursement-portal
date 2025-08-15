@@ -3,7 +3,7 @@ const BASE_URL = "https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.exa
 export async function createExpense(expense) {
   const res = await fetch(BASE_URL, {
     method: "POST",
-    headers: authHeaders(),
+    headers: {"Content-Type" : "application/json"},
     body: JSON.stringify(expense),
   });
   if (!res.ok) {
@@ -16,7 +16,7 @@ export async function createExpense(expense) {
 export async function getExpenses() {
   const res = await fetch(BASE_URL, {
     method: "GET",
-    headers: authHeaders(),
+    headers: {"Content-Type" : "application/json"},
   });
   if (!res.ok) {
     const errorData = await res.json().catch(() => null);
@@ -29,7 +29,7 @@ export async function getExpenses() {
 export async function updateExpenseStatus(id, updateData) {
   const res = await fetch(`${BASE_URL}/${id}/status`, {
     method: "PUT",
-    headers: authHeaders(),
+    headers: {"Content-Type" : "application/json"},
     body: JSON.stringify(updateData),
   });
   if (!res.ok) {
