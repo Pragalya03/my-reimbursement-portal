@@ -5,7 +5,6 @@ import com.examly.springapp.repository.ExpensePolicyRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ExpensePolicyService {
@@ -20,16 +19,34 @@ public class ExpensePolicyService {
         return expensePolicyRepository.findAll();
     }
 
-    public Optional<ExpensePolicy> getPolicyById(Long id) {
-        return expensePolicyRepository.findById(id);
+    public ExpensePolicy getPolicyById(Long id) {
+        return expensePolicyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Policy not found with id " + id));
     }
 
-    public ExpensePolicy savePolicy(ExpensePolicy policy) {
+    public ExpensePolicy createPolicy(ExpensePolicy policy) {
         return expensePolicyRepository.save(policy);
+    }
+
+    public ExpensePolicy updatePolicy(Long id, ExpensePolicy policyDetails) {
+        ExpensePolicy policy = getPolicyById(id);
+        policy.setPolicyName(policyDetails.getPolicyName());
+        policy.setCategory(policyDetails.getCategory());
+        policy.setSpendingLimit(policyDetails.getSpendingLimit());
+        policy.setApprovalRequired(policyDetails.getApprovalRequired());
+        policy.setReceiptRequired(policyDetails.getReceiptRequired());
+        policy.setEffectiveDate(policyDetails.getEffectiveDate());
+        policy.setExpiryDate(policyDetails.getExpiryDate());
+        policy.setIsActive(policyDetails.getIsActive());
+        return expensePolicyRepository.save(policy);
+    }
+
+    public void deletePolicy(Long id) {
+        ExpensePolicy policy = getPolicyById(id);
+        expensePolicyRepository.delete(policy);
     }
 
     public List<ExpensePolicy> getActivePolicies() {
         return expensePolicyRepository.findByIsActiveTrue();
     }
 }
-
