@@ -23,7 +23,7 @@ const TableView = ({ columns, data, onEdit, onDelete }) => {
           data.map((row) => (
             <tr key={row.id}>
               {columns.map((col) => (
-                <td key={col}>{row[col] ?? ""}</td> {/* <-- Use exact key */}
+                <td key={col}>{row[col] ?? ""}</td>
               ))}
               <td>
                 <button onClick={() => onEdit(row)}>Edit</button>
