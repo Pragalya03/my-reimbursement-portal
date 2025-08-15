@@ -13,20 +13,29 @@ const TableView = ({ columns, data, onEdit, onDelete }) => {
         </tr>
       </thead>
       <tbody>
-        {data.map((row) => (
-          <tr key={row.id}>
-            {columns.map((col) => (
-              <td key={col}>{row[col.toLowerCase()] || ""}</td>
-            ))}
-            <td>
-              <button onClick={() => onEdit(row)}>Edit</button>
-              <button onClick={() => onDelete(row.id)}>Delete</button>
+        {data.length === 0 ? (
+          <tr>
+            <td colSpan={columns.length + 1} style={{ textAlign: "center" }}>
+              No data available
             </td>
           </tr>
-        ))}
+        ) : (
+          data.map((row) => (
+            <tr key={row.id}>
+              {columns.map((col) => (
+                <td key={col}>{row[col] ?? ""}</td>
+              ))}
+              <td>
+                <button onClick={() => onEdit(row)}>Edit</button>
+                <button onClick={() => onDelete(row.id)}>Delete</button>
+              </td>
+            </tr>
+          ))
+        )}
       </tbody>
     </table>
   );
 };
+
 
 export default TableView;
