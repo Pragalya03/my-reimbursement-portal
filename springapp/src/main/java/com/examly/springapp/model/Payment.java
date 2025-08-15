@@ -134,5 +134,5 @@ public class Payment {
     }
 
     // Getters and setters
-    
+    public Payment(){}
 }

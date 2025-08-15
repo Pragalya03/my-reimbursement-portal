@@ -29,7 +29,7 @@ public class PaymentService {
     public Payment updatePayment(Long id, Payment payment) {
         Payment existingPayment = paymentRepository.findById(id).orElse(new Payment());
         // update fields if exists
-        existingPayment.setAmount(payment.getAmount());
+        existingPayment.setPaymentAmount(payment.getPaymentAmount());
         existingPayment.setProcessedBy(payment.getProcessedBy());
         existingPayment.setPaymentDate(payment.getPaymentDate());
         // save updated payment
