@@ -15,25 +15,38 @@ function Register() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleRegister = async (e) => {
-    e.preventDefault();
-    setError("");
-    setSuccess("");
+  e.preventDefault();
+  setError("");
+  setSuccess("");
 
-    try {
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      if (!res.ok) throw new Error("Registration failed");
+  try {
+    const res = await fetch("/users", { // <-- match your backend path
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: formData.username,
+        email: formData.email,
+        passwordHash: formData.password,
+        role: "EMPLOYEE",
+        employeeId: "EMP" + Math.floor(Math.random() * 10000), // auto-generate unique id
+        department: null,
+        manager: null,
+        createdDate: new Date().toISOString(),
+        lastLogin: null,
+        isActive: true
+      }),
+    });
 
-      setSuccess("Account created successfully!");
-      setFormData({ username: "", email: "", password: "" });
-      setTimeout(() => navigate("/login"), 1500);
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+    if (!res.ok) throw new Error("Registration failed");
+
+    setSuccess("Account created successfully!");
+    setFormData({ username: "", email: "", password: "" });
+    setTimeout(() => navigate("/login"), 1500);
+  } catch (err) {
+    setError(err.message);
+  }
+};
+
 
   return (
     <div className="register-page">
@@ -69,3 +82,4 @@ function Register() {
 }
 
 export default Register;
+
