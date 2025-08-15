@@ -2,6 +2,9 @@ package com.examly.springapp.service;
 
 import com.examly.springapp.model.User;
 import com.examly.springapp.repository.UserRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,8 +12,15 @@ import java.util.List;
 @Service
 public class UserService {
 
+    @Autowired
     private final UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
+    public User registerUser(User user){
+        user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
+        return userRepository.save(user);
+    }
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
