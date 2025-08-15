@@ -39,9 +39,6 @@ export async function updateExpenseStatus(id, updateData) {
   return res.json();
 }
 
-// src/utils/api.js
-const BASE_URL = "https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io";
-
 // ---------- Departments ----------
 export const getDepartments = async () => {
   try {
