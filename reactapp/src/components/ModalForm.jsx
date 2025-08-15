@@ -4,15 +4,13 @@ const ModalForm = ({ fields, initialData, onSubmit, onClose }) => {
   const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    // Fill in default values for checkboxes if not present
     const defaults = {};
     fields.forEach(f => {
       if (f.type === "checkbox" && initialData && initialData[f.name] === undefined) {
         defaults[f.name] = f.default || false;
       }
-      // Fill default for select if not present
       if (f.type === "select" && initialData && initialData[f.name] === undefined) {
-        defaults[f.name] = f.options && f.options[0] ? f.options[0] : "";
+        defaults[f.name] = f.default || "";
       }
     });
     setFormData({ ...defaults, ...(initialData || {}) });
@@ -29,7 +27,7 @@ const ModalForm = ({ fields, initialData, onSubmit, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await onSubmit(formData); // make sure API call is awaited
+      await onSubmit(formData);
     } catch (err) {
       console.error("Submit failed:", err);
       alert("Failed to save. See console for details.");
@@ -49,9 +47,12 @@ const ModalForm = ({ fields, initialData, onSubmit, onClose }) => {
                   value={formData[field.name] || ""}
                   onChange={handleChange}
                 >
-                  {field.options && field.options.map(opt => (
-                    <option key={opt} value={opt}>{opt}</option>
-                  ))}
+                  {field.options && field.options.map((opt) => {
+                    if (typeof opt === "object") {
+                      return <option key={opt.value} value={opt.value}>{opt.label}</option>;
+                    }
+                    return <option key={opt} value={opt}>{opt}</option>;
+                  })}
                 </select>
               ) : (
                 <input
