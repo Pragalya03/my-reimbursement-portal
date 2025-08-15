@@ -1,21 +1,35 @@
-// src/components/ModalForm.jsx
 import React, { useState, useEffect } from "react";
 
 const ModalForm = ({ fields, initialData, onSubmit, onClose }) => {
   const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    setFormData(initialData || {});
-  }, [initialData]);
+    // Fill in default values for checkboxes if not present
+    const defaults = {};
+    fields.forEach(f => {
+      if (f.type === "checkbox" && initialData && initialData[f.name] === undefined) {
+        defaults[f.name] = f.default || false;
+      }
+    });
+    setFormData({ ...defaults, ...(initialData || {}) });
+  }, [initialData, fields]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, type, value, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value
+    }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    try {
+      await onSubmit(formData); // make sure API call is awaited
+    } catch (err) {
+      console.error("Submit failed:", err);
+      alert("Failed to save. See console for details.");
+    }
   };
 
   return (
@@ -28,7 +42,8 @@ const ModalForm = ({ fields, initialData, onSubmit, onClose }) => {
               <input
                 type={field.type || "text"}
                 name={field.name}
-                value={formData[field.name] || ""}
+                value={field.type === "checkbox" ? undefined : formData[field.name] || ""}
+                checked={field.type === "checkbox" ? !!formData[field.name] : undefined}
                 onChange={handleChange}
               />
             </div>
