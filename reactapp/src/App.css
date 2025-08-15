@@ -1,6 +1,8 @@
 .App {
   font-family: Arial, sans-serif;
   padding: 20px;
+  background-color: #F2EFEA;
+  color: #333333;
 }
 
 .page-container {
@@ -12,20 +14,20 @@
   display: flex;
   justify-content: center;
   gap: 15px;
-  background-color: #1e40af; /* Indigo dark */
+  background-color: #556B2F; /* Deep Olive */
   padding: 10px;
 }
 
 .user-type-btn {
-  color: #ffffff;
+  color: #F2EFEA; /* Warm Gray text */
   text-decoration: none;
   padding: 8px 20px;
   border-radius: 5px;
-  background-color: #3b82f6; /* Light blue */
+  background-color: #D2691E; /* Burnt Orange */
   transition: background 0.3s;
 }
 
 .user-type-btn.active,
 .user-type-btn:hover {
-  background-color: #60a5fa;
+  background-color: #DAA520; /* Goldenrod */
 }
