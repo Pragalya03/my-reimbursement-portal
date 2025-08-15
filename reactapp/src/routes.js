@@ -1,7 +1,7 @@
 // routes.js
-import LandingPage from "./pages/LandingPage";
-import LoginPage from "./pages/LoginPage";
-import EmployeeRegistration from "./pages/EmployeeRegistration";
+import LandingPage from "./pages/Home";
+import LoginPage from "./pages/Login";
+import EmployeeRegistration from "./pages/Register";
 import EmployeeDashboard from "./pages/EmployeeDashboard";
 import ManagerDashboard from "./pages/ManagerDashboard";
 import FinanceDashboard from "./pages/FinanceDashboard";

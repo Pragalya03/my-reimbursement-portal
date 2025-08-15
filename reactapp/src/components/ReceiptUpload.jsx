@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./ReceiptUpload.css";
+import "../styles/ReceiptUpload.css";
 
 function ReceiptUpload({ onUpload }) {
   const [file, setFile] = useState(null);
