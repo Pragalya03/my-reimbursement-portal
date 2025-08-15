@@ -1,3 +1,5 @@
+package com.examly.springapp.config;
+
 @Bean
 public WebMvcConfigurer corsConfigurer() {
     return new WebMvcConfigurer() {
