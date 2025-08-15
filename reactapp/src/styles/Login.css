@@ -1,0 +1,31 @@
+.login-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #F2EFEA;
+  border-radius: 10px;
+  border: 1px solid #E07A5F;
+  color: #333333;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #7E7E7E;
+}
+
+.login-container button {
+  background-color: #556B2F; /* Deep Olive */
+  color: #F2EFEA;
+  padding: 8px;
+  width: 100%;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+}
+
+.login-container button:hover {
+  background-color: #DAA520; /* Goldenrod */
+}
