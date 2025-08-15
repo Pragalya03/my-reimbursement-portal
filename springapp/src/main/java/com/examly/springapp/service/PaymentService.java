@@ -5,7 +5,6 @@ import com.examly.springapp.repository.PaymentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PaymentService {
@@ -20,16 +19,34 @@ public class PaymentService {
         return paymentRepository.findAll();
     }
 
-    public Optional<Payment> getPaymentById(Long id) {
-        return paymentRepository.findById(id);
+    public Payment getPaymentById(Long id) {
+        return paymentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Payment not found with id " + id));
     }
 
-    public Payment savePayment(Payment payment) {
+    public Payment createPayment(Payment payment) {
         return paymentRepository.save(payment);
+    }
+
+    public Payment updatePayment(Long id, Payment paymentDetails) {
+        Payment payment = getPaymentById(id);
+        payment.setExpense(paymentDetails.getExpense());
+        payment.setPaymentAmount(paymentDetails.getPaymentAmount());
+        payment.setPaymentDate(paymentDetails.getPaymentDate());
+        payment.setPaymentMethod(paymentDetails.getPaymentMethod());
+        payment.setTransactionId(paymentDetails.getTransactionId());
+        payment.setBankAccountId(paymentDetails.getBankAccountId());
+        payment.setStatus(paymentDetails.getStatus());
+        payment.setProcessedBy(paymentDetails.getProcessedBy());
+        return paymentRepository.save(payment);
+    }
+
+    public void deletePayment(Long id) {
+        Payment payment = getPaymentById(id);
+        paymentRepository.delete(payment);
     }
 
     public List<Payment> getPaymentsByExpense(Long expenseId) {
         return paymentRepository.findByExpenseId(expenseId);
     }
 }
-
