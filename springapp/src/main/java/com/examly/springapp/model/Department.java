@@ -34,5 +34,82 @@ public class Department {
     @OneToMany(mappedBy = "department")
     private List<User> users;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
+    }
+
+    public String getDepartmentCode() {
+        return departmentCode;
+    }
+
+    public void setDepartmentCode(String departmentCode) {
+        this.departmentCode = departmentCode;
+    }
+
+    public User getManager() {
+        return manager;
+    }
+
+    public void setManager(User manager) {
+        this.manager = manager;
+    }
+
+    public BigDecimal getBudgetLimit() {
+        return budgetLimit;
+    }
+
+    public void setBudgetLimit(BigDecimal budgetLimit) {
+        this.budgetLimit = budgetLimit;
+    }
+
+    public String getCostCenter() {
+        return costCenter;
+    }
+
+    public void setCostCenter(String costCenter) {
+        this.costCenter = costCenter;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public Department(Long id, String departmentName, String departmentCode, User manager, BigDecimal budgetLimit,
+            String costCenter, Boolean isActive, List<User> users) {
+        this.id = id;
+        this.departmentName = departmentName;
+        this.departmentCode = departmentCode;
+        this.manager = manager;
+        this.budgetLimit = budgetLimit;
+        this.costCenter = costCenter;
+        this.isActive = isActive;
+        this.users = users;
+    }
+
     // Getters and setters
+    
 }

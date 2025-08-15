@@ -44,5 +44,109 @@ public class Receipt {
     @Column(name = "upload_date", nullable = false)
     private LocalDateTime uploadDate = LocalDateTime.now();
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Expense getExpense() {
+        return expense;
+    }
+
+    public void setExpense(Expense expense) {
+        this.expense = expense;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public Long getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(Long fileSize) {
+        this.fileSize = fileSize;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public String getOcrText() {
+        return ocrText;
+    }
+
+    public void setOcrText(String ocrText) {
+        this.ocrText = ocrText;
+    }
+
+    public BigDecimal getOcrAmount() {
+        return ocrAmount;
+    }
+
+    public void setOcrAmount(BigDecimal ocrAmount) {
+        this.ocrAmount = ocrAmount;
+    }
+
+    public LocalDate getOcrDate() {
+        return ocrDate;
+    }
+
+    public void setOcrDate(LocalDate ocrDate) {
+        this.ocrDate = ocrDate;
+    }
+
+    public String getOcrVendor() {
+        return ocrVendor;
+    }
+
+    public void setOcrVendor(String ocrVendor) {
+        this.ocrVendor = ocrVendor;
+    }
+
+    public LocalDateTime getUploadDate() {
+        return uploadDate;
+    }
+
+    public void setUploadDate(LocalDateTime uploadDate) {
+        this.uploadDate = uploadDate;
+    }
+
+    public Receipt(Long id, Expense expense, String fileName, Long fileSize, String fileType, String filePath,
+            String ocrText, BigDecimal ocrAmount, LocalDate ocrDate, String ocrVendor, LocalDateTime uploadDate) {
+        this.id = id;
+        this.expense = expense;
+        this.fileName = fileName;
+        this.fileSize = fileSize;
+        this.fileType = fileType;
+        this.filePath = filePath;
+        this.ocrText = ocrText;
+        this.ocrAmount = ocrAmount;
+        this.ocrDate = ocrDate;
+        this.ocrVendor = ocrVendor;
+        this.uploadDate = uploadDate;
+    }
+
     // Getters and setters
+    
 }

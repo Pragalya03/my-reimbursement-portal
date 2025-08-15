@@ -37,5 +37,92 @@ public class ExpenseCategory {
     @OneToMany(mappedBy = "parentCategory")
     private List<ExpenseCategory> subCategories;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public String getCategoryCode() {
+        return categoryCode;
+    }
+
+    public void setCategoryCode(String categoryCode) {
+        this.categoryCode = categoryCode;
+    }
+
+    public BigDecimal getPolicyLimit() {
+        return policyLimit;
+    }
+
+    public void setPolicyLimit(BigDecimal policyLimit) {
+        this.policyLimit = policyLimit;
+    }
+
+    public Boolean getRequiresReceipt() {
+        return requiresReceipt;
+    }
+
+    public void setRequiresReceipt(Boolean requiresReceipt) {
+        this.requiresReceipt = requiresReceipt;
+    }
+
+    public Boolean getRequiresBusinessPurpose() {
+        return requiresBusinessPurpose;
+    }
+
+    public void setRequiresBusinessPurpose(Boolean requiresBusinessPurpose) {
+        this.requiresBusinessPurpose = requiresBusinessPurpose;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public ExpenseCategory getParentCategory() {
+        return parentCategory;
+    }
+
+    public void setParentCategory(ExpenseCategory parentCategory) {
+        this.parentCategory = parentCategory;
+    }
+
+    public List<ExpenseCategory> getSubCategories() {
+        return subCategories;
+    }
+
+    public void setSubCategories(List<ExpenseCategory> subCategories) {
+        this.subCategories = subCategories;
+    }
+
+    public ExpenseCategory(Long id, String categoryName, String categoryCode, BigDecimal policyLimit,
+            Boolean requiresReceipt, Boolean requiresBusinessPurpose, Boolean isActive, ExpenseCategory parentCategory,
+            List<ExpenseCategory> subCategories) {
+        this.id = id;
+        this.categoryName = categoryName;
+        this.categoryCode = categoryCode;
+        this.policyLimit = policyLimit;
+        this.requiresReceipt = requiresReceipt;
+        this.requiresBusinessPurpose = requiresBusinessPurpose;
+        this.isActive = isActive;
+        this.parentCategory = parentCategory;
+        this.subCategories = subCategories;
+    }
+
     // Getters and setters
+    
 }

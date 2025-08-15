@@ -61,5 +61,147 @@ public class Expense {
     @Column(name = "exchange_rate", precision = 10, scale = 4)
     private BigDecimal exchangeRate = BigDecimal.valueOf(1.0);
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public User getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(User employee) {
+        this.employee = employee;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDate getExpenseDate() {
+        return expenseDate;
+    }
+
+    public void setExpenseDate(LocalDate expenseDate) {
+        this.expenseDate = expenseDate;
+    }
+
+    public ExpenseCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(ExpenseCategory category) {
+        this.category = category;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public LocalDateTime getSubmissionDate() {
+        return submissionDate;
+    }
+
+    public void setSubmissionDate(LocalDateTime submissionDate) {
+        this.submissionDate = submissionDate;
+    }
+
+    public LocalDateTime getApprovalDate() {
+        return approvalDate;
+    }
+
+    public void setApprovalDate(LocalDateTime approvalDate) {
+        this.approvalDate = approvalDate;
+    }
+
+    public LocalDateTime getPaymentDate() {
+        return paymentDate;
+    }
+
+    public void setPaymentDate(LocalDateTime paymentDate) {
+        this.paymentDate = paymentDate;
+    }
+
+    public String getBusinessPurpose() {
+        return businessPurpose;
+    }
+
+    public void setBusinessPurpose(String businessPurpose) {
+        this.businessPurpose = businessPurpose;
+    }
+
+    public String getProjectCode() {
+        return projectCode;
+    }
+
+    public void setProjectCode(String projectCode) {
+        this.projectCode = projectCode;
+    }
+
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
+
+    public void setCurrencyCode(String currencyCode) {
+        this.currencyCode = currencyCode;
+    }
+
+    public BigDecimal getExchangeRate() {
+        return exchangeRate;
+    }
+
+    public void setExchangeRate(BigDecimal exchangeRate) {
+        this.exchangeRate = exchangeRate;
+    }
+
+    public Expense(Long id, User employee, BigDecimal amount, String description, LocalDate expenseDate,
+            ExpenseCategory category, Status status, String remarks, LocalDateTime submissionDate,
+            LocalDateTime approvalDate, LocalDateTime paymentDate, String businessPurpose, String projectCode,
+            String currencyCode, BigDecimal exchangeRate) {
+        this.id = id;
+        this.employee = employee;
+        this.amount = amount;
+        this.description = description;
+        this.expenseDate = expenseDate;
+        this.category = category;
+        this.status = status;
+        this.remarks = remarks;
+        this.submissionDate = submissionDate;
+        this.approvalDate = approvalDate;
+        this.paymentDate = paymentDate;
+        this.businessPurpose = businessPurpose;
+        this.projectCode = projectCode;
+        this.currencyCode = currencyCode;
+        this.exchangeRate = exchangeRate;
+    }
+
     // Getters and setters
+    
 }

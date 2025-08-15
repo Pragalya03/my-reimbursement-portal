@@ -37,5 +37,92 @@ public class ExpensePolicy {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getPolicyName() {
+        return policyName;
+    }
+
+    public void setPolicyName(String policyName) {
+        this.policyName = policyName;
+    }
+
+    public ExpenseCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(ExpenseCategory category) {
+        this.category = category;
+    }
+
+    public BigDecimal getSpendingLimit() {
+        return spendingLimit;
+    }
+
+    public void setSpendingLimit(BigDecimal spendingLimit) {
+        this.spendingLimit = spendingLimit;
+    }
+
+    public Boolean getApprovalRequired() {
+        return approvalRequired;
+    }
+
+    public void setApprovalRequired(Boolean approvalRequired) {
+        this.approvalRequired = approvalRequired;
+    }
+
+    public Boolean getReceiptRequired() {
+        return receiptRequired;
+    }
+
+    public void setReceiptRequired(Boolean receiptRequired) {
+        this.receiptRequired = receiptRequired;
+    }
+
+    public LocalDate getEffectiveDate() {
+        return effectiveDate;
+    }
+
+    public void setEffectiveDate(LocalDate effectiveDate) {
+        this.effectiveDate = effectiveDate;
+    }
+
+    public LocalDate getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(LocalDate expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public ExpensePolicy(Long id, String policyName, ExpenseCategory category, BigDecimal spendingLimit,
+            Boolean approvalRequired, Boolean receiptRequired, LocalDate effectiveDate, LocalDate expiryDate,
+            Boolean isActive) {
+        this.id = id;
+        this.policyName = policyName;
+        this.category = category;
+        this.spendingLimit = spendingLimit;
+        this.approvalRequired = approvalRequired;
+        this.receiptRequired = receiptRequired;
+        this.effectiveDate = effectiveDate;
+        this.expiryDate = expiryDate;
+        this.isActive = isActive;
+    }
+
     // Getters and setters
+    
 }

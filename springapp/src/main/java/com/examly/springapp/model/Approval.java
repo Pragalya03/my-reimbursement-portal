@@ -39,5 +39,81 @@ public class Approval {
     @Column(name = "is_final_approval", nullable = false)
     private Boolean isFinalApproval = false;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Expense getExpense() {
+        return expense;
+    }
+
+    public void setExpense(Expense expense) {
+        this.expense = expense;
+    }
+
+    
+    public User getApprover() {
+        return approver;
+    }
+    
+    public void setApprover(User approver) {
+        this.approver = approver;
+    }
+
+    public int getApprovalLevel() {
+        return approvalLevel;
+    }
+    
+    public void setApprovalLevel(int approvalLevel) {
+        this.approvalLevel = approvalLevel;
+    }
+    
+    public ApprovalStatus getApprovalStatus() {
+        return approvalStatus;
+    }
+    
+    public void setApprovalStatus(ApprovalStatus approvalStatus) {
+        this.approvalStatus = approvalStatus;
+    }
+    
+    public LocalDateTime getApprovalDate() {
+        return approvalDate;
+    }
+
+    public void setApprovalDate(LocalDateTime approvalDate) {
+        this.approvalDate = approvalDate;
+    }
+    
+    public String getComments() {
+        return comments;
+    }
+    
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+    
+    public Boolean getIsFinalApproval() {
+        return isFinalApproval;
+    }
+    
+    public void setIsFinalApproval(Boolean isFinalApproval) {
+        this.isFinalApproval = isFinalApproval;
+    }
+    
     // Getters and setters
+    public Approval(Long id, Expense expense, User approver, int approvalLevel, ApprovalStatus approvalStatus,
+            LocalDateTime approvalDate, String comments, Boolean isFinalApproval) {
+        this.id = id;
+        this.expense = expense;
+        this.approver = approver;
+        this.approvalLevel = approvalLevel;
+        this.approvalStatus = approvalStatus;
+        this.approvalDate = approvalDate;
+        this.comments = comments;
+        this.isFinalApproval = isFinalApproval;
+    }
 }
