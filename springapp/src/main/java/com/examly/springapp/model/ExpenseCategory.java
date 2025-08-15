@@ -3,6 +3,7 @@ package com.examly.springapp.model;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "expense_categories")
@@ -34,9 +35,10 @@ public class ExpenseCategory {
     @JoinColumn(name = "parent_category_id")
     private ExpenseCategory parentCategory;
 
-    @OneToMany(mappedBy = "parentCategory")
-    private List<ExpenseCategory> subCategories;
+    @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL)
+    private List<ExpenseCategory> subCategories = new ArrayList<>();
 
+    public ExpenseCategory(){}
     public Long getId() {
         return id;
     }
@@ -106,7 +108,7 @@ public class ExpenseCategory {
     }
 
     public void setSubCategories(List<ExpenseCategory> subCategories) {
-        this.subCategories = subCategories;
+        this.subCategories = subCategories = subCategories!=null?subCategories:new ArrayList<>();
     }
 
     public ExpenseCategory(Long id, String categoryName, String categoryCode, BigDecimal policyLimit,
@@ -120,7 +122,7 @@ public class ExpenseCategory {
         this.requiresBusinessPurpose = requiresBusinessPurpose;
         this.isActive = isActive;
         this.parentCategory = parentCategory;
-        this.subCategories = subCategories;
+        this.subCategories = subCategories!=null?subCategories:new ArrayList<>();
     }
 
     // Getters and setters
