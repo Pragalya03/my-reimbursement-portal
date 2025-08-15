@@ -10,6 +10,10 @@ const ModalForm = ({ fields, initialData, onSubmit, onClose }) => {
       if (f.type === "checkbox" && initialData && initialData[f.name] === undefined) {
         defaults[f.name] = f.default || false;
       }
+      // Fill default for select if not present
+      if (f.type === "select" && initialData && initialData[f.name] === undefined) {
+        defaults[f.name] = f.options && f.options[0] ? f.options[0] : "";
+      }
     });
     setFormData({ ...defaults, ...(initialData || {}) });
   }, [initialData, fields]);
@@ -39,13 +43,25 @@ const ModalForm = ({ fields, initialData, onSubmit, onClose }) => {
           {fields.map((field) => (
             <div key={field.name} className="form-group">
               <label>{field.label}</label>
-              <input
-                type={field.type || "text"}
-                name={field.name}
-                value={field.type === "checkbox" ? undefined : formData[field.name] || ""}
-                checked={field.type === "checkbox" ? !!formData[field.name] : undefined}
-                onChange={handleChange}
-              />
+              {field.type === "select" ? (
+                <select
+                  name={field.name}
+                  value={formData[field.name] || ""}
+                  onChange={handleChange}
+                >
+                  {field.options && field.options.map(opt => (
+                    <option key={opt} value={opt}>{opt}</option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type={field.type || "text"}
+                  name={field.name}
+                  value={field.type === "checkbox" ? undefined : formData[field.name] || ""}
+                  checked={field.type === "checkbox" ? !!formData[field.name] : undefined}
+                  onChange={handleChange}
+                />
+              )}
             </div>
           ))}
           <div className="modal-actions">
