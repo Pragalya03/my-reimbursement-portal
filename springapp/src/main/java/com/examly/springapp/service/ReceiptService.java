@@ -3,7 +3,6 @@ package com.examly.springapp.service;
 import com.examly.springapp.model.Receipt;
 import com.examly.springapp.repository.ReceiptRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
