@@ -1,42 +1,45 @@
 package com.examly.springapp.service;
 
+import com.examly.springapp.model.Expense;
+import com.examly.springapp.repository.ExpenseRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.examly.springapp.model.Expense;
-import com.examly.springapp.repository.ExpenseRepository;
-
 @Service
 public class ExpenseService {
-    @Autowired
-    private ExpenseRepository expenseRepository;
-    
-    public Expense createExpense(Expense expense){
-        expense.setStatus("PENDING");
-        return expenseRepository.save(expense);
+
+    private final ExpenseRepository expenseRepository;
+
+    public ExpenseService(ExpenseRepository expenseRepository) {
+        this.expenseRepository = expenseRepository;
     }
 
-    public List<Expense> getAllExpenses(){
+    public List<Expense> getAllExpenses() {
         return expenseRepository.findAll();
-    }
-
-    public Optional<Expense> updateExpenseStatus(Long id, String status, String remarks){
-        Optional<Expense> optionalExpense=expenseRepository.findById(id);
-        if(optionalExpense.isPresent()){
-            Expense expense=optionalExpense.get();
-            expense.setStatus(status);
-            expense.setRemarks(remarks);
-            expenseRepository.save(expense);
-        }
-
-        return optionalExpense;
     }
 
     public Optional<Expense> getExpenseById(Long id) {
         return expenseRepository.findById(id);
     }
 
+    public List<Expense> getExpensesByEmployee(Long employeeId) {
+        return expenseRepository.findByEmployeeId(employeeId);
+    }
+
+    public Expense saveExpense(Expense expense) {
+        return expenseRepository.save(expense);
+    }
+
+    @Transactional
+    public int updateExpenseStatus(Long id, String status, String remarks) {
+        return expenseRepository.updateExpenseStatusAndRemarks(id, status, remarks);
+    }
+
+    public List<Expense> getExpensesByDateRange(LocalDate start, LocalDate end) {
+        return expenseRepository.findByExpenseDateBetween(start, end);
+    }
 }
