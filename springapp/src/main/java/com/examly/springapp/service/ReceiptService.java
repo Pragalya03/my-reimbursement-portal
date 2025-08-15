@@ -5,7 +5,6 @@ import com.examly.springapp.repository.ReceiptRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ReceiptService {
@@ -20,16 +19,36 @@ public class ReceiptService {
         return receiptRepository.findAll();
     }
 
-    public Optional<Receipt> getReceiptById(Long id) {
-        return receiptRepository.findById(id);
+    public Receipt getReceiptById(Long id) {
+        return receiptRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Receipt not found with id " + id));
     }
 
-    public Receipt saveReceipt(Receipt receipt) {
+    public Receipt createReceipt(Receipt receipt) {
         return receiptRepository.save(receipt);
+    }
+
+    public Receipt updateReceipt(Long id, Receipt receiptDetails) {
+        Receipt receipt = getReceiptById(id);
+        receipt.setExpense(receiptDetails.getExpense());
+        receipt.setFileName(receiptDetails.getFileName());
+        receipt.setFileSize(receiptDetails.getFileSize());
+        receipt.setFileType(receiptDetails.getFileType());
+        receipt.setFilePath(receiptDetails.getFilePath());
+        receipt.setOcrText(receiptDetails.getOcrText());
+        receipt.setOcrAmount(receiptDetails.getOcrAmount());
+        receipt.setOcrDate(receiptDetails.getOcrDate());
+        receipt.setOcrVendor(receiptDetails.getOcrVendor());
+        receipt.setUploadDate(receiptDetails.getUploadDate());
+        return receiptRepository.save(receipt);
+    }
+
+    public void deleteReceipt(Long id) {
+        Receipt receipt = getReceiptById(id);
+        receiptRepository.delete(receipt);
     }
 
     public List<Receipt> getReceiptsByExpense(Long expenseId) {
         return receiptRepository.findByExpenseId(expenseId);
     }
 }
-
