@@ -66,52 +66,69 @@ const AdminPanel = () => {
   const handleDepartmentDelete = async (id) => { await api.deleteDepartment(id); fetchDepartments(); };
 
   // ---------------- Users ----------------
-  const roleOptions = [
-    { label: "EMPLOYEE", value: "EMPLOYEE" },
-    { label: "MANAGER", value: "MANAGER" },
-    { label: "FINANCE_MANAGER", value: "FINANCE_MANAGER" },
-    { label: "ADMIN", value: "ADMIN" },
-    { label: "AUDITOR", value: "AUDITOR" }
-  ];
+  // ---------------- Users ----------------
+const roleOptions = [
+  { label: "EMPLOYEE", value: "EMPLOYEE" },
+  { label: "MANAGER", value: "MANAGER" },
+  { label: "FINANCE_MANAGER", value: "FINANCE_MANAGER" },
+  { label: "ADMIN", value: "ADMIN" },
+  { label: "AUDITOR", value: "AUDITOR" }
+];
 
-  const handleUserAdd = () => openModal(
-    [
-      { name: "username", label: "Username", type: "text" },
-      { name: "email", label: "Email", type: "email" },
-      { name: "passwordHash", label: "Password", type: "password" },
-      { name: "employeeId", label: "Employee ID", type: "text" },
-      { name: "role", label: "Role", type: "select", options: roleOptions },
-      { name: "departmentId", label: "Department", type: "select", options: departments.map(d => ({ label: d.departmentName, value: d.id })) },
-      { name: "isActive", label: "Active", type: "checkbox", default: true }
-    ],
-    async (data) => {
-      if (data.departmentId) data.department = { id: data.departmentId };
-      await api.createUser(data);
-      closeModal();
-      fetchUsers();
-    }
-  );
+const handleUserAdd = () => openModal(
+  [
+    { name: "username", label: "Username", type: "text" },
+    { name: "email", label: "Email", type: "email" },
+    { name: "password", label: "Password", type: "password" },
+    { name: "employeeId", label: "Employee ID", type: "text" },
+    { name: "role", label: "Role", type: "select", options: roleOptions },
+    { name: "departmentId", label: "Department", type: "select", options: departments.map(d => ({ label: d.departmentName, value: d.id })) },
+    { name: "isActive", label: "Active", type: "checkbox", default: true }
+  ],
+  async (data) => {
+    // Rename password to passwordHash if backend expects hashed field
+    if (data.password) data.passwordHash = data.password;
+    delete data.password;
 
-  const handleUserEdit = (row) => openModal(
-    [
-      { name: "username", label: "Username", type: "text" },
-      { name: "email", label: "Email", type: "email" },
-      { name: "passwordHash", label: "Password", type: "password" },
-      { name: "employeeId", label: "Employee ID", type: "text" },
-      { name: "role", label: "Role", type: "select", options: roleOptions },
-      { name: "departmentId", label: "Department", type: "select", options: departments.map(d => ({ label: d.departmentName, value: d.id })) },
-      { name: "isActive", label: "Active", type: "checkbox" }
-    ],
-    async (data) => {
-      if (data.departmentId) data.department = { id: data.departmentId };
-      await api.updateUser(row.id, data);
-      closeModal();
-      fetchUsers();
-    },
-    { ...row, departmentId: row.department?.id }
-  );
+    // Only send departmentId
+    if (!data.departmentId) delete data.departmentId;
 
-  const handleUserDelete = async (id) => { await api.deleteUser(id); fetchUsers(); };
+    await api.createUser(data);
+    closeModal();
+    fetchUsers();
+  }
+);
+
+const handleUserEdit = (row) => openModal(
+  [
+    { name: "username", label: "Username", type: "text" },
+    { name: "email", label: "Email", type: "email" },
+    { name: "password", label: "Password", type: "password" },
+    { name: "employeeId", label: "Employee ID", type: "text" },
+    { name: "role", label: "Role", type: "select", options: roleOptions },
+    { name: "departmentId", label: "Department", type: "select", options: departments.map(d => ({ label: d.departmentName, value: d.id })) },
+    { name: "isActive", label: "Active", type: "checkbox" }
+  ],
+  async (data) => {
+    // If password entered, send it as passwordHash
+    if (data.password) data.passwordHash = data.password;
+    delete data.password;
+
+    // Only send departmentId
+    if (!data.departmentId) delete data.departmentId;
+
+    await api.updateUser(row.id, data);
+    closeModal();
+    fetchUsers();
+  },
+  { ...row, departmentId: row.department?.id }
+);
+
+const handleUserDelete = async (id) => {
+  await api.deleteUser(id);
+  fetchUsers();
+};
+
 
   // ---------------- Expense Policies ----------------
   const handlePolicyAdd = () => openModal(
@@ -232,3 +249,4 @@ const AdminPanel = () => {
 };
 
 export default AdminPanel;
+
