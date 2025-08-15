@@ -24,7 +24,7 @@ public class Expense {
 
     // In tests, field is named "date"
     @Column(name = "expense_date", nullable = false)
-    private LocalDate date;
+    private LocalDate expenseDate;
 
     // Keep as String for test compatibility; default to "PENDING"
     @Column(nullable = false)
@@ -66,10 +66,10 @@ public class Expense {
     }
 
     public LocalDate getDate() {
-        return date;
+        return expenseDate;
     }
     public void setDate(LocalDate date) {
-        this.date = date;
+        this.expenseDate = date;
     }
 
     public String getStatus() {
