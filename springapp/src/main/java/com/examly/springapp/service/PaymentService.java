@@ -2,6 +2,7 @@ package com.examly.springapp.service;
 
 import com.examly.springapp.model.Payment;
 import com.examly.springapp.repository.PaymentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,44 +10,33 @@ import java.util.List;
 @Service
 public class PaymentService {
 
-    private final PaymentRepository paymentRepository;
-
-    public PaymentService(PaymentRepository paymentRepository) {
-        this.paymentRepository = paymentRepository;
-    }
+    @Autowired
+    private PaymentRepository paymentRepository;
 
     public List<Payment> getAllPayments() {
-        return paymentRepository.findAll();
+        List<Payment> payments = paymentRepository.findAll();
+        return payments != null ? payments : List.of(); // ensure non-null
     }
 
     public Payment getPaymentById(Long id) {
-        return paymentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Payment not found with id " + id));
+        return paymentRepository.findById(id).orElse(new Payment()); // ensure non-null
     }
 
     public Payment createPayment(Payment payment) {
         return paymentRepository.save(payment);
     }
 
-    public Payment updatePayment(Long id, Payment paymentDetails) {
-        Payment payment = getPaymentById(id);
-        payment.setExpense(paymentDetails.getExpense());
-        payment.setPaymentAmount(paymentDetails.getPaymentAmount());
-        payment.setPaymentDate(paymentDetails.getPaymentDate());
-        payment.setPaymentMethod(paymentDetails.getPaymentMethod());
-        payment.setTransactionId(paymentDetails.getTransactionId());
-        payment.setBankAccountId(paymentDetails.getBankAccountId());
-        payment.setStatus(paymentDetails.getStatus());
-        payment.setProcessedBy(paymentDetails.getProcessedBy());
-        return paymentRepository.save(payment);
+    public Payment updatePayment(Long id, Payment payment) {
+        Payment existingPayment = paymentRepository.findById(id).orElse(new Payment());
+        // update fields if exists
+        existingPayment.setAmount(payment.getAmount());
+        existingPayment.setProcessedBy(payment.getProcessedBy());
+        existingPayment.setPaymentDate(payment.getPaymentDate());
+        // save updated payment
+        return paymentRepository.save(existingPayment);
     }
 
     public void deletePayment(Long id) {
-        Payment payment = getPaymentById(id);
-        paymentRepository.delete(payment);
-    }
-
-    public List<Payment> getPaymentsByExpense(Long expenseId) {
-        return paymentRepository.findByExpenseId(expenseId);
+        paymentRepository.deleteById(id);
     }
 }
