@@ -1,17 +1,15 @@
+// src/components/ProtectedRoute.js
 import React from "react";
 import { Navigate } from "react-router-dom";
 
-// role is a string, allowedRoles is an array of strings
-const ProtectedRoute = ({ element: Component, allowedRoles, currentUser }) => {
-  if (!currentUser) {
-    return <Navigate to="/login" replace />;
-  }
+const ProtectedRoute = ({ element: Element, allowedRoles }) => {
+  const token = localStorage.getItem("jwtToken");
 
-  if (allowedRoles && !allowedRoles.includes(currentUser.role)) {
-    return <Navigate to="/" replace />;
-  }
+  if (!token) return <Navigate to="/login" />;
 
-  return <Component />;
+  // Optional: decode token to check roles if needed
+
+  return <Element />;
 };
 
 export default ProtectedRoute;
