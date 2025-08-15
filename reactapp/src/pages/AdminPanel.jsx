@@ -6,27 +6,33 @@ import * as api from "../utils/api.js";
 import '../styles/AdminPanel.css';
 
 const AdminPanel = () => {
+  // Table data states
   const [departments, setDepartments] = useState([]);
   const [users, setUsers] = useState([]);
   const [policies, setPolicies] = useState([]);
   const [categories, setCategories] = useState([]);
 
+  // Modal states
   const [modalData, setModalData] = useState(null);
   const [modalFields, setModalFields] = useState([]);
   const [modalSubmit, setModalSubmit] = useState(() => {});
   const [showModal, setShowModal] = useState(false);
 
-  const fetchAll = async () => {
-    setDepartments(await api.getDepartments());
-    setUsers(await api.getUsers());
-    setPolicies(await api.getPolicies());
-    setCategories(await api.getCategories());
-  };
+  // Individual fetch functions
+  const fetchDepartments = async () => setDepartments(await api.getDepartments());
+  const fetchUsers = async () => setUsers(await api.getUsers());
+  const fetchPolicies = async () => setPolicies(await api.getPolicies());
+  const fetchCategories = async () => setCategories(await api.getCategories());
 
+  // Load all tables once
   useEffect(() => {
-    fetchAll();
+    fetchDepartments();
+    fetchUsers();
+    fetchPolicies();
+    fetchCategories();
   }, []);
 
+  // Modal helpers
   const openModal = (fields, submitCallback, initialData = null) => {
     setModalFields(fields);
     setModalSubmit(() => submitCallback);
@@ -36,98 +42,122 @@ const AdminPanel = () => {
 
   const closeModal = () => setShowModal(false);
 
-  // Handlers for add/edit
-  const handleDepartmentEdit = (row) => openModal([
-    { name: "departmentName", label: "Name" },
-    { name: "departmentCode", label: "Code" },
-  ], async (data) => {
-    await api.updateDepartment(row.id, data);
-    closeModal();
-    fetchAll();
-  }, row);
-
+  // ---------------- Departments ----------------
   const handleDepartmentAdd = () => openModal(
-  [
-    { name: "departmentName", label: "Name", type: "text" },
-    { name: "departmentCode", label: "Code", type: "text" },
-    { name: "budgetLimit", label: "Budget Limit", type: "number" },
-    { name: "costCenter", label: "Cost Center", type: "text" },
-    { name: "isActive", label: "Active", type: "checkbox", default: true }
-  ],
-  async (data) => {
-    await api.createDepartment(data);
-    closeModal();
-    fetchAll();
-  }
-);
+    [
+      { name: "departmentName", label: "Name", type: "text" },
+      { name: "departmentCode", label: "Code", type: "text" },
+      { name: "budgetLimit", label: "Budget Limit", type: "number" },
+      { name: "costCenter", label: "Cost Center", type: "text" },
+      { name: "isActive", label: "Active", type: "checkbox", default: true }
+    ],
+    async (data) => {
+      await api.createDepartment(data);
+      closeModal();
+      fetchDepartments();
+    }
+  );
+
+  const handleDepartmentEdit = (row) => openModal(
+    [
+      { name: "departmentName", label: "Name", type: "text" },
+      { name: "departmentCode", label: "Code", type: "text" },
+      { name: "budgetLimit", label: "Budget Limit", type: "number" },
+      { name: "costCenter", label: "Cost Center", type: "text" },
+      { name: "isActive", label: "Active", type: "checkbox" }
+    ],
+    async (data) => {
+      await api.updateDepartment(row.id, data);
+      closeModal();
+      fetchDepartments();
+    },
+    row
+  );
 
   const handleDepartmentDelete = async (id) => {
     await api.deleteDepartment(id);
-    fetchAll();
+    fetchDepartments();
   };
 
-  // Similarly, add handlers for Users, Policies, Categories (same pattern)
-  const handleUserEdit = (row) => openModal([
-    { name: "username", label: "Username" },
-    { name: "email", label: "Email" },
-  ], async (data) => {
-    await api.updateUser(row.id, data);
-    closeModal();
-    fetchAll();
-  }, row);
+  // ---------------- Users ----------------
+  const handleUserAdd = () => openModal(
+    [
+      { name: "username", label: "Username", type: "text" },
+      { name: "email", label: "Email", type: "email" }
+    ],
+    async (data) => {
+      await api.createUser(data);
+      closeModal();
+      fetchUsers();
+    }
+  );
 
-  const handleUserAdd = () => openModal([
-    { name: "username", label: "Username" },
-    { name: "email", label: "Email" },
-  ], async (data) => {
-    await api.createUser(data);
-    closeModal();
-    fetchAll();
-  });
+  const handleUserEdit = (row) => openModal(
+    [
+      { name: "username", label: "Username", type: "text" },
+      { name: "email", label: "Email", type: "email" }
+    ],
+    async (data) => {
+      await api.updateUser(row.id, data);
+      closeModal();
+      fetchUsers();
+    },
+    row
+  );
 
   const handleUserDelete = async (id) => {
     await api.deleteUser(id);
-    fetchAll();
+    fetchUsers();
   };
 
-  // Expense Policies
-  const handlePolicyEdit = (row) => openModal([
-    { name: "policyName", label: "Name" },
-  ], async (data) => {
-    await api.updatePolicy(row.id, data);
-    closeModal();
-    fetchAll();
-  }, row);
+  // ---------------- Policies ----------------
+  const handlePolicyAdd = () => openModal(
+    [{ name: "policyName", label: "Name", type: "text" }],
+    async (data) => {
+      await api.createPolicy(data);
+      closeModal();
+      fetchPolicies();
+    }
+  );
 
-  const handlePolicyAdd = () => openModal([{ name: "policyName", label: "Name" }], async (data) => {
-    await api.createPolicy(data);
-    closeModal();
-    fetchAll();
-  });
+  const handlePolicyEdit = (row) => openModal(
+    [{ name: "policyName", label: "Name", type: "text" }],
+    async (data) => {
+      await api.updatePolicy(row.id, data);
+      closeModal();
+      fetchPolicies();
+    },
+    row
+  );
 
   const handlePolicyDelete = async (id) => {
     await api.deletePolicy(id);
-    fetchAll();
+    fetchPolicies();
   };
 
-  // Expense Categories
-  const handleCategoryEdit = (row) => openModal([
-    { name: "categoryName", label: "Name" },
-  ], async (data) => {
-    await api.updateCategory(row.id, data);
-    closeModal();
-    fetchAll();
-  }, row);
+  // ---------------- Categories ----------------
+  const handleCategoryAdd = () => openModal(
+    [{ name: "categoryName", label: "Name", type: "text" }],
+    async (data) => {
+      await api.createCategory(data);
+      closeModal();
+      fetchCategories();
+    }
+  );
 
-  const handleCategoryAdd = () => openModal([{ name: "categoryName", label: "Name" }], async (data) => {
-    await api.createCategory(data);
-    closeModal();
-    fetchAll();
-  });
+  const handleCategoryEdit = (row) => openModal(
+    [{ name: "categoryName", label: "Name", type: "text" }],
+    async (data) => {
+      await api.updateCategory(row.id, data);
+      closeModal();
+      fetchCategories();
+    },
+    row
+  );
 
   const handleCategoryDelete = async (id) => {
     await api.deleteCategory(id);
-    fetchAll();
+    fetchCategories();
   };
 
   return (
@@ -191,4 +221,3 @@ const AdminPanel = () => {
 };
 
 export default AdminPanel;
-
