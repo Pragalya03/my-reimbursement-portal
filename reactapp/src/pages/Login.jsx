@@ -79,7 +79,6 @@ export default function LoginPage() {
         </select>
         <button
           type="submit"
-          style={{ width: "100%", padding: "10px", backgroundColor: "#3b82f6", color: "white", border: "none", borderRadius: "5px" }}
         >
           Login
         </button>

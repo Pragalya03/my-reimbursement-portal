@@ -7,6 +7,8 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   font-family: Arial, sans-serif;
   color: #333333;
+  margin-top: 100px;
+  padding-top:120px;
 }
 
 .expense-list h2 {
@@ -14,6 +16,7 @@
 }
 
 .expense-list button {
+  position: sticky;
   padding: 8px 16px;
   background-color: #3b82f6; 
   color: white;
@@ -22,6 +25,8 @@
   cursor: pointer;
   font-size: 14px;
   transition: background-color 0.3s;
+  z-index:10;
+  top:20px;
 }
 
 .expense-list button:hover {

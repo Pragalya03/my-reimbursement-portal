@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getExpenses } from "../utils/api.js";
-import "../styles/ExpenseList.css";
+import "../styles/EmployeeDashboard.css";
 
 function EmployeeDashboard() {
   const [expenses, setExpenses] = useState([]);
@@ -27,7 +27,7 @@ function EmployeeDashboard() {
   }, [loggedInEmployeeId]);
 
   const handleAddExpense = () => {
-    window.location.href = "/expense/new";
+    window.location.href = "/expenses/new";
   };
 
   const formatDate = (dateString) => {
