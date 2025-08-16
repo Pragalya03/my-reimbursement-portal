@@ -55,6 +55,8 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import AdminPanel from "./pages/AdminPanel";
 import EmployeeDashboard from "./pages/EmployeeDashboard";
+import FinanceDashboard from "./pages/FinanceDashboard";
+import AuditorDashboard from "./pages/AuditorDashboard";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
 import Home from "./pages/Home";
@@ -78,6 +80,8 @@ function App() {
   <Route path="/expenses/new" element={<ExpenseForm />} />
   <Route path="/employee-dashboard" element={<EmployeeDashboard />} /> 
   <Route path="/manager-dashboard" element={<ExpenseList />} /> 
+  <Route path="/finance-dashboard" element={<FinanceDashboard />} /> 
+  <Route path="/auditor-dashboard" element={<AuditorDashboard />} /> 
   
 </Routes>
 
