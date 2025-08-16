@@ -64,10 +64,10 @@ function App() {
   return (
     <Router>
       <nav className="full-width-navbar">
-        <NavLink to="/employee" className="user-type-btn">Employee</NavLink>
-        <NavLink to="/manager" className="user-type-btn">Manager</NavLink>
-        <NavLink to="/finance" className="user-type-btn">Finance</NavLink>
+        <h1 className="brand-name">ClaimEase</h1>
+        <div className="nav-right">
         <NavLink to="/admin" className="user-type-btn">Admin</NavLink>
+        </div>
       </nav>
 
       <div className="App">
