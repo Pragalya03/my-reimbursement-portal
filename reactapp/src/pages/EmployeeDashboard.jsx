@@ -1,135 +1,157 @@
-import { useState, useEffect } from "react";
+// src/components/EmployeeDashboard.js
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getExpenses } from "../utils/api.js";
+import "../styles/ExpenseList.css";
 
-export default function Register() {
-  const navigate = useNavigate();
-  const [departments, setDepartments] = useState([]);
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    passwordHash: "",
-    role: "EMPLOYEE",
-    employeeId: "",
-    department: null,
-    manager: null,
-    createdDate: "",
-    lastLogin: "",
-    isActive: true
-  });
+function EmployeeDashboard() {
+  const [expenses, setExpenses] = useState([]);
+  const [statusFilter, setStatusFilter] = useState("");
+  const [highlightedId, setHighlightedId] = useState(null);
+  const [searchEmployeeId, setSearchEmployeeId] = useState("");
+  const navigate = useNavigate(); // for navigation
 
-  // Fetch departments
   useEffect(() => {
-    fetch("https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io/departments")
-      .then(res => res.json())
-      .then(data => {
-        setDepartments(data);
-        if (data.length === 0) {
-          setFormData(prev => ({ ...prev, department: null }));
-        }
-      })
-      .catch(err => {
-        console.error("Failed to fetch departments:", err);
-        setFormData(prev => ({ ...prev, department: null }));
-      });
+    fetchExpenses();
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "departmentId") {
-      setFormData(prev => ({
-        ...prev,
-        department: value ? { id: Number(value) } : null
-      }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+  const fetchExpenses = async () => {
+    try {
+      const data = await getExpenses();
+      setExpenses(data);
+    } catch (error) {
+      console.error("Failed to fetch expenses:", error);
+      setExpenses([]);
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch(
-        "https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io/users",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        }
-      );
-      if (res.ok) {
-        const registeredUser = await res.json();
-        alert("User registered!");
-
-        // Redirect based on role
-        if (registeredUser.role === "EMPLOYEE") {
-          navigate("/employee-dashboard");
-        } else if (registeredUser.role === "MANAGER") {
-          navigate("/manager");
-        } else {
-          navigate("/"); // fallback
-        }
-      } else {
-        const errorText = await res.text();
-        alert("Error registering user: " + errorText);
-      }
-    } catch (err) {
-      console.error("Failed to submit registration:", err);
-      alert("Failed to connect to server.");
+  const handleGoClick = () => {
+    const foundExpense = expenses.find(
+      (exp) => String(exp.employeeId) === searchEmployeeId.trim()
+    );
+    if (foundExpense) {
+      setHighlightedId(foundExpense.id);
+    } else {
+      alert("Employee ID not found.");
     }
+  };
+
+  const handleAddExpense = () => {
+    navigate("/expense-form"); // adjust this path to match your route for ExpenseForm.js
+  };
+
+  const filteredExpenses = statusFilter
+    ? expenses.filter((expense) => expense.status === statusFilter)
+    : expenses;
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        name="username"
-        placeholder="Username"
-        value={formData.username}
-        onChange={handleChange}
-        required
-      />
-      <input
-        name="email"
-        type="email"
-        placeholder="Email"
-        value={formData.email}
-        onChange={handleChange}
-        required
-      />
-      <input
-        name="passwordHash"
-        type="password"
-        placeholder="Password"
-        value={formData.passwordHash}
-        onChange={handleChange}
-        required
-      />
-      <input
-        name="employeeId"
-        placeholder="Employee ID"
-        value={formData.employeeId}
-        onChange={handleChange}
-        required
-      />
+    <div className="expense-list">
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
+        <h2>All Expenses</h2>
+        <button
+          onClick={handleAddExpense}
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#3b82f6",
+            color: "white",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+        >
+          Add Expense
+        </button>
+      </div>
 
-      {/* Role dropdown */}
-      <select name="role" value={formData.role} onChange={handleChange} required>
-        <option value="EMPLOYEE">EMPLOYEE</option>
-        <option value="MANAGER">MANAGER</option>
+      <label htmlFor="status-filter" style={{ marginRight: "8px" }}>
+        Status:
+      </label>
+      <select
+        id="status-filter"
+        value={statusFilter}
+        onChange={(e) => setStatusFilter(e.target.value)}
+        style={{ marginBottom: "12px" }}
+      >
+        <option value="">All</option>
+        <option value="PENDING">Pending</option>
+        <option value="APPROVED">Approved</option>
+        <option value="REJECTED">Rejected</option>
       </select>
 
-      {/* Department dropdown */}
-      {departments.length > 0 ? (
-        <select name="departmentId" onChange={handleChange}>
-          <option value="">Select Department</option>
-          {departments.map(d => (
-            <option key={d.id} value={d.id}>{d.departmentName}</option>
-          ))}
-        </select>
-      ) : (
-        <input type="text" value="No departments available" disabled />
-      )}
+      <div style={{ marginBottom: "15px", marginTop: "10px" }}>
+        <label style={{ marginRight: "8px", fontWeight: "bold" }}>
+          Or Select by Employee ID:
+        </label>
+        <input
+          type="text"
+          value={searchEmployeeId}
+          onChange={(e) => setSearchEmployeeId(e.target.value)}
+          placeholder="Enter Employee ID"
+          style={{ marginRight: "8px", padding: "5px" }}
+        />
+        <button
+          onClick={handleGoClick}
+          style={{
+            padding: "6px 12px",
+            background: "#fde68a",
+            color: "#d97706",
+            border: "2px solid #d97706",
+            borderRadius: "20px",
+            cursor: "pointer",
+          }}
+        >
+          GO
+        </button>
+      </div>
 
-      <button type="submit">Register</button>
-    </form>
+      {filteredExpenses.length === 0 ? (
+        <p>No expenses found</p>
+      ) : (
+        <table
+          data-testid="expenses-table"
+          style={{ width: "100%", borderCollapse: "collapse" }}
+        >
+          <thead>
+            <tr>
+              <th>Employee ID</th>
+              <th>Amount</th>
+              <th>Description</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredExpenses.map((expense) => (
+              <tr
+                key={expense.id}
+                style={{
+                  backgroundColor:
+                    highlightedId === expense.id ? "#fde68a" : "transparent",
+                }}
+              >
+                <td>{expense.employeeId}</td>
+                <td>${Number(expense.amount).toFixed(2)}</td>
+                <td>{expense.description}</td>
+                <td>{formatDate(expense.date)}</td>
+                <td>{expense.status}</td>
+                <td>{expense.remarks || ""}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
   );
 }
+
+export default EmployeeDashboard;
