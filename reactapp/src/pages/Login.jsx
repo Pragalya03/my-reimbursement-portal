@@ -47,9 +47,9 @@ export default function LoginPage() {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "50px auto", textAlign: "center" }}>
+    <div className="login-page">
       <h2>Login</h2>
-      <form onSubmit={handleLogin}>
+      <form className="login-form" onSubmit={handleLogin}>
         <input
           type="text"
           placeholder="Username"
@@ -87,3 +87,4 @@ export default function LoginPage() {
     </div>
   );
 }
+
