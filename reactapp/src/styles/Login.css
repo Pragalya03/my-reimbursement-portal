@@ -1,45 +1,46 @@
 .login-page {
   font-family: Arial, sans-serif;
-  background-color: #E5E1D8; /* darker warm gray */
+  background-color: #DAD6C7; /* slightly darker warm gray */
   background-image: repeating-linear-gradient(
     45deg,
-    #E5E1D8,
-    #E5E1D8 10px,
-    #DAD6C7 10px,
-    #DAD6C7 20px
-  ); /* subtle diagonal stripe pattern */
+    #DAD6C7,
+    #DAD6C7 15px,
+    #CFC9B8 15px,
+    #CFC9B8 30px
+  ); /* subtle diagonal pattern for texture */
   color: #333333;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   min-height: calc(100vh - 80px);
-  padding: 40px 20px;
+  padding: 50px 20px;
 }
 
 .login-page h2 {
   font-size: 2rem;
   font-weight: bold;
-  color: #556B2F; /* Deep Olive */
-  margin-bottom: 25px;
+  color: #3B4B1F; /* slightly darker Deep Olive for contrast */
+  margin-bottom: 30px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* subtle shadow to make text pop */
 }
 
 .login-form {
   width: 100%;
   max-width: 400px;
-  background-color: #fff;
-  padding: 30px;
+  background-color: #F2EFEA; /* lighter warm gray for contrast */
+  padding: 35px;
   border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 .login-form input,
 .login-form select {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin-bottom: 15px;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #BFB7A5;
   font-size: 1rem;
   transition: border 0.3s, box-shadow 0.3s;
 }
@@ -47,16 +48,17 @@
 .login-form input:focus,
 .login-form select:focus {
   border-color: #556B2F; 
-  box-shadow: 0 0 5px rgba(85, 107, 47, 0.3);
+  box-shadow: 0 0 6px rgba(85, 107, 47, 0.35);
   outline: none;
 }
 
 .login-form button {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   background-color: #D2691E; 
   color: #F2EFEA; 
   font-size: 1rem;
+  font-weight: bold;
   border: none;
   border-radius: 8px;
   cursor: pointer;
