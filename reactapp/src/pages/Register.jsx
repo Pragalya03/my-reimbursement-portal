@@ -6,12 +6,12 @@ export default function Register() {
     username: "",
     email: "",
     passwordHash: "",
-    role: "EMPLOYEE",
+    role: "EMPLOYEE",   // default role
     employeeId: "",
-    department: null,  // null if no departments
-    manager: null,     // backend sets automatically
-    createdDate: "",   // backend sets automatically
-    lastLogin: "",     // backend sets automatically
+    department: null,
+    manager: null,
+    createdDate: "",
+    lastLogin: "",
     isActive: true
   });
 
@@ -53,7 +53,6 @@ export default function Register() {
       });
       if (res.ok) {
         alert("User registered!");
-        // Optionally reset the form
         setFormData({
           username: "",
           email: "",
@@ -109,6 +108,13 @@ export default function Register() {
         required
       />
 
+      {/* Role dropdown */}
+      <select name="role" value={formData.role} onChange={handleChange} required>
+        <option value="EMPLOYEE">EMPLOYEE</option>
+        <option value="MANAGER">MANAGER</option>
+      </select>
+
+      {/* Department dropdown or fallback */}
       {departments.length > 0 ? (
         <select name="departmentId" onChange={handleChange}>
           <option value="">Select Department</option>
