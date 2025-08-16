@@ -277,15 +277,19 @@ const handlePolicyEdit = (row) =>
       <h3>Users</h3>
       <button onClick={handleUserAdd}>Add User</button>
       <TableView
-        columns={["id", "username", "email", "role", "employeeId", "department", "isActive"]}
-        data={users.map(u => ({
-          ...u,
-          department: departments.find(d=>d.id === u.departmentId)?.departmentName || "",
-          isActive: u.isActive ? "true" : "false"
-        }))}
-        onEdit={handleUserEdit}
-        onDelete={handleUserDelete}
-      />
+  columns={["id", "username", "email", "role", "employeeId", "department", "isActive"]}
+  data={users.map(u => {
+    const dept = departments.find(d => d.id === u.department?.id || u.departmentId);
+    return {
+      ...u,
+      department: dept ? dept.departmentName : "",
+      isActive: u.isActive ? "true" : "false"
+    };
+  })}
+  onEdit={handleUserEdit}
+  onDelete={handleUserDelete}
+/>
+
     </section>
 
     {/* Expense Policies */}
@@ -335,6 +339,7 @@ const handlePolicyEdit = (row) =>
 };
 
 export default AdminPanel;
+
 
 
 
