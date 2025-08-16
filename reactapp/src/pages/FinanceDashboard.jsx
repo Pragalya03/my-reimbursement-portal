@@ -1,7 +1,6 @@
 // src/components/FinanceDashboard.jsx
 import React, { useEffect, useState } from "react";
 import { getExpenses } from "../utils/api.js";
-import ExpenseStatusUpdate from "./ExpenseStatusUpdate";
 import "../styles/ExpenseList.css";
 
 function FinanceDashboard() {
@@ -88,7 +87,6 @@ function FinanceDashboard() {
               <th>Date</th>
               <th>Status</th>
               <th>Remarks</th>
-              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -100,12 +98,6 @@ function FinanceDashboard() {
                 <td>{formatDate(expense.date)}</td>
                 <td>{expense.status}</td>
                 <td>{expense.remarks || ""}</td>
-                <td>
-                  <ExpenseStatusUpdate
-                    expense={expense}
-                    onStatusUpdate={fetchExpenses}
-                  />
-                </td>
               </tr>
             ))}
           </tbody>
