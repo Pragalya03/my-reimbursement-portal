@@ -134,11 +134,12 @@
 
 
 // src/pages/Register.js
+// src/pages/Register.js
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Register() {
-  const navigate = useNavigate(); // hook to navigate programmatically
+  const navigate = useNavigate();
   const [departments, setDepartments] = useState([]);
   const [formData, setFormData] = useState({
     username: "",
@@ -157,16 +158,8 @@ export default function Register() {
   useEffect(() => {
     fetch("https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io/departments")
       .then(res => res.json())
-      .then(data => {
-        setDepartments(data);
-        if (data.length === 0) {
-          setFormData(prev => ({ ...prev, department: null }));
-        }
-      })
-      .catch(err => {
-        console.error("Failed to fetch departments:", err);
-        setFormData(prev => ({ ...prev, department: null }));
-      });
+      .then(data => setDepartments(data))
+      .catch(err => console.error("Failed to fetch departments:", err));
   }, []);
 
   const handleChange = (e) => {
@@ -194,16 +187,26 @@ export default function Register() {
       );
 
       if (res.ok) {
-        await res.json();
+        const data = await res.json();
         alert("User registered!");
 
-        // Redirect based on role
-        if (formData.role === "EMPLOYEE") {
-          navigate("/employee-dashboard");
-        } else if (formData.role === "MANAGER") {
-          navigate("/manager");
-        } else {
-          navigate("/"); // fallback
+        // Use backend role for navigation
+        const role = data.role?.toUpperCase();
+        switch (role) {
+          case "EMPLOYEE":
+            navigate("/employee-dashboard");
+            break;
+          case "MANAGER":
+            navigate("/manager-dashboard");
+            break;
+          case "FINANCE_MANAGER":
+            navigate("/finance-dashboard");
+            break;
+          case "AUDITOR":
+            navigate("/auditor-dashboard");
+            break;
+          default:
+            navigate("/");
         }
       } else {
         const errorText = await res.text();
@@ -248,13 +251,13 @@ export default function Register() {
         required
       />
 
-      {/* Role dropdown */}
       <select name="role" value={formData.role} onChange={handleChange} required>
         <option value="EMPLOYEE">EMPLOYEE</option>
         <option value="MANAGER">MANAGER</option>
+        <option value="FINANCE_MANAGER">FINANCE_MANAGER</option>
+        <option value="AUDITOR">AUDITOR</option>
       </select>
 
-      {/* Department dropdown or fallback */}
       {departments.length > 0 ? (
         <select name="departmentId" onChange={handleChange}>
           <option value="">Select Department</option>
