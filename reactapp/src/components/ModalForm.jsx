@@ -5,8 +5,14 @@ const ModalForm = ({ fields, initialData, onSubmit, onClose }) => {
 
   useEffect(() => {
     const defaults = {};
-    fields.forEach(f => {
+    fields.forEach((f) => {
       if (f.type === "checkbox") defaults[f.name] = f.default || false;
+      if (f.type === "date") {
+        // default today if not provided
+        defaults[f.name] =
+          f.default ||
+          new Date().toISOString().split("T")[0];
+      }
       if (f.type === "select" && initialData?.[f.name] === undefined) {
         defaults[f.name] = f.options?.[0]?.value || "";
       }
@@ -16,9 +22,14 @@ const ModalForm = ({ fields, initialData, onSubmit, onClose }) => {
 
   const handleChange = (e) => {
     const { name, type, value, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value
+      [name]:
+        type === "checkbox"
+          ? checked
+          : type === "number"
+          ? Number(value)
+          : value,
     }));
   };
 
@@ -36,7 +47,7 @@ const ModalForm = ({ fields, initialData, onSubmit, onClose }) => {
     <div className="modal-overlay">
       <div className="modal-content">
         <form onSubmit={handleSubmit}>
-          {fields.map(f => (
+          {fields.map((f) => (
             <div key={f.name} className="form-group">
               <label>{f.label}</label>
               {f.type === "select" ? (
@@ -45,7 +56,7 @@ const ModalForm = ({ fields, initialData, onSubmit, onClose }) => {
                   value={formData[f.name] || ""}
                   onChange={handleChange}
                 >
-                  {f.options.map(opt => (
+                  {f.options.map((opt) => (
                     <option key={opt.value} value={opt.value}>
                       {opt.label}
                     </option>
@@ -55,8 +66,14 @@ const ModalForm = ({ fields, initialData, onSubmit, onClose }) => {
                 <input
                   type={f.type || "text"}
                   name={f.name}
-                  value={f.type === "checkbox" ? undefined : formData[f.name] || ""}
-                  checked={f.type === "checkbox" ? !!formData[f.name] : undefined}
+                  value={
+                    f.type === "checkbox"
+                      ? undefined
+                      : formData[f.name] || ""
+                  }
+                  checked={
+                    f.type === "checkbox" ? !!formData[f.name] : undefined
+                  }
                   onChange={handleChange}
                 />
               )}
@@ -64,7 +81,9 @@ const ModalForm = ({ fields, initialData, onSubmit, onClose }) => {
           ))}
           <div className="modal-actions">
             <button type="submit">Save</button>
-            <button type="button" onClick={onClose}>Cancel</button>
+            <button type="button" onClick={onClose}>
+              Cancel
+            </button>
           </div>
         </form>
       </div>
