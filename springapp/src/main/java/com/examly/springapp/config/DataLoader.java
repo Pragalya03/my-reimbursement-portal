@@ -35,7 +35,6 @@ public class DataLoader implements CommandLineRunner {
 
         // ---------- Preload Departments ----------
         Department finance = new Department();
-        finance.setId(2L);
         finance.setDepartmentName("Finance");
         finance.setDepartmentCode("FIN01");
         finance.setBudgetLimit(new BigDecimal("100000"));
@@ -43,7 +42,6 @@ public class DataLoader implements CommandLineRunner {
         finance.setIsActive(true);
 
         Department it = new Department();
-        it.setId(3L);
         it.setDepartmentName("IT");
         it.setDepartmentCode("IT01");
         it.setBudgetLimit(new BigDecimal("75000"));
@@ -51,7 +49,6 @@ public class DataLoader implements CommandLineRunner {
         it.setIsActive(true);
 
         Department marketing = new Department();
-        marketing.setId(4L);
         marketing.setDepartmentName("Marketing");
         marketing.setDepartmentCode("MKT01");
         marketing.setBudgetLimit(new BigDecimal("60000"));
@@ -75,6 +72,10 @@ public class DataLoader implements CommandLineRunner {
 
         // Save manager first
         userRepository.save(sunitha);
+
+        // Update finance department manager reference
+        finance.setManager(sunitha);
+        departmentRepository.save(finance);
 
         User mahesh = new User();
         mahesh.setUsername("Mahesh");
@@ -106,11 +107,10 @@ public class DataLoader implements CommandLineRunner {
         jackson.setManager(sunitha);
         jackson.setIsActive(true);
 
-        // Save remaining users
         userRepository.save(mahesh);
         userRepository.save(ramya);
         userRepository.save(jackson);
 
         logger.info("Default departments and users loaded successfully!");
-    } // end run method
-} // end class
+    }
+}
