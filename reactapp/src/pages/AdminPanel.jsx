@@ -257,70 +257,85 @@ const handlePolicyEdit = (row) =>
   const handleCategoryDelete = async (id) => { await api.deleteCategory(id); fetchCategories(); };
 
   return (
-    <div className="admin-panel">
-      <h2>Admin Panel</h2>
+  <div className="admin-panel">
+    <h2>Admin Panel</h2>
 
-      <section>
-        <h3>Departments</h3>
-        <button onClick={handleDepartmentAdd}>Add Department</button>
-        <TableView
-          columns={["id", "departmentName", "departmentCode", "budgetLimit", "costCenter", "isActive"]}
-          data={departments}
-          onEdit={handleDepartmentEdit}
-          onDelete={handleDepartmentDelete}
-        />
-      </section>
+    {/* Departments */}
+    <section>
+      <h3>Departments</h3>
+      <button onClick={handleDepartmentAdd}>Add Department</button>
+      <TableView
+        columns={["id", "departmentName", "departmentCode", "budgetLimit", "costCenter", "isActive"]}
+        data={departments}
+        onEdit={handleDepartmentEdit}
+        onDelete={handleDepartmentDelete}
+      />
+    </section>
 
-      <section>
-        <h3>Users</h3>
-        <button onClick={handleUserAdd}>Add User</button>
-        <TableView
-          columns={["id", "username", "email", "role", "employeeId", "department", "isActive"]}
-          data={users.map(u => ({
-            ...u,
-            department: u.department?.departmentName || "",
-            isActive: u.isActive ? "Yes" : "No"
-          }))}
-          onEdit={handleUserEdit}
-          onDelete={handleUserDelete}
-        />
-      </section>
+    {/* Users */}
+    <section>
+      <h3>Users</h3>
+      <button onClick={handleUserAdd}>Add User</button>
+      <TableView
+        columns={["id", "username", "email", "role", "employeeId", "department", "isActive"]}
+        data={users.map(u => ({
+          ...u,
+          department: u.department?.departmentName || "",
+          isActive: !!u.isActive   // true/false
+        }))}
+        onEdit={handleUserEdit}
+        onDelete={handleUserDelete}
+      />
+    </section>
 
-      <section>
-        <h3>Expense Policies</h3>
-        <button onClick={handlePolicyAdd}>Add Policy</button>
-        <TableView
-          columns={["id", "policyName", "spendingLimit", "approvalRequired", "receiptRequired", "isActive"]}
-          data={policies}
-          onEdit={handlePolicyEdit}
-          onDelete={handlePolicyDelete}
-        />
-      </section>
+    {/* Expense Policies */}
+    <section>
+      <h3>Expense Policies</h3>
+      <button onClick={handlePolicyAdd}>Add Policy</button>
+      <TableView
+        columns={["id", "policyName", "spendingLimit", "approvalRequired", "receiptRequired", "isActive"]}
+        data={policies.map(p => ({
+          ...p,
+          approvalRequired: !!p.approvalRequired,
+          receiptRequired: !!p.receiptRequired,
+          isActive: !!p.isActive
+        }))}
+        onEdit={handlePolicyEdit}
+        onDelete={handlePolicyDelete}
+      />
+    </section>
 
-      <section>
-        <h3>Expense Categories</h3>
-        <button onClick={handleCategoryAdd}>Add Category</button>
-        <TableView
-          columns={["id", "categoryName", "categoryCode", "policyLimit", "requiresReceipt", "requiresBusinessPurpose", "isActive"]}
-          data={categories}
-          onEdit={handleCategoryEdit}
-          onDelete={handleCategoryDelete}
-        />
-      </section>
+    {/* Expense Categories */}
+    <section>
+      <h3>Expense Categories</h3>
+      <button onClick={handleCategoryAdd}>Add Category</button>
+      <TableView
+        columns={["id", "categoryName", "categoryCode", "policyLimit", "requiresReceipt", "requiresBusinessPurpose", "isActive"]}
+        data={categories.map(c => ({
+          ...c,
+          requiresReceipt: !!c.requiresReceipt,
+          requiresBusinessPurpose: !!c.requiresBusinessPurpose,
+          isActive: !!c.isActive
+        }))}
+        onEdit={handleCategoryEdit}
+        onDelete={handleCategoryDelete}
+      />
+    </section>
 
-      {showModal && (
-        <ModalForm
-          fields={modalFields}
-          initialData={modalData}
-          onSubmit={modalSubmit}
-          onClose={closeModal}
-        />
-      )}
-    </div>
-  );
+    {showModal && (
+      <ModalForm
+        fields={modalFields}
+        initialData={modalData}
+        onSubmit={modalSubmit}
+        onClose={closeModal}
+      />
+    )}
+  </div>
+);
 };
 
 export default AdminPanel;
+
 
 
 
