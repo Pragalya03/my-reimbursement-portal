@@ -175,10 +175,10 @@ const handlePolicyAdd = () =>
     async (data) => {
       const payload = {
         policyName: data.policyName || "Untitled Policy",
-        category:{id: Number(data.categoryId ?? categories[0]?.id)} ,
-        spendingLimit: Number(data.spendingLimit) || 0,
-        approvalRequired: data.approvalRequired,
-        receiptRequired: data.receiptRequired,
+        category: data.categoryId?{id:Number(data.categoryId)} : null,
+        spendingLimit: data.spendingLimit? Number(data.spendingLimit) :  0,
+        approvalRequired: !!data.approvalRequired,
+        receiptRequired: !!data.receiptRequired,
         effectiveDate: data.effectiveDate,
         expiryDate: data.expiryDate || null,
         isActive: data.isActive

@@ -45,11 +45,12 @@ const ModalForm = ({ fields, initialData, onSubmit, onClose }) => {
               {f.type === "select" ? (
                 <select
                   name={f.name}
-                  value={formData[f.name] || f.options[0]?.value|| ""}
-                  onChange={(e)=>{
-                    f.name==="categoryId" ? Number(e.target.value): e.target.value;
-                    setFormData({...formData, [f.name]:value});;
-                  }}
+                  value={formData[f.name] || ""}
+                  // onChange={(e)=>{
+                  //   f.name==="categoryId" ? Number(e.target.value): e.target.value;
+                  //   setFormData({...formData, [f.name]:value});;
+                  // }}
+                  onChange={handleChange}
                 >
                   {f.options.map(opt => (
                     <option key={opt.value} value={opt.value}>
