@@ -6,7 +6,7 @@ import "../styles/ExpenseList.css";
 
 function FinanceDashboard() {
   const [expenses, setExpenses] = useState([]);
-  const [statusFilter, setStatusFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState(""); // optional filter by status
 
   useEffect(() => {
     fetchExpenses();
@@ -15,7 +15,9 @@ function FinanceDashboard() {
   const fetchExpenses = async () => {
     try {
       const data = await getExpenses();
-      setExpenses(data); // Show all expenses
+      // Only keep approved expenses
+      const approvedExpenses = data.filter(exp => exp.status === "APPROVED");
+      setExpenses(approvedExpenses);
     } catch (error) {
       console.error("Failed to fetch expenses:", error);
       setExpenses([]);
@@ -37,6 +39,7 @@ function FinanceDashboard() {
 
   return (
     <div className="expense-list">
+      {/* Back button */}
       <div style={{ display: "flex", justifyContent:"flex-end", marginBottom:"15px" }}>
         <button
           onClick={() => window.history.back()}
@@ -53,10 +56,10 @@ function FinanceDashboard() {
         </button>
       </div>
 
-      <h2>All Expenses (Finance Dashboard)</h2>
+      <h2>Approved Expenses (Finance Dashboard)</h2>
 
       <label htmlFor="status-filter" style={{ marginRight: "8px" }}>
-        Status:
+        Status Filter (Optional):
       </label>
       <select
         id="status-filter"
@@ -65,13 +68,13 @@ function FinanceDashboard() {
         style={{ marginBottom: "12px" }}
       >
         <option value="">All</option>
-        <option value="PENDING">Pending</option>
         <option value="APPROVED">Approved</option>
+        <option value="PENDING">Pending</option>
         <option value="REJECTED">Rejected</option>
       </select>
 
       {filteredExpenses.length === 0 ? (
-        <p>No expenses found</p>
+        <p>No approved expenses found</p>
       ) : (
         <table
           data-testid="expenses-table"
