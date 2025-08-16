@@ -1,9 +1,10 @@
 const BASE_URL = "https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io";
 
+// ---------- Expenses ----------
 export async function createExpense(expense) {
   const res = await fetch(`${BASE_URL}/api/expenses`, {
     method: "POST",
-    headers: {"Content-Type" : "application/json"},
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(expense),
   });
   if (!res.ok) {
@@ -16,7 +17,7 @@ export async function createExpense(expense) {
 export async function getExpenses() {
   const res = await fetch(`${BASE_URL}/api/expenses`, {
     method: "GET",
-    headers: {"Content-Type" : "application/json"},
+    headers: { "Content-Type": "application/json" },
   });
   if (!res.ok) {
     const errorData = await res.json().catch(() => null);
@@ -25,11 +26,10 @@ export async function getExpenses() {
   return res.json();
 }
 
-
 export async function updateExpenseStatus(id, updateData) {
   const res = await fetch(`${BASE_URL}/api/expenses/${id}/status`, {
     method: "PUT",
-    headers: {"Content-Type" : "application/json"},
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(updateData),
   });
   if (!res.ok) {
@@ -104,14 +104,20 @@ export const getUsers = async () => {
 
 export const createUser = async (data) => {
   try {
-    // Transform departmentId into department object
     const payload = { ...data };
+
+    // transform departmentId into department object OR set null
     if (payload.departmentId) {
       payload.department = { id: payload.departmentId };
+    } else {
+      payload.department = null;
     }
     delete payload.departmentId;
 
-    // Convert password field to passwordHash if exists
+    // always send manager (null if not set)
+    payload.manager = payload.manager || null;
+
+    // convert password to passwordHash
     if (payload.password) {
       payload.passwordHash = payload.password;
       delete payload.password;
@@ -131,18 +137,22 @@ export const createUser = async (data) => {
     return await res.json();
   } catch (err) {
     console.error("Failed to create user:", err);
-    throw err;  // important to propagate the error
+    throw err;
   }
 };
-
 
 export const updateUser = async (id, data) => {
   try {
     const payload = { ...data };
+
     if (payload.departmentId) {
       payload.department = { id: payload.departmentId };
+    } else {
+      payload.department = null;
     }
     delete payload.departmentId;
+
+    payload.manager = payload.manager || null;
 
     if (payload.password) {
       payload.passwordHash = payload.password;
