@@ -1,7 +1,6 @@
-// routes.js
 import LandingPage from "./pages/Home";
 import LoginPage from "./pages/Login";
-import EmployeeRegistration from "./pages/Register";
+import Register from "./pages/Register";
 import EmployeeDashboard from "./pages/EmployeeDashboard";
 import ManagerDashboard from "./pages/ManagerDashboard";
 import FinanceDashboard from "./pages/FinanceDashboard";
@@ -12,15 +11,15 @@ import ExpenseList from "./components/ExpenseList";
 import ExpenseStatusUpdate from "./components/ExpenseStatusUpdate";
 
 export const appRoutes = [
-  { path: "/", element: LandingPage },
-  { path: "/login", element: LoginPage },
-  { path: "/register", element: EmployeeRegistration },
-  { path: "/employee", element: EmployeeDashboard, roles: ["EMPLOYEE"], },
-  { path: "/manager", element: ManagerDashboard, roles: ["MANAGER"], },
-  { path: "/finance", element: FinanceDashboard, roles: ["FINANCE_MANAGER"], },
-  { path: "/admin", element: AdminPanel, },
-  { path: "/receipts", element: ReceiptManagement, roles: ["EMPLOYEE", "MANAGER", "FINANCE_MANAGER"], },
-  { path: "/expenses/new", element: ExpenseForm },
-  { path: "/expenses", element: ExpenseList },
-  { path: "/expenses/:id/update", element: ExpenseStatusUpdate },
+  { path: "/", element: <LandingPage /> },
+  { path: "/login", element: <LoginPage /> },
+  { path: "/register", element: <Register /> },
+  { path: "/employee", element: <EmployeeDashboard /> },
+  { path: "/manager", element: <ManagerDashboard /> },
+  { path: "/finance", element: <FinanceDashboard /> },
+  { path: "/admin", element: <AdminPanel /> },
+  { path: "/receipts", element: <ReceiptManagement /> },
+  { path: "/expenses/new", element: <ExpenseForm /> },
+  { path: "/expenses", element: <ExpenseList /> },
+  { path: "/expenses/:id/update", element: <ExpenseStatusUpdate /> },
 ];
