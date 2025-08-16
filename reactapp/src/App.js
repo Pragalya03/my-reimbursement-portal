@@ -53,6 +53,7 @@ import { BrowserRouter as Router, Routes, Route, NavLink } from "react-router-do
 import './App.css';
 import Register from "./pages/Register";
 import AdminPanel from "./pages/AdminPanel";
+import EmployeeDashboard from "./pages/EmployeeDashboard";
 import ExpenseForm from "./components/ExpenseForm";
 import Home from "./pages/Home";
 function App() {
@@ -66,7 +67,6 @@ function App() {
       </nav>
 
       <div className="App">
-          import EmployeeDashboard from "./components/EmployeeDashboard";
 
 <Routes>
   <Route path="/" element={<Home />} />
