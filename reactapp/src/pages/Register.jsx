@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function RegistrationPage() {
+export default function Register() {
   const [departments, setDepartments] = useState([]);
   const [formData, setFormData] = useState({
     username: "",
@@ -8,30 +8,29 @@ export default function RegistrationPage() {
     passwordHash: "",
     role: "EMPLOYEE",
     employeeId: "",
-    department: null,   // defaults to null if no departments
-    manager: "",        // backend will set automatically
-    createdDate: "",    // backend will set automatically
-    lastLogin: "",      // backend will set automatically
+    department: null,  // null if no departments
+    manager: null,     // backend sets automatically
+    createdDate: "",   // backend sets automatically
+    lastLogin: "",     // backend sets automatically
     isActive: true
   });
 
-  // Fetch departments from backend
+  // Fetch departments
   useEffect(() => {
     fetch("https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io/departments")
       .then(res => res.json())
       .then(data => {
         setDepartments(data);
         if (data.length === 0) {
-          setFormData(prev => ({ ...prev, department: null })); // no departments
+          setFormData(prev => ({ ...prev, department: null }));
         }
       })
       .catch(err => {
         console.error("Failed to fetch departments:", err);
-        setFormData(prev => ({ ...prev, department: null })); // fallback null
+        setFormData(prev => ({ ...prev, department: null }));
       });
   }, []);
 
-  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "departmentId") {
@@ -44,7 +43,6 @@ export default function RegistrationPage() {
     }
   };
 
-  // Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -53,8 +51,25 @@ export default function RegistrationPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      if (res.ok) alert("User registered!");
-      else alert("Error registering user.");
+      if (res.ok) {
+        alert("User registered!");
+        // Optionally reset the form
+        setFormData({
+          username: "",
+          email: "",
+          passwordHash: "",
+          role: "EMPLOYEE",
+          employeeId: "",
+          department: null,
+          manager: null,
+          createdDate: "",
+          lastLogin: "",
+          isActive: true
+        });
+      } else {
+        const errorText = await res.text();
+        alert("Error registering user: " + errorText);
+      }
     } catch (err) {
       console.error("Failed to submit registration:", err);
       alert("Failed to connect to server.");
@@ -95,7 +110,7 @@ export default function RegistrationPage() {
       />
 
       {departments.length > 0 ? (
-        <select name="departmentId" onChange={handleChange} required>
+        <select name="departmentId" onChange={handleChange}>
           <option value="">Select Department</option>
           {departments.map(d => (
             <option key={d.id} value={d.id}>{d.departmentName}</option>
