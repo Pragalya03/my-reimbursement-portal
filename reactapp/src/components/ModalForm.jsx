@@ -1,150 +1,78 @@
 import React, { useState, useEffect } from "react";
 
-function ModalForm({ isOpen, onClose, onSubmit, initialData, categories }) {
-  const [formData, setFormData] = useState({
-    policyName: "",
-    categoryId: "",
-    spendingLimit: "",
-    approvalRequired: true,
-    receiptRequired: true,
-    effectiveDate: "",
-    expiryDate: "",
-    isActive: true,
-  });
+const ModalForm = ({ fields, initialData, onSubmit, onClose }) => {
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
-    if (initialData) {
-      setFormData({
-        policyName: initialData.policyName || "",
-        categoryId: initialData.category?.id || "",
-        spendingLimit: initialData.spendingLimit || "",
-        approvalRequired: initialData.approvalRequired ?? true,
-        receiptRequired: initialData.receiptRequired ?? true,
-        effectiveDate: initialData.effectiveDate || "",
-        expiryDate: initialData.expiryDate || "",
-        isActive: initialData.isActive ?? true,
-      });
-    }
-  }, [initialData]);
+    const defaults = {};
+    fields.forEach(f => {
+      if (f.type === "checkbox") defaults[f.name] = f.default || false;
+      if (f.type === "select" && initialData?.[f.name] === undefined) {
+        defaults[f.name] = f.options?.[0]?.value || "";
+      }
+      if (f.type === "date" && f.default && !initialData?.[f.name]) {
+        defaults[f.name] = f.default;
+      }
+    });
+    setFormData({ ...defaults, ...(initialData || {}) });
+  }, [initialData, fields]);
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
+    const { name, type, value, checked } = e.target;
+    setFormData(prev => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "checkbox" ? checked : value
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // 🔑 Build payload exactly how backend expects
-    const payload = {
-      policyName: formData.policyName,
-      category: { id: Number(formData.categoryId) },
-      spendingLimit: formData.spendingLimit,
-      approvalRequired: formData.approvalRequired,
-      receiptRequired: formData.receiptRequired,
-      effectiveDate: formData.effectiveDate,
-      expiryDate: formData.expiryDate,
-      isActive: formData.isActive,
-    };
-
-    onSubmit(payload);
+    try {
+      await onSubmit(formData);
+    } catch (err) {
+      console.error("Submit failed:", err);
+      alert("Failed to save. See console for details.");
+    }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="modal">
+    <div className="modal-overlay">
       <div className="modal-content">
-        <h2>{initialData ? "Edit Policy" : "Add Policy"}</h2>
         <form onSubmit={handleSubmit}>
-          <label>Policy Name</label>
-          <input
-            type="text"
-            name="policyName"
-            value={formData.policyName}
-            onChange={handleChange}
-            required
-          />
-
-          <label>Category</label>
-          <select
-            name="categoryId"
-            value={formData.categoryId}
-            onChange={handleChange}
-            required
-          >
-            <option value="">--Select Category--</option>
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
-
-          <label>Spending Limit</label>
-          <input
-            type="number"
-            name="spendingLimit"
-            value={formData.spendingLimit}
-            onChange={handleChange}
-          />
-
-          <label>
-            <input
-              type="checkbox"
-              name="approvalRequired"
-              checked={formData.approvalRequired}
-              onChange={handleChange}
-            />
-            Approval Required
-          </label>
-
-          <label>
-            <input
-              type="checkbox"
-              name="receiptRequired"
-              checked={formData.receiptRequired}
-              onChange={handleChange}
-            />
-            Receipt Required
-          </label>
-
-          <label>Effective Date</label>
-          <input
-            type="date"
-            name="effectiveDate"
-            value={formData.effectiveDate}
-            onChange={handleChange}
-            required
-          />
-
-          <label>Expiry Date</label>
-          <input
-            type="date"
-            name="expiryDate"
-            value={formData.expiryDate}
-            onChange={handleChange}
-          />
-
-          <label>
-            <input
-              type="checkbox"
-              name="isActive"
-              checked={formData.isActive}
-              onChange={handleChange}
-            />
-            Active
-          </label>
-
-          <button type="submit">Save</button>
-          <button type="button" onClick={onClose}>Cancel</button>
+          {fields.map(f => (
+            <div key={f.name} className="form-group">
+              <label>{f.label}</label>
+              {f.type === "select" ? (
+                <select
+                  name={f.name}
+                  value={formData[f.name] || ""}
+                  onChange={handleChange}
+                >
+                  {f.options.map(opt => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type={f.type || "text"}
+                  name={f.name}
+                  value={f.type === "checkbox" ? undefined : formData[f.name] || ""}
+                  checked={f.type === "checkbox" ? !!formData[f.name] : undefined}
+                  onChange={handleChange}
+                />
+              )}
+            </div>
+          ))}
+          <div className="modal-actions">
+            <button type="submit">Save</button>
+            <button type="button" onClick={onClose}>Cancel</button>
+          </div>
         </form>
       </div>
     </div>
   );
-}
+};
 
 export default ModalForm;
