@@ -40,17 +40,25 @@ public ExpensePolicy createPolicy(ExpensePolicy policy) {
 
 
     public ExpensePolicy updatePolicy(Long id, ExpensePolicy policyDetails) {
-        ExpensePolicy policy = getPolicyById(id);
-        policy.setPolicyName(policyDetails.getPolicyName());
-        policy.setCategory(policyDetails.getCategory());
-        policy.setSpendingLimit(policyDetails.getSpendingLimit());
-        policy.setApprovalRequired(policyDetails.getApprovalRequired());
-        policy.setReceiptRequired(policyDetails.getReceiptRequired());
-        policy.setEffectiveDate(policyDetails.getEffectiveDate());
-        policy.setExpiryDate(policyDetails.getExpiryDate());
-        policy.setIsActive(policyDetails.getIsActive());
-        return expensePolicyRepository.save(policy);
+    ExpensePolicy policy = getPolicyById(id);
+
+    policy.setPolicyName(policyDetails.getPolicyName());
+
+    if (policyDetails.getCategory() != null && policyDetails.getCategory().getId() != null) {
+        ExpenseCategory category = categoryRepo.findById(policyDetails.getCategory().getId())
+            .orElseThrow(() -> new RuntimeException("Category not found"));
+        policy.setCategory(category);
     }
+
+    policy.setSpendingLimit(policyDetails.getSpendingLimit());
+    policy.setApprovalRequired(policyDetails.getApprovalRequired());
+    policy.setReceiptRequired(policyDetails.getReceiptRequired());
+    policy.setEffectiveDate(policyDetails.getEffectiveDate());
+    policy.setExpiryDate(policyDetails.getExpiryDate());
+    policy.setIsActive(policyDetails.getIsActive());
+
+    return expensePolicyRepository.save(policy);
+}
 
     public void deletePolicy(Long id) {
         ExpensePolicy policy = getPolicyById(id);
