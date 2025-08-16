@@ -154,6 +154,7 @@ const handleUserDelete = async (id) => {
 
   // ---------------- Expense Policies ----------------
   // ---------------- Expense Policies ----------------
+// ---------------- Expense Policies ----------------
 const handlePolicyAdd = () =>
   openModal(
     [
@@ -164,10 +165,20 @@ const handlePolicyAdd = () =>
       { name: "effectiveDate", label: "Effective Date", type: "date", default: new Date().toISOString().split("T")[0] },
       { name: "expiryDate", label: "Expiry Date", type: "date" },
       { name: "isActive", label: "Active", type: "checkbox", default: true },
+      {
+        name: "categoryId",
+        label: "Category",
+        type: "select",
+        options: categories.map(c => ({ label: c.categoryName, value: c.id }))
+      }
     ],
     async (data) => {
-      console.log("Policy payload:", data); // debug
-      await api.createPolicy(data);
+      const payload = {
+        ...data,
+        categoryId: data.categoryId || categories[0]?.id, // ensure categoryId always present
+      };
+      console.log("Policy payload:", payload);
+      await api.createPolicy(payload);
       closeModal();
       fetchPolicies();
     }
@@ -183,14 +194,25 @@ const handlePolicyEdit = (row) =>
       { name: "effectiveDate", label: "Effective Date", type: "date" },
       { name: "expiryDate", label: "Expiry Date", type: "date" },
       { name: "isActive", label: "Active", type: "checkbox" },
+      {
+        name: "categoryId",
+        label: "Category",
+        type: "select",
+        options: categories.map(c => ({ label: c.categoryName, value: c.id }))
+      }
     ],
     async (data) => {
-      await api.updatePolicy(row.id, data);
+      const payload = {
+        ...data,
+        categoryId: data.categoryId || row.categoryId || categories[0]?.id,
+      };
+      await api.updatePolicy(row.id, payload);
       closeModal();
       fetchPolicies();
     },
     row
   );
+
 
 
   const handlePolicyDelete = async (id) => { await api.deletePolicy(id); fetchPolicies(); };
@@ -288,6 +310,7 @@ const handlePolicyEdit = (row) =>
 };
 
 export default AdminPanel;
+
 
 
 
