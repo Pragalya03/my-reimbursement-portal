@@ -174,8 +174,14 @@ const handlePolicyAdd = () =>
     ],
     async (data) => {
       const payload = {
-        ...data,
-        categoryId: data.categoryId || categories[0]?.id, // ensure categoryId always present
+        policyName: data.policyName || "Untitled Policy",
+        category:{id: Number(data.categoryId ?? categories[0]?.id)} ,
+        spendingLimit: Number(data.spendingLimit) || 0,
+        approvalRequired: data.approvalRequired,
+        receiptRequired: data.receiptRequired,
+        effectiveDate: data.effectiveDate,
+        expiryDate: data.expiryDate || null,
+        isActive: data.isActive
       };
       console.log("Policy payload:", payload);
       await api.createPolicy(payload);
