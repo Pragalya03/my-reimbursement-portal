@@ -153,28 +153,45 @@ const handleUserDelete = async (id) => {
 
 
   // ---------------- Expense Policies ----------------
-  const handlePolicyAdd = () => openModal(
+  // ---------------- Expense Policies ----------------
+const handlePolicyAdd = () =>
+  openModal(
     [
       { name: "policyName", label: "Name", type: "text" },
       { name: "spendingLimit", label: "Spending Limit", type: "number" },
       { name: "approvalRequired", label: "Approval Required", type: "checkbox", default: true },
       { name: "receiptRequired", label: "Receipt Required", type: "checkbox", default: true },
-      { name: "isActive", label: "Active", type: "checkbox", default: true }
+      { name: "effectiveDate", label: "Effective Date", type: "date", default: new Date().toISOString().split("T")[0] },
+      { name: "expiryDate", label: "Expiry Date", type: "date" },
+      { name: "isActive", label: "Active", type: "checkbox", default: true },
     ],
-    async (data) => { await api.createPolicy(data); closeModal(); fetchPolicies(); }
+    async (data) => {
+      console.log("Policy payload:", data); // debug
+      await api.createPolicy(data);
+      closeModal();
+      fetchPolicies();
+    }
   );
 
-  const handlePolicyEdit = (row) => openModal(
+const handlePolicyEdit = (row) =>
+  openModal(
     [
       { name: "policyName", label: "Name", type: "text" },
       { name: "spendingLimit", label: "Spending Limit", type: "number" },
       { name: "approvalRequired", label: "Approval Required", type: "checkbox" },
       { name: "receiptRequired", label: "Receipt Required", type: "checkbox" },
-      { name: "isActive", label: "Active", type: "checkbox" }
+      { name: "effectiveDate", label: "Effective Date", type: "date" },
+      { name: "expiryDate", label: "Expiry Date", type: "date" },
+      { name: "isActive", label: "Active", type: "checkbox" },
     ],
-    async (data) => { await api.updatePolicy(row.id, data); closeModal(); fetchPolicies(); },
+    async (data) => {
+      await api.updatePolicy(row.id, data);
+      closeModal();
+      fetchPolicies();
+    },
     row
   );
+
 
   const handlePolicyDelete = async (id) => { await api.deletePolicy(id); fetchPolicies(); };
 
@@ -271,6 +288,7 @@ const handleUserDelete = async (id) => {
 };
 
 export default AdminPanel;
+
 
 
 
