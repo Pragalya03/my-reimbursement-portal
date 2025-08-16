@@ -34,7 +34,7 @@ public class User {
     @Column(name = "employee_id", unique = true, nullable = false, length = 20)
     private String employeeId;
 
-    @ManyToOne(optional=true)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name = "department_id")
     @JsonIgnoreProperties("users")
     private Department department;

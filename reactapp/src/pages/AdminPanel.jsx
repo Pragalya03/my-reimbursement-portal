@@ -283,6 +283,7 @@ const handlePolicyEdit = (row) =>
     return {
       ...u,
       department: dept ? dept.departmentName : "",
+      departmentId: dept?.id||null,
       isActive: u.isActive ? "true" : "false"
     };
   })}
