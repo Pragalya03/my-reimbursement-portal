@@ -123,6 +123,5 @@ public class ExpensePolicy {
         this.isActive = isActive;
     }
 
-    // Getters and setters
-    
-}
+
+    public ExpensePolicy(){}
