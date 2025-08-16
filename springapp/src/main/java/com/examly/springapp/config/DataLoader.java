@@ -55,31 +55,32 @@ public class DataLoader implements CommandLineRunner {
         marketing.setCostCenter("CC104");
         marketing.setIsActive(true);
 
-        // ---------- Preload Manager ----------
+        departmentRepository.save(finance);
+        departmentRepository.save(it);
+        departmentRepository.save(marketing);
+
+        // ---------- Preload Users ----------
         User sunitha = new User();
         sunitha.setUsername("Sunitha");
         sunitha.setEmail("jane@example.com");
         sunitha.setPasswordHash(DEFAULT_PASSWORD);
         sunitha.setRole(User.Role.MANAGER);
         sunitha.setEmployeeId("EMP102");
-        sunitha.setDepartment(finance); // assign finance now
+        sunitha.setDepartment(finance);
         sunitha.setManager(null);
         sunitha.setIsActive(true);
 
         // Save manager first
         userRepository.save(sunitha);
 
-        // Assign manager to all departments
+        // Assign manager to departments
         finance.setManager(sunitha);
         it.setManager(sunitha);
         marketing.setManager(sunitha);
-
-        // Save departments after manager assignment
         departmentRepository.save(finance);
         departmentRepository.save(it);
         departmentRepository.save(marketing);
 
-        // ---------- Preload Other Users ----------
         User mahesh = new User();
         mahesh.setUsername("Mahesh");
         mahesh.setEmail("alice@example.com");
