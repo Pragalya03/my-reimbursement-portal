@@ -47,16 +47,15 @@ function App() {
 
 
 export default App;
-*/import React from "react";
+*/
+import React from "react";
 import { BrowserRouter as Router, Routes, Route, NavLink } from "react-router-dom";
-import { appRoutes } from "./routes";
 import './App.css';
 import Register from "./pages/Register";
 import AdminPanel from "./pages/AdminPanel";
 import ExpenseForm from "./components/ExpenseForm";
+import Home from "./pages/Home";
 function App() {
-  const currentUser = getCurrentUser();
-
   return (
     <Router>
       <nav className="full-width-navbar">
@@ -67,28 +66,16 @@ function App() {
       </nav>
 
       <div className="App">
-        <Routes>
-          {appRoutes.map((route, idx) => {
-            const Element = route.element;
-            if (route.roles) {
-              return (
-                <Route
-                  key={idx}
-                  path={route.path}
-                  element={
-                    <ProtectedRoute
-                      element={Element}
-                      allowedRoles={route.roles}
-                      currentUser={currentUser}
-                    />
-                  }
-                />
-              );
-            } else {
-              return <Route key={idx} path={route.path} element={<Element />} />;
-            }
-          })}
-        </Routes>
+          import EmployeeDashboard from "./components/EmployeeDashboard";
+
+<Routes>
+  <Route path="/" element={<Home />} />
+  <Route path="/register" element={<Register />} />
+  <Route path="/admin" element={<AdminPanel />} />
+  <Route path="/expenses/new" element={<ExpenseForm />} />
+  <Route path="/employee-dashboard" element={<EmployeeDashboard />} /> {/* new */}
+</Routes>
+
       </div>
     </Router>
   );
