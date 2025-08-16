@@ -107,7 +107,6 @@ import React, { useEffect, useState } from "react";
 import { getExpenses } from "../utils/api.js";
 import "../styles/EmployeeDashboard.css";
 
-
 function EmployeeDashboard() {
   const [expenses, setExpenses] = useState([]);
   const loggedInEmployeeId = localStorage.getItem("loggedInEmployeeId");
@@ -116,10 +115,12 @@ function EmployeeDashboard() {
     const fetchExpenses = async () => {
       try {
         const data = await getExpenses();
-        const filteredByEmployee = data.filter(
+
+        // Filter only expenses for the logged-in user
+        const filtered = data.filter(
           (exp) => String(exp.employeeId) === String(loggedInEmployeeId)
         );
-        setExpenses(filteredByEmployee);
+        setExpenses(filtered);
       } catch (error) {
         console.error("Failed to fetch expenses:", error);
         setExpenses([]);
@@ -143,23 +144,16 @@ function EmployeeDashboard() {
 
   return (
     <>
-      {/* Back button OUTSIDE expense-list */}
-      {/* <button
+      {/* Back Button Top Right */}
+      <button
         className="back-btn"
         onClick={() => window.history.back()}
       >
         Back
-      </button> */}
+      </button>
 
       <div className="expense-list">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "15px",
-          }}
-        >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
           <h2>My Expenses</h2>
           <button
             onClick={handleAddExpense}
@@ -172,7 +166,7 @@ function EmployeeDashboard() {
         {expenses.length === 0 ? (
           <p>No expenses found</p>
         ) : (
-          <table data-testid="expenses-table" style={{ width: "100%", borderCollapse: "collapse" }}>
+          <table data-testid="expenses-table">
             <thead>
               <tr>
                 <th>Employee ID</th>
