@@ -112,5 +112,5 @@ public class DataLoader implements CommandLineRunner {
         userRepository.save(jackson);
 
         logger.info("Default departments and users loaded successfully!");
-    }
-}
+    } // end run method
+} // end class
