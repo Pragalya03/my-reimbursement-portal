@@ -16,9 +16,13 @@ const AdminPanel = () => {
 
   // ---------------- Fetch functions ----------------
   const fetchDepartments = async () => {
-    const data = await api.getDepartments();
-    setDepartments(data.map(d => ({ ...d, isActive: d.isActive ? "Yes" : "No" })));
-  };
+  const data = await api.getDepartments();
+  setDepartments(data.map(d => ({
+    ...d,
+    isActive: d.isActive ? "Yes" : "No"   // only for display
+  })));
+};
+
   const fetchUsers = async () => setUsers(await api.getUsers());
   const fetchPolicies = async () => setPolicies(await api.getPolicies());
   const fetchCategories = async () => setCategories(await api.getCategories());
@@ -52,16 +56,31 @@ const AdminPanel = () => {
   );
 
   const handleDepartmentEdit = (row) => openModal(
-    [
-      { name: "departmentName", label: "Name", type: "text" },
-      { name: "departmentCode", label: "Code", type: "text" },
-      { name: "budgetLimit", label: "Budget Limit", type: "number" },
-      { name: "costCenter", label: "Cost Center", type: "text" },
-      { name: "isActive", label: "Active", type: "checkbox" }
-    ],
-    async (data) => { await api.updateDepartment(row.id, data); closeModal(); fetchDepartments(); },
-    row
-  );
+  [
+    { name: "departmentName", label: "Name", type: "text" },
+    { name: "departmentCode", label: "Code", type: "text" },
+    { name: "budgetLimit", label: "Budget Limit", type: "number" },
+    { name: "costCenter", label: "Cost Center", type: "text" },
+    { name: "isActive", label: "Active", type: "checkbox" }
+  ],
+  async (data) => {
+    // 🔥 Ensure boolean, not "Yes"/"No"
+    const payload = {
+      ...data,
+      isActive: !!data.isActive
+    };
+
+    await api.updateDepartment(row.id, payload);
+    closeModal();
+    fetchDepartments();
+  },
+  {
+    ...row,
+    // 🔥 convert "Yes"/"No" back to boolean for modal form
+    isActive: row.isActive === "Yes"
+  }
+);
+
 
   const handleDepartmentDelete = async (id) => { await api.deleteDepartment(id); fetchDepartments(); };
 
@@ -252,5 +271,6 @@ const handleUserDelete = async (id) => {
 };
 
 export default AdminPanel;
+
 
 
