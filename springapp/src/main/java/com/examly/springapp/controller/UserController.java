@@ -5,6 +5,7 @@ import com.examly.springapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -26,11 +27,16 @@ public class UserController {
 
     @PostMapping
     public User createUser(@RequestBody User user) {
+        // ignore any incoming createdDate or lastLogin from frontend
+        user.setCreatedDate(LocalDateTime.now());
+        user.setLastLogin(null); // or LocalDateTime.now() if you want a default
         return userService.createUser(user);
     }
 
     @PutMapping("/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody User user) {
+        // also ignore lastLogin here, it should only change on actual login
+        user.setLastLogin(null);
         return userService.updateUser(id, user);
     }
 
