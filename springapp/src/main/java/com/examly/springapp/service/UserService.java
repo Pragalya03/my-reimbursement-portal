@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import java.util.Map;
+
 @Service
 public class UserService {
     @Autowired
@@ -71,7 +73,7 @@ public class UserService {
         }
     }
     if (updates.containsKey("password")) {
-        existing.setPassword(updates.get("password").toString());
+        existing.setPasswordHash(updates.get("password").toString());
     }
 
     // ❌ Ignore createdDate and lastLogin, backend controls these

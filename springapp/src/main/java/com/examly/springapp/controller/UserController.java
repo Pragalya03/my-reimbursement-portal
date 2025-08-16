@@ -37,7 +37,7 @@ public class UserController {
     // ✅ Modified: allow partial update instead of overwriting with nulls
     @PutMapping("/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
-        return userService.updateUserPartial(id, updates);
+        return userService.updateUserSafe(id, updates);
     }
 
     @DeleteMapping("/{id}")
