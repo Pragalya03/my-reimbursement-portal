@@ -12,10 +12,23 @@
 
 .full-width-navbar {
   display: flex;
-  justify-content: center;
-  gap: 15px;
+  justify-content: space-between; /* brand on left, buttons on right */
+  align-items: center;
   background-color: #556B2F; /* Deep Olive */
-  padding: 10px;
+  padding: 10px 20px;
+}
+
+.brand-name {
+  font-size: 1.8rem;
+  font-weight: bold;
+  background: linear-gradient(45deg, #FF7F50, #FFD700, #98FB98); /* pretty gradient */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
 }
 
 .user-type-btn {
