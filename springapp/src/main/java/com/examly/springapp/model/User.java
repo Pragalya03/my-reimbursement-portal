@@ -32,11 +32,11 @@ public class User {
     @Column(name = "employee_id", unique = true, nullable = false, length = 20)
     private String employeeId;
 
-    @ManyToOne
+    @ManyToOne(optional=true)
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @ManyToOne
+    @ManyToOne(optional=true)
     @JoinColumn(name = "manager_id")
     private User manager;
 

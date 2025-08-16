@@ -1,6 +1,8 @@
 package com.examly.springapp.service;
 
 import com.examly.springapp.model.User;
+import com.examly.springapp.model.Department;
+import com.examly.springapp.repository.DepartmentRepository;
 import com.examly.springapp.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,8 @@ import java.util.List;
 
 @Service
 public class UserService {
-
+    @Autowired
+    private DepartmentRepository departmentRepository;
     @Autowired
     private final UserRepository userRepository;
 
@@ -28,6 +31,11 @@ public class UserService {
     }
 
     public User createUser(User user) {
+        if(user.getDepartment()!=null && user.getDepartment().getId()!=null){
+            Department dept=departmentRepository.findById(user.getDepartment().getId())
+            .orElseThrow(()->new RuntimeException("Invalid department id"));
+        user.setDepartment(dept);
+        }
         return userRepository.save(user);
     }
 

@@ -79,7 +79,7 @@ const handleUserAdd = () => openModal(
   [
     { name: "username", label: "Username", type: "text" },
     { name: "email", label: "Email", type: "email" },
-    { name: "password", label: "Password", type: "password" },  // user enters 'password'
+    { name: "passwordHash", label: "Password", type: "password" },  // user enters 'password'
     { name: "employeeId", label: "Employee ID", type: "text" },
     { name: "role", label: "Role", type: "select", options: roleOptions },
     { name: "departmentId", label: "Department", type: "select", options: departments.map(d => ({ label: d.departmentName, value: d.id })) },
@@ -88,8 +88,8 @@ const handleUserAdd = () => openModal(
   async (data) => {
     const payload = {
       ...data,
-      passwordHash: data.password,
-      department: data.departmentId ? { id: data.departmentId } : null
+      passwordHash: data.password || "default123",
+      department: data.departmentId ? { id: data.departmentId } : null,
     };
     delete payload.password;
     delete payload.departmentId;
