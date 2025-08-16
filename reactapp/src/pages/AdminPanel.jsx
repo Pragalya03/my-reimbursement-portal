@@ -280,8 +280,8 @@ const handlePolicyEdit = (row) =>
         columns={["id", "username", "email", "role", "employeeId", "department", "isActive"]}
         data={users.map(u => ({
           ...u,
-          department: u.department?.departmentName || "",
-          isActive: !!u.isActive   // true/false
+          department: departments.find(d=>d.id === u.departmentId)?.departmentName || "",
+          isActive: u.isActive ? "true" : "false"
         }))}
         onEdit={handleUserEdit}
         onDelete={handleUserDelete}
@@ -296,9 +296,9 @@ const handlePolicyEdit = (row) =>
         columns={["id", "policyName", "spendingLimit", "approvalRequired", "receiptRequired", "isActive"]}
         data={policies.map(p => ({
           ...p,
-          approvalRequired: !!p.approvalRequired,
-          receiptRequired: !!p.receiptRequired,
-          isActive: !!p.isActive
+          approvalRequired: p.approvalRequired ? "true" : "false",
+          receiptRequired: p.receiptRequired ? "true" : "false",
+          isActive: p.isActive ? "true" : "false"
         }))}
         onEdit={handlePolicyEdit}
         onDelete={handlePolicyDelete}
@@ -313,9 +313,9 @@ const handlePolicyEdit = (row) =>
         columns={["id", "categoryName", "categoryCode", "policyLimit", "requiresReceipt", "requiresBusinessPurpose", "isActive"]}
         data={categories.map(c => ({
           ...c,
-          requiresReceipt: !!c.requiresReceipt,
-          requiresBusinessPurpose: !!c.requiresBusinessPurpose,
-          isActive: !!c.isActive
+          requiresReceipt: c.requiresReceipt ? "true" : "false",
+          requiresBusinessPurpose: c.requiresBusinessPurpose ? "true" : "false",
+          isActive: c.isActive ? "true" : "false"
         }))}
         onEdit={handleCategoryEdit}
         onDelete={handleCategoryDelete}
