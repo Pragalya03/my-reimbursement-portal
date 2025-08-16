@@ -52,6 +52,22 @@ public class UserService {
         user.setIsActive(userDetails.getIsActive());
         return userRepository.save(user);
     }
+    public User updateUserPartial(Long id, User updatedUser) {
+    User existingUser = userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+    if (updatedUser.getUsername() != null) existingUser.setUsername(updatedUser.getUsername());
+    if (updatedUser.getEmail() != null) existingUser.setEmail(updatedUser.getEmail());
+    if (updatedUser.getPasswordHash() != null) existingUser.setPasswordHash(updatedUser.getPasswordHash());
+    if (updatedUser.getRole() != null) existingUser.setRole(updatedUser.getRole());
+    if (updatedUser.getEmployeeId() != null) existingUser.setEmployeeId(updatedUser.getEmployeeId());
+    if (updatedUser.getDepartment() != null) existingUser.setDepartment(updatedUser.getDepartment());
+    if (updatedUser.getManager() != null) existingUser.setManager(updatedUser.getManager());
+    if (updatedUser.getIsActive() != null) existingUser.setIsActive(updatedUser.getIsActive());
+
+    // lastLogin should not be overwritten by update requests
+    return userRepository.save(existingUser);
+}
 
     public void deleteUser(Long id) {
         User user = getUserById(id);
