@@ -194,32 +194,37 @@ const handlePolicyEdit = (row) =>
   openModal(
     [
       { name: "policyName", label: "Name", type: "text" },
+      { name: "categoryId", label: "Category", type: "select", options: categories.map(c => ({ label: c.categoryName, value: c.id })) },
       { name: "spendingLimit", label: "Spending Limit", type: "number" },
       { name: "approvalRequired", label: "Approval Required", type: "checkbox" },
       { name: "receiptRequired", label: "Receipt Required", type: "checkbox" },
       { name: "effectiveDate", label: "Effective Date", type: "date" },
       { name: "expiryDate", label: "Expiry Date", type: "date" },
       { name: "isActive", label: "Active", type: "checkbox" },
-      {
-        name: "categoryId",
-        label: "Category",
-        type: "select",
-        options: categories.map(c => ({ label: c.categoryName, value: c.id }))
-      }
     ],
     async (data) => {
       const payload = {
-        ...data,
-        categoryId: data.categoryId || row.categoryId || categories[0]?.id,
+        policyName: data.policyName || "Untitled Policy",
+        category: data.categoryId ? { id: Number(data.categoryId) } : null,
+        spendingLimit: data.spendingLimit ? Number(data.spendingLimit) : 0,
+        approvalRequired: !!data.approvalRequired,
+        receiptRequired: !!data.receiptRequired,
+        effectiveDate: data.effectiveDate,
+        expiryDate: data.expiryDate || null,
+        isActive: !!data.isActive
       };
+
+      console.log("Policy payload for update:", payload);
       await api.updatePolicy(row.id, payload);
       closeModal();
       fetchPolicies();
     },
-    row
+    {
+      ...row,
+      categoryId: row.category?.id || "",
+      spendingLimit: row.spendingLimit || 0
+    }
   );
-
-
 
   const handlePolicyDelete = async (id) => { await api.deletePolicy(id); fetchPolicies(); };
 
@@ -316,6 +321,7 @@ const handlePolicyEdit = (row) =>
 };
 
 export default AdminPanel;
+
 
 
 
