@@ -51,7 +51,7 @@ public class DataLoader implements CommandLineRunner {
         finance.setBudgetLimit(new BigDecimal("100000"));
         finance.setCostCenter("CC102");
         finance.setIsActive(true);
-        finance.setManager(sunitha);
+        finance.setManager(sunitha); // set manager before saving
 
         Department it = new Department();
         it.setDepartmentName("IT");
