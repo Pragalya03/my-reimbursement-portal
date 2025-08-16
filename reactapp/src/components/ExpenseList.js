@@ -417,7 +417,21 @@ function ExpenseList() {
   };
 
   return (
+    
     <div className="expense-list">
+      <div style={{display: "flex", justifyContent:"flex-end", marginBottom:"15px"}}>
+      <button
+      onClick={()=>window.history.back()}
+      style={{
+        padding: "6px 12px",
+        backgroundColor: "#f87171",
+        color: "white",
+        border: "none",
+        borderRadius: "8px",
+        cursor: "pointer",
+      }}
+    >Back</button>
+    </div>
       <h2>All Expenses</h2>
 
       <label htmlFor="status-filter" style={{ marginRight: "8px" }}>
