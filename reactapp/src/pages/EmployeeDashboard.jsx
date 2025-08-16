@@ -37,7 +37,7 @@ function EmployeeDashboard() {
   };
 
   const handleAddExpense = () => {
-    navigate("/expense-form"); // adjust this path to match your route for ExpenseForm.js
+    navigate("/expenses/new"); // adjust this path to match your route for ExpenseForm.js
   };
 
   const filteredExpenses = statusFilter
