@@ -45,14 +45,7 @@ function EmployeeDashboard() {
         <h2>My Expenses</h2>
         <button
           onClick={handleAddExpense}
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#3b82f6",
-            color: "white",
-            border: "none",
-            borderRadius: "8px",
-            cursor: "pointer",
-          }}
+          className="add-expense-btn"
         >
           Add Expense
         </button>
@@ -96,4 +89,5 @@ function EmployeeDashboard() {
 }
 
 export default EmployeeDashboard;
+
 
