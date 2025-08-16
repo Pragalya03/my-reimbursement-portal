@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -34,10 +36,12 @@ public class User {
 
     @ManyToOne(optional=true)
     @JoinColumn(name = "department_id")
+    @JsonIgnoreProperties("users")
     private Department department;
 
     @ManyToOne(optional=true)
     @JoinColumn(name = "manager_id")
+    @JsonIgnoreProperties({"manager","department"})
     private User manager;
 
     @Column(name = "created_date", nullable = false, updatable = false)
@@ -161,6 +165,5 @@ public class User {
         this.isActive = isActive;
     }
 
-    // Getters and setters
-    
+    public User(){}
 }
