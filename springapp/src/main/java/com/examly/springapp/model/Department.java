@@ -150,7 +150,7 @@ public class Department {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
 
-    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "department", fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"department", "manager", "passwordHash"})
     private List<User> users;
 
