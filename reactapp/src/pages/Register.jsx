@@ -191,7 +191,7 @@ export default function Register() {
       if (res.ok) {
         alert("User registered!");
         // Redirect to ExpenseForm page
-        navigate("/expenseform"); 
+        navigate("/expenses/new"); 
       } else {
         const errorText = await res.text();
         alert("Error registering user: " + errorText);
