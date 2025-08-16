@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.deser.std.NumberDeserializers.BigDecimalDeserializer;
+
 @Entity
 @Table(name = "expense_policies")
 public class ExpensePolicy {
@@ -127,3 +131,4 @@ public class ExpensePolicy {
 
 
     public ExpensePolicy(){}
+}

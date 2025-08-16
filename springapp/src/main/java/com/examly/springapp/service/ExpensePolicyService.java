@@ -1,7 +1,11 @@
 package com.examly.springapp.service;
 
+import com.examly.springapp.model.ExpenseCategory;
 import com.examly.springapp.model.ExpensePolicy;
+import com.examly.springapp.repository.ExpenseCategoryRepository;
 import com.examly.springapp.repository.ExpensePolicyRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,7 +35,7 @@ public ExpensePolicy createPolicy(ExpensePolicy policy) {
             .orElseThrow(() -> new RuntimeException("Category not found"));
         policy.setCategory(category);
     }
-    return policyRepo.save(policy);
+    return expensePolicyRepository.save(policy);
 }
 
 
