@@ -52,39 +52,32 @@ public class UserService {
         user.setIsActive(userDetails.getIsActive());
         return userRepository.save(user);
     }
-    public User updateUserSafe(Long id, User incoming) {
+    public User updateUserSafe(Long id, Map<String, Object> updates) {
     User existing = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+            .orElseThrow(() -> new RuntimeException("User not found: " + id));
 
-    // Only update allowed fields
-    if (incoming.getUsername() != null) {
-        existing.setUsername(incoming.getUsername());
+    // Safely copy fields if present
+    if (updates.containsKey("username")) {
+        existing.setUsername(updates.get("username").toString());
     }
-    if (incoming.getEmail() != null) {
-        existing.setEmail(incoming.getEmail());
+    if (updates.containsKey("email")) {
+        existing.setEmail(updates.get("email").toString());
     }
-    if (incoming.getPasswordHash() != null) {
-        existing.setPasswordHash(incoming.getPasswordHash());
+    if (updates.containsKey("role")) {
+        try {
+            existing.setRole(User.Role.valueOf(updates.get("role").toString().toUpperCase()));
+        } catch (IllegalArgumentException e) {
+            // ignore invalid role values instead of throwing 400
+        }
     }
-    if (incoming.getRole() != null) {
-        existing.setRole(incoming.getRole());
-    }
-    if (incoming.getEmployeeId() != null) {
-        existing.setEmployeeId(incoming.getEmployeeId());
-    }
-    if (incoming.getDepartment() != null) {
-        existing.setDepartment(incoming.getDepartment());
-    }
-    if (incoming.getManager() != null) {
-        existing.setManager(incoming.getManager());
-    }
-    if (incoming.getIsActive() != null) {
-        existing.setIsActive(incoming.getIsActive());
+    if (updates.containsKey("password")) {
+        existing.setPassword(updates.get("password").toString());
     }
 
-    // never overwrite createdDate or lastLogin here
+    // ❌ Ignore createdDate and lastLogin, backend controls these
     return userRepository.save(existing);
 }
+
 
     public User updateUserPartial(Long id, User updatedUser) {
     User existingUser = userRepository.findById(id)
