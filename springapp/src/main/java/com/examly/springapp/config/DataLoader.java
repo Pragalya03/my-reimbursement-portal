@@ -6,30 +6,39 @@ import com.examly.springapp.repository.DepartmentRepository;
 import com.examly.springapp.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.math.BigDecimal;
 
 @Component
 public class DataLoader implements CommandLineRunner {
 
-    @Autowired
-    private DepartmentRepository departmentRepository;
+    private static final Logger logger = LoggerFactory.getLogger(DataLoader.class);
+    private static final String DEFAULT_PASSWORD = "pass123";
 
-    @Autowired
-    private UserRepository userRepository;
+    private final DepartmentRepository departmentRepository;
+    private final UserRepository userRepository;
+
+    public DataLoader(DepartmentRepository departmentRepository, UserRepository userRepository) {
+        this.departmentRepository = departmentRepository;
+        this.userRepository = userRepository;
+    }
 
     @Override
     public void run(String... args) throws Exception {
 
-        // Skip if already loaded
-        if(departmentRepository.count() > 0 || userRepository.count() > 0) return;
+        if (departmentRepository.count() > 0 || userRepository.count() > 0) {
+            logger.info("Departments and users already exist. Skipping data loader.");
+            return;
+        }
 
         // ---------- Preload Departments ----------
         Department finance = new Department();
         finance.setId(2L);
         finance.setDepartmentName("Finance");
         finance.setDepartmentCode("FIN01");
-        finance.setManager(null); // will set manager later if needed
-        finance.setBudgetLimit(100000.0);
+        finance.setBudgetLimit(new BigDecimal("100000"));
         finance.setCostCenter("CC102");
         finance.setIsActive(true);
 
@@ -37,8 +46,7 @@ public class DataLoader implements CommandLineRunner {
         it.setId(3L);
         it.setDepartmentName("IT");
         it.setDepartmentCode("IT01");
-        it.setManager(null);
-        it.setBudgetLimit(75000.0);
+        it.setBudgetLimit(new BigDecimal("75000"));
         it.setCostCenter("CC103");
         it.setIsActive(true);
 
@@ -46,8 +54,7 @@ public class DataLoader implements CommandLineRunner {
         marketing.setId(4L);
         marketing.setDepartmentName("Marketing");
         marketing.setDepartmentCode("MKT01");
-        marketing.setManager(null);
-        marketing.setBudgetLimit(60000.0);
+        marketing.setBudgetLimit(new BigDecimal("60000"));
         marketing.setCostCenter("CC104");
         marketing.setIsActive(true);
 
@@ -59,17 +66,20 @@ public class DataLoader implements CommandLineRunner {
         User sunitha = new User();
         sunitha.setUsername("Sunitha");
         sunitha.setEmail("jane@example.com");
-        sunitha.setPasswordHash("pass123");
+        sunitha.setPasswordHash(DEFAULT_PASSWORD);
         sunitha.setRole(User.Role.MANAGER);
         sunitha.setEmployeeId("EMP102");
         sunitha.setDepartment(finance);
         sunitha.setManager(null);
         sunitha.setIsActive(true);
 
+        // Save manager first
+        userRepository.save(sunitha);
+
         User mahesh = new User();
         mahesh.setUsername("Mahesh");
         mahesh.setEmail("alice@example.com");
-        mahesh.setPasswordHash("pass123");
+        mahesh.setPasswordHash(DEFAULT_PASSWORD);
         mahesh.setRole(User.Role.FINANCE_MANAGER);
         mahesh.setEmployeeId("EMP103");
         mahesh.setDepartment(finance);
@@ -79,7 +89,7 @@ public class DataLoader implements CommandLineRunner {
         User ramya = new User();
         ramya.setUsername("Ramya");
         ramya.setEmail("bob@example.com");
-        ramya.setPasswordHash("pass123");
+        ramya.setPasswordHash(DEFAULT_PASSWORD);
         ramya.setRole(User.Role.ADMIN);
         ramya.setEmployeeId("EMP104");
         ramya.setDepartment(it);
@@ -89,19 +99,18 @@ public class DataLoader implements CommandLineRunner {
         User jackson = new User();
         jackson.setUsername("Jackson");
         jackson.setEmail("eve@example.com");
-        jackson.setPasswordHash("pass123");
+        jackson.setPasswordHash(DEFAULT_PASSWORD);
         jackson.setRole(User.Role.AUDITOR);
         jackson.setEmployeeId("EMP105");
         jackson.setDepartment(marketing);
         jackson.setManager(sunitha);
         jackson.setIsActive(true);
 
-        // Save users
-        userRepository.save(sunitha);
+        // Save remaining users
         userRepository.save(mahesh);
         userRepository.save(ramya);
         userRepository.save(jackson);
 
-        System.out.println("Default departments and users loaded successfully!");
+        logger.info("Default departments and users loaded successfully!");
     }
 }
