@@ -10,7 +10,8 @@ import java.util.List;
 public class ExpensePolicyService {
 
     private final ExpensePolicyRepository expensePolicyRepository;
-
+    @Autowired
+    private ExpenseCategoryRepository categoryRepo;
     public ExpensePolicyService(ExpensePolicyRepository expensePolicyRepository) {
         this.expensePolicyRepository = expensePolicyRepository;
     }
@@ -23,10 +24,16 @@ public class ExpensePolicyService {
         return expensePolicyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Policy not found with id " + id));
     }
-
-    public ExpensePolicy createPolicy(ExpensePolicy policy) {
-        return expensePolicyRepository.save(policy);
+    
+public ExpensePolicy createPolicy(ExpensePolicy policy) {
+    if (policy.getCategory() != null && policy.getCategory().getId() != null) {
+        ExpenseCategory category = categoryRepo.findById(policy.getCategory().getId())
+            .orElseThrow(() -> new RuntimeException("Category not found"));
+        policy.setCategory(category);
     }
+    return policyRepo.save(policy);
+}
+
 
     public ExpensePolicy updatePolicy(Long id, ExpensePolicy policyDetails) {
         ExpensePolicy policy = getPolicyById(id);

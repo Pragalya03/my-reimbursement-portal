@@ -20,6 +20,7 @@ public class ExpensePolicy {
     private ExpenseCategory category;
 
     @Column(name = "spending_limit", precision = 10, scale = 2)
+    @JsonDeserialize(using=BigDecimalDeserializer.class)
     private BigDecimal spendingLimit;
 
     @Column(name = "approval_required", nullable = false)
@@ -29,6 +30,7 @@ public class ExpensePolicy {
     private Boolean receiptRequired = true;
 
     @Column(name = "effective_date", nullable = false)
+    @JsonFormat(pattern ="yyyy-MM-dd")
     private LocalDate effectiveDate;
 
     @Column(name = "expiry_date")
@@ -123,6 +125,5 @@ public class ExpensePolicy {
         this.isActive = isActive;
     }
 
-    // Getters and setters
-    
-}
+
+    public ExpensePolicy(){}
