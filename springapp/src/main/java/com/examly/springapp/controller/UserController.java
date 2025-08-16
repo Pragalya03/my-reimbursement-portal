@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -35,8 +36,8 @@ public class UserController {
 
     // ✅ Modified: allow partial update instead of overwriting with nulls
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) {
-        return userService.updateUserSafe(id, user);
+    public User updateUser(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        return userService.updateUserPartial(id, updates);
     }
 
     @DeleteMapping("/{id}")
