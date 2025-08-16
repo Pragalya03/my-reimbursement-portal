@@ -33,11 +33,10 @@ public class UserController {
         return userService.createUser(user);
     }
 
+    // ✅ Modified: allow partial update instead of overwriting with nulls
     @PutMapping("/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody User user) {
-        // also ignore lastLogin here, it should only change on actual login
-        user.setLastLogin(null);
-        return userService.updateUser(id, user);
+        return userService.updateUserPartial(id, user);
     }
 
     @DeleteMapping("/{id}")
