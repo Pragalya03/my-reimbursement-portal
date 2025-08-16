@@ -1,31 +1,29 @@
 .login-page {
   font-family: Arial, sans-serif;
-  background-color: #E6E0D4; /* slightly darker warm background */
+  background-color: #F2EFEA; 
   color: #333333;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 80px); /* leave space for navbar */
+  min-height: calc(100vh - 80px); 
   padding: 40px 20px;
 }
 
 .login-page h2 {
   font-size: 2rem;
   font-weight: bold;
-  background: linear-gradient(45deg, #BDB76B, #556B2F); /* subtle gold/olive */
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #556B2F; 
   margin-bottom: 25px;
 }
 
 .login-form {
   width: 100%;
   max-width: 400px;
-  background-color: #F2EFEA;
+  background-color: #fff; 
   padding: 30px;
   border-radius: 12px;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
 }
 
 .login-form input,
@@ -41,16 +39,16 @@
 
 .login-form input:focus,
 .login-form select:focus {
-  border-color: #556B2F; /* Deep Olive focus */
-  box-shadow: 0 0 5px rgba(85,107,47,0.4);
+  border-color: #556B2F; 
+  box-shadow: 0 0 5px rgba(85, 107, 47, 0.3);
   outline: none;
 }
 
 .login-form button {
   width: 100%;
   padding: 12px;
-  background-color: #D2691E; /* Burnt Orange */
-  color: #F2EFEA; /* Warm Gray text */
+  background-color: #D2691E; 
+  color: #F2EFEA; 
   font-size: 1rem;
   border: none;
   border-radius: 8px;
@@ -59,6 +57,6 @@
 }
 
 .login-form button:hover {
-  background-color: #DAA520; /* Goldenrod */
-  transform: scale(1.05);
+  background-color: #DAA520; 
+  transform: scale(1.03);
 }
