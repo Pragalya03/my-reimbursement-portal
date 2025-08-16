@@ -7,7 +7,9 @@ const ModalForm = ({ fields, initialData, onSubmit, onClose }) => {
     const defaults = {};
     fields.forEach(f => {
       if (f.type === "checkbox") defaults[f.name] = f.default || false;
-      if (f.type === "select" && initialData?.[f.name] === undefined) defaults[f.name] = f.options?.[0]?.value || "";
+      if (f.type === "select" && initialData?.[f.name] === undefined) {
+        defaults[f.name] = f.options?.[0]?.value || "";
+      }
     });
     setFormData({ ...defaults, ...(initialData || {}) });
   }, [initialData, fields]);
@@ -38,8 +40,16 @@ const ModalForm = ({ fields, initialData, onSubmit, onClose }) => {
             <div key={f.name} className="form-group">
               <label>{f.label}</label>
               {f.type === "select" ? (
-                <select name={f.name} value={formData[f.name] || ""} onChange={handleChange}>
-                  {f.options.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                <select
+                  name={f.name}
+                  value={formData[f.name] || ""}
+                  onChange={handleChange}
+                >
+                  {f.options.map(opt => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
                 </select>
               ) : (
                 <input
