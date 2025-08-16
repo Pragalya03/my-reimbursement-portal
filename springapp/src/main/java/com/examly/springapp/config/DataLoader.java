@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -29,85 +28,70 @@ public class DataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        // ---------- Preload Departments ----------
-        Department finance = departmentRepository.findByDepartmentCode("FIN01")
-                .orElseGet(() -> {
-                    Department d = new Department();
-                    d.setDepartmentName("Finance");
-                    d.setDepartmentCode("FIN01");
-                    d.setBudgetLimit(new BigDecimal("100000"));
-                    d.setCostCenter("CC102");
-                    d.setIsActive(true);
-                    return departmentRepository.save(d);
-                });
+        if(departmentRepository.count() > 0 || userRepository.count() > 0){
+            logger.info("Departments and users already exist. Skipping data loader.");
+            return;
+        }
 
-        Department it = departmentRepository.findByDepartmentCode("IT01")
-                .orElseGet(() -> {
-                    Department d = new Department();
-                    d.setDepartmentName("IT");
-                    d.setDepartmentCode("IT01");
-                    d.setBudgetLimit(new BigDecimal("75000"));
-                    d.setCostCenter("CC103");
-                    d.setIsActive(true);
-                    return departmentRepository.save(d);
-                });
+        // ---------- Preload manager first ----------
+        User sunitha = new User();
+        sunitha.setUsername("Sunitha");
+        sunitha.setEmail("jane@example.com");
+        sunitha.setPasswordHash(DEFAULT_PASSWORD);
+        sunitha.setRole(User.Role.MANAGER);
+        sunitha.setEmployeeId("EMP102");
+        sunitha.setIsActive(true);
+        sunitha.setManager(null);
+        sunitha = userRepository.save(sunitha); // Save manager first
 
-        Department marketing = departmentRepository.findByDepartmentCode("MKT01")
-                .orElseGet(() -> {
-                    Department d = new Department();
-                    d.setDepartmentName("Marketing");
-                    d.setDepartmentCode("MKT01");
-                    d.setBudgetLimit(new BigDecimal("60000"));
-                    d.setCostCenter("CC104");
-                    d.setIsActive(true);
-                    return departmentRepository.save(d);
-                });
-
-        // ---------- Preload Users ----------
-        // 1. Manager Sunitha
-        Optional<User> sunithaOpt = userRepository.findByEmail("jane@example.com");
-        User sunitha = sunithaOpt.orElseGet(() -> {
-            User u = new User();
-            u.setUsername("Sunitha");
-            u.setEmail("jane@example.com");
-            u.setPasswordHash(DEFAULT_PASSWORD);
-            u.setRole(User.Role.MANAGER);
-            u.setEmployeeId("EMP102");
-            u.setDepartment(finance);
-            u.setManager(null);
-            u.setIsActive(true);
-            return userRepository.save(u);
-        });
-
-        // 2. Assign manager to all departments
+        // ---------- Preload Departments with manager ----------
+        Department finance = new Department();
+        finance.setDepartmentName("Finance");
+        finance.setDepartmentCode("FIN01");
+        finance.setBudgetLimit(new BigDecimal("100000"));
+        finance.setCostCenter("CC102");
+        finance.setIsActive(true);
         finance.setManager(sunitha);
+
+        Department it = new Department();
+        it.setDepartmentName("IT");
+        it.setDepartmentCode("IT01");
+        it.setBudgetLimit(new BigDecimal("75000"));
+        it.setCostCenter("CC103");
+        it.setIsActive(true);
         it.setManager(sunitha);
+
+        Department marketing = new Department();
+        marketing.setDepartmentName("Marketing");
+        marketing.setDepartmentCode("MKT01");
+        marketing.setBudgetLimit(new BigDecimal("60000"));
+        marketing.setCostCenter("CC104");
+        marketing.setIsActive(true);
         marketing.setManager(sunitha);
+
         departmentRepository.save(finance);
         departmentRepository.save(it);
         departmentRepository.save(marketing);
 
-        // 3. Other users
-        saveUserIfNotExists("Mahesh", "alice@example.com", User.Role.FINANCE_MANAGER, "EMP103", finance, sunitha);
-        saveUserIfNotExists("Ramya", "bob@example.com", User.Role.ADMIN, "EMP104", it, sunitha);
-        saveUserIfNotExists("Jackson", "eve@example.com", User.Role.AUDITOR, "EMP105", marketing, sunitha);
+        // ---------- Preload other users ----------
+        saveUser("Mahesh","alice@example.com", User.Role.FINANCE_MANAGER, "EMP103", finance, sunitha);
+        saveUser("Ramya","bob@example.com", User.Role.ADMIN, "EMP104", it, sunitha);
+        saveUser("Jackson","eve@example.com", User.Role.AUDITOR, "EMP105", marketing, sunitha);
 
         logger.info("Default departments and users loaded successfully!");
     }
 
-    private void saveUserIfNotExists(String username, String email, User.Role role, String empId,
-                                     Department dept, User manager) {
-        if(userRepository.findByEmail(email).isEmpty()) {
-            User u = new User();
-            u.setUsername(username);
-            u.setEmail(email);
-            u.setPasswordHash(DEFAULT_PASSWORD);
-            u.setRole(role);
-            u.setEmployeeId(empId);
-            u.setDepartment(dept);
-            u.setManager(manager);
-            u.setIsActive(true);
-            userRepository.save(u);
-        }
+    private void saveUser(String username, String email, User.Role role, String empId,
+                          Department dept, User manager){
+        User u = new User();
+        u.setUsername(username);
+        u.setEmail(email);
+        u.setPasswordHash(DEFAULT_PASSWORD);
+        u.setRole(role);
+        u.setEmployeeId(empId);
+        u.setDepartment(dept);
+        u.setManager(manager);
+        u.setIsActive(true);
+        userRepository.save(u);
     }
 }
