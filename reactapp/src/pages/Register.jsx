@@ -9,16 +9,17 @@ export default function RegistrationPage() {
     role: "EMPLOYEE",
     employeeId: "",
     department: { id: 0 },
-    manager: "",
-    createdDate: new Date().toISOString(),
-    lastLogin: new Date().toISOString(),
+    manager: "",           // backend will ignore or fill automatically
+    createdDate: "",       // backend will ignore
+    lastLogin: "",         // backend will ignore
     isActive: true
   });
 
   useEffect(() => {
-    fetch("http://localhost:8080/departments")
+    fetch("https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io/departments")
       .then(res => res.json())
-      .then(data => setDepartments(data));
+      .then(data => setDepartments(data))
+      .catch(err => console.error("Failed to fetch departments:", err));
   }, []);
 
   const handleChange = (e) => {
@@ -32,13 +33,18 @@ export default function RegistrationPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:8080/users/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-    if(res.ok) alert("User registered!");
-    else alert("Error registering user.");
+    try {
+      const res = await fetch("https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      if(res.ok) alert("User registered!");
+      else alert("Error registering user.");
+    } catch(err) {
+      console.error("Failed to submit registration:", err);
+      alert("Failed to connect to server.");
+    }
   };
 
   return (
