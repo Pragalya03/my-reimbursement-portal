@@ -1,31 +1,64 @@
-.login-container {
-  max-width: 400px;
-  margin: 50px auto;
-  padding: 20px;
-  background-color: #F2EFEA;
-  border-radius: 10px;
-  border: 1px solid #E07A5F;
+.login-page {
+  font-family: Arial, sans-serif;
+  background-color: #F2EFEA; /* same as App background */
   color: #333333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px); /* leave space for navbar */
+  padding: 40px 20px;
 }
 
-.login-container input {
-  width: 100%;
-  padding: 8px;
-  margin: 10px 0;
-  border-radius: 5px;
-  border: 1px solid #7E7E7E;
+.login-page h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  background: linear-gradient(45deg, #FF7F50, #FFD700, #98FB98);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 25px;
 }
 
-.login-container button {
-  background-color: #556B2F; /* Deep Olive */
-  color: #F2EFEA;
-  padding: 8px;
+.login-form {
   width: 100%;
-  border-radius: 5px;
+  max-width: 400px;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+.login-form input,
+.login-form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+.login-form input:focus,
+.login-form select:focus {
+  border-color: #556B2F; /* Deep Olive focus */
+  box-shadow: 0 0 5px rgba(85,107,47,0.4);
+  outline: none;
+}
+
+.login-form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #D2691E; /* Burnt Orange */
+  color: #F2EFEA; /* Warm Gray text */
+  font-size: 1rem;
   border: none;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
 }
 
-.login-container button:hover {
+.login-form button:hover {
   background-color: #DAA520; /* Goldenrod */
+  transform: scale(1.05);
 }
