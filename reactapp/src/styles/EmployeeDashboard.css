@@ -31,7 +31,6 @@
   background-color: #2563eb; 
 }
 
-
 .expense-list table {
   width: 100%;
   border-collapse: collapse;
@@ -59,6 +58,7 @@
   background-color: #f1f1f1;
 }
 
+/* Back button top-right */
 .back-btn {
   position: fixed;
   top: 25px;
@@ -67,16 +67,14 @@
   background: white;
   color: #2F4F4F;
   font-weight: 700;
-  min-width: 80px;
   font-size: 1rem;
   border-radius: 14px;
   border: 2px solid #2F4F4F;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(47, 79, 79, 0.3);
-  transition: background 0.3s ease, color 0.3s ease;
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  box-shadow: 0 4px 12px rgba(47, 79, 79, 0.3);
   z-index: 1000;
 }
 
