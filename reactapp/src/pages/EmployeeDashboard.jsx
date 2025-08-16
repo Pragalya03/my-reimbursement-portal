@@ -5,7 +5,6 @@ import "../styles/ExpenseList.css";
 
 function EmployeeDashboard() {
   const [expenses, setExpenses] = useState([]);
-  const [highlightedId, setHighlightedId] = useState(null);
 
   // Get the logged-in user's employeeId from localStorage
   const loggedInEmployeeId = localStorage.getItem("loggedInEmployeeId");
@@ -83,10 +82,6 @@ function EmployeeDashboard() {
             {expenses.map((expense) => (
               <tr
                 key={expense.id}
-                style={{
-                  backgroundColor:
-                    highlightedId === expense.id ? "#fde68a" : "transparent",
-                }}
               >
                 <td>{expense.employeeId}</td>
                 <td>${Number(expense.amount).toFixed(2)}</td>
