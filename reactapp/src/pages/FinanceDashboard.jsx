@@ -5,7 +5,6 @@ import "../styles/ExpenseList.css";
 
 function FinanceDashboard() {
   const [expenses, setExpenses] = useState([]);
-  const [statusFilter, setStatusFilter] = useState(""); // optional filter by status
 
   useEffect(() => {
     fetchExpenses();
@@ -22,10 +21,6 @@ function FinanceDashboard() {
       setExpenses([]);
     }
   };
-
-  const filteredExpenses = statusFilter
-    ? expenses.filter((expense) => expense.status === statusFilter)
-    : expenses;
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -57,28 +52,10 @@ function FinanceDashboard() {
 
       <h2>Approved Expenses (Finance Dashboard)</h2>
 
-      <label htmlFor="status-filter" style={{ marginRight: "8px" }}>
-        Status Filter (Optional):
-      </label>
-      <select
-        id="status-filter"
-        value={statusFilter}
-        onChange={(e) => setStatusFilter(e.target.value)}
-        style={{ marginBottom: "12px" }}
-      >
-        <option value="">All</option>
-        <option value="APPROVED">Approved</option>
-        <option value="PENDING">Pending</option>
-        <option value="REJECTED">Rejected</option>
-      </select>
-
-      {filteredExpenses.length === 0 ? (
+      {expenses.length === 0 ? (
         <p>No approved expenses found</p>
       ) : (
-        <table
-          data-testid="expenses-table"
-          style={{ width: "100%", borderCollapse: "collapse" }}
-        >
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead>
             <tr>
               <th>Employee ID</th>
@@ -90,7 +67,7 @@ function FinanceDashboard() {
             </tr>
           </thead>
           <tbody>
-            {filteredExpenses.map((expense) => (
+            {expenses.map((expense) => (
               <tr key={expense.id}>
                 <td>{expense.employeeId}</td>
                 <td>${Number(expense.amount).toFixed(2)}</td>
