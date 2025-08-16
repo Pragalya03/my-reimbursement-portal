@@ -1,6 +1,6 @@
 .login-page {
   font-family: Arial, sans-serif;
-  background-color: #F2EFEA; /* same as App background */
+  background-color: #E6E0D4; /* slightly darker warm background */
   color: #333333;
   display: flex;
   flex-direction: column;
@@ -13,7 +13,7 @@
 .login-page h2 {
   font-size: 2rem;
   font-weight: bold;
-  background: linear-gradient(45deg, #FF7F50, #FFD700, #98FB98);
+  background: linear-gradient(45deg, #BDB76B, #556B2F); /* subtle gold/olive */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 25px;
@@ -22,7 +22,7 @@
 .login-form {
   width: 100%;
   max-width: 400px;
-  background-color: #fff;
+  background-color: #F2EFEA;
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 6px 15px rgba(0,0,0,0.1);
