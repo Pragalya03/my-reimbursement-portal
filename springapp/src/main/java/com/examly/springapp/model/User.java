@@ -49,6 +49,15 @@ public class User {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
 
+    @PrePersist
+    protected void onCreate(){
+        this.createdDate=LocalDateTime.now();
+        this.lastLogin=null;
+    }
+
+    public void onUpdate(){
+        
+    }
     public Long getId() {
         return id;
     }
