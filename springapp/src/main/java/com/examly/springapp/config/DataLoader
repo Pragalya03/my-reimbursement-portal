@@ -1,0 +1,82 @@
+package com.examly.springapp.config;
+
+import com.examly.springapp.model.User;
+import com.examly.springapp.model.Department;
+import com.examly.springapp.repository.UserRepository;
+import com.examly.springapp.repository.DepartmentRepository;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+
+@Component
+public class DataLoader implements CommandLineRunner {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private DepartmentRepository departmentRepository;
+
+    @Override
+    public void run(String... args) throws Exception {
+
+        if(userRepository.count() > 0) return; // skip if users already exist
+
+        // Fetch departments (assumes they exist, else create them)
+        Department dept2 = departmentRepository.findById(2L)
+                .orElseThrow(() -> new RuntimeException("Department 2 not found"));
+        Department dept3 = departmentRepository.findById(3L)
+                .orElseThrow(() -> new RuntimeException("Department 3 not found"));
+        Department dept4 = departmentRepository.findById(4L)
+                .orElseThrow(() -> new RuntimeException("Department 4 not found"));
+
+        // Create users
+        User sunitha = new User();
+        sunitha.setUsername("Sunitha");
+        sunitha.setEmail("jane@example.com");
+        sunitha.setPasswordHash("pass123");
+        sunitha.setRole(User.Role.MANAGER);
+        sunitha.setEmployeeId("EMP102");
+        sunitha.setDepartment(dept2);
+        sunitha.setManager(null);
+        sunitha.setIsActive(true);
+
+        User mahesh = new User();
+        mahesh.setUsername("Mahesh");
+        mahesh.setEmail("alice@example.com");
+        mahesh.setPasswordHash("pass123");
+        mahesh.setRole(User.Role.FINANCE_MANAGER);
+        mahesh.setEmployeeId("EMP103");
+        mahesh.setDepartment(dept2);
+        mahesh.setManager(sunitha);  // manager EMP102
+        mahesh.setIsActive(true);
+
+        User ramya = new User();
+        ramya.setUsername("Ramya");
+        ramya.setEmail("bob@example.com");
+        ramya.setPasswordHash("pass123");
+        ramya.setRole(User.Role.ADMIN);
+        ramya.setEmployeeId("EMP104");
+        ramya.setDepartment(dept3);
+        ramya.setManager(sunitha);
+        ramya.setIsActive(true);
+
+        User jackson = new User();
+        jackson.setUsername("Jackson");
+        jackson.setEmail("eve@example.com");
+        jackson.setPasswordHash("pass123");
+        jackson.setRole(User.Role.AUDITOR);
+        jackson.setEmployeeId("EMP105");
+        jackson.setDepartment(dept4);
+        jackson.setManager(sunitha);
+        jackson.setIsActive(true);
+
+        // Save all
+        userRepository.save(sunitha);
+        userRepository.save(mahesh);
+        userRepository.save(ramya);
+        userRepository.save(jackson);
+
+        System.out.println("Default users loaded successfully!");
+    }
+}
