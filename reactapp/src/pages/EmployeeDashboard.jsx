@@ -1,48 +1,38 @@
-// src/components/EmployeeDashboard.js
+// src/components/EmployeeDashboard.jsx
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { getExpenses } from "../utils/api.js";
 import "../styles/ExpenseList.css";
 
 function EmployeeDashboard() {
   const [expenses, setExpenses] = useState([]);
-  const [statusFilter, setStatusFilter] = useState("");
   const [highlightedId, setHighlightedId] = useState(null);
-  const [searchEmployeeId, setSearchEmployeeId] = useState("");
-  const navigate = useNavigate(); // for navigation
+
+  // Get the logged-in user's employeeId from localStorage
+  const loggedInEmployeeId = localStorage.getItem("loggedInEmployeeId");
 
   useEffect(() => {
+    const fetchExpenses = async () => {
+      try {
+        const data = await getExpenses();
+
+        // Filter expenses only for the logged-in employee
+        const filteredByEmployee = data.filter(
+          (exp) => String(exp.employeeId) === String(loggedInEmployeeId)
+        );
+
+        setExpenses(filteredByEmployee);
+      } catch (error) {
+        console.error("Failed to fetch expenses:", error);
+        setExpenses([]);
+      }
+    };
+
     fetchExpenses();
-  }, []);
-
-  const fetchExpenses = async () => {
-    try {
-      const data = await getExpenses();
-      setExpenses(data);
-    } catch (error) {
-      console.error("Failed to fetch expenses:", error);
-      setExpenses([]);
-    }
-  };
-
-  const handleGoClick = () => {
-    const foundExpense = expenses.find(
-      (exp) => String(exp.employeeId) === searchEmployeeId.trim()
-    );
-    if (foundExpense) {
-      setHighlightedId(foundExpense.id);
-    } else {
-      alert("Employee ID not found.");
-    }
-  };
+  }, [loggedInEmployeeId]);
 
   const handleAddExpense = () => {
-    navigate("/expenses/new"); // adjust this path to match your route for ExpenseForm.js
+    window.location.href = "/expense/new";
   };
-
-  const filteredExpenses = statusFilter
-    ? expenses.filter((expense) => expense.status === statusFilter)
-    : expenses;
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -56,7 +46,7 @@ function EmployeeDashboard() {
   return (
     <div className="expense-list">
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
-        <h2>All Expenses</h2>
+        <h2>My Expenses</h2>
         <button
           onClick={handleAddExpense}
           style={{
@@ -72,48 +62,7 @@ function EmployeeDashboard() {
         </button>
       </div>
 
-      <label htmlFor="status-filter" style={{ marginRight: "8px" }}>
-        Status:
-      </label>
-      <select
-        id="status-filter"
-        value={statusFilter}
-        onChange={(e) => setStatusFilter(e.target.value)}
-        style={{ marginBottom: "12px" }}
-      >
-        <option value="">All</option>
-        <option value="PENDING">Pending</option>
-        <option value="APPROVED">Approved</option>
-        <option value="REJECTED">Rejected</option>
-      </select>
-
-      <div style={{ marginBottom: "15px", marginTop: "10px" }}>
-        <label style={{ marginRight: "8px", fontWeight: "bold" }}>
-          Or Select by Employee ID:
-        </label>
-        <input
-          type="text"
-          value={searchEmployeeId}
-          onChange={(e) => setSearchEmployeeId(e.target.value)}
-          placeholder="Enter Employee ID"
-          style={{ marginRight: "8px", padding: "5px" }}
-        />
-        <button
-          onClick={handleGoClick}
-          style={{
-            padding: "6px 12px",
-            background: "#fde68a",
-            color: "#d97706",
-            border: "2px solid #d97706",
-            borderRadius: "20px",
-            cursor: "pointer",
-          }}
-        >
-          GO
-        </button>
-      </div>
-
-      {filteredExpenses.length === 0 ? (
+      {expenses.length === 0 ? (
         <p>No expenses found</p>
       ) : (
         <table
@@ -131,7 +80,7 @@ function EmployeeDashboard() {
             </tr>
           </thead>
           <tbody>
-            {filteredExpenses.map((expense) => (
+            {expenses.map((expense) => (
               <tr
                 key={expense.id}
                 style={{
