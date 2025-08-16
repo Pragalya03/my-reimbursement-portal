@@ -1,4 +1,3 @@
-// src/components/AuditorDashboard.jsx
 import React, { useEffect, useState } from "react";
 import { getExpenses } from "../utils/api.js";
 import "../styles/ExpenseList.css";
