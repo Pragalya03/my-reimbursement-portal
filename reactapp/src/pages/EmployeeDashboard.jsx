@@ -1,4 +1,3 @@
-// src/components/EmployeeDashboard.jsx
 import React, { useEffect, useState } from "react";
 import { getExpenses } from "../utils/api.js";
 import "../styles/ExpenseList.css";
@@ -6,7 +5,6 @@ import "../styles/ExpenseList.css";
 function EmployeeDashboard() {
   const [expenses, setExpenses] = useState([]);
 
-  // Get the logged-in user's employeeId from localStorage
   const loggedInEmployeeId = localStorage.getItem("loggedInEmployeeId");
 
   useEffect(() => {
@@ -14,7 +12,6 @@ function EmployeeDashboard() {
       try {
         const data = await getExpenses();
 
-        // Filter expenses only for the logged-in employee
         const filteredByEmployee = data.filter(
           (exp) => String(exp.employeeId) === String(loggedInEmployeeId)
         );
@@ -99,3 +96,4 @@ function EmployeeDashboard() {
 }
 
 export default EmployeeDashboard;
+
