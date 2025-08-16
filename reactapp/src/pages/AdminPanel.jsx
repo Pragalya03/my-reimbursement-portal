@@ -277,7 +277,7 @@ const handlePolicyEdit = (row) =>
       <h3>Users</h3>
       <button onClick={handleUserAdd}>Add User</button>
       <TableView
-  columns={["id", "username", "email", "role", "employeeId", "department", "isActive"]}
+  columns={["id", "username", "email", "role", "employeeId", "isActive"]}
   data={users.map(u => {
     const dept = departments.find(d => d.id === u.department?.id || u.departmentId);
     return {
