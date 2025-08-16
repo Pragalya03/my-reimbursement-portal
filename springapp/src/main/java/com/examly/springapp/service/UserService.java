@@ -52,6 +52,40 @@ public class UserService {
         user.setIsActive(userDetails.getIsActive());
         return userRepository.save(user);
     }
+    public User updateUserSafe(Long id, User incoming) {
+    User existing = userRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+    // Only update allowed fields
+    if (incoming.getUsername() != null) {
+        existing.setUsername(incoming.getUsername());
+    }
+    if (incoming.getEmail() != null) {
+        existing.setEmail(incoming.getEmail());
+    }
+    if (incoming.getPasswordHash() != null) {
+        existing.setPasswordHash(incoming.getPasswordHash());
+    }
+    if (incoming.getRole() != null) {
+        existing.setRole(incoming.getRole());
+    }
+    if (incoming.getEmployeeId() != null) {
+        existing.setEmployeeId(incoming.getEmployeeId());
+    }
+    if (incoming.getDepartment() != null) {
+        existing.setDepartment(incoming.getDepartment());
+    }
+    if (incoming.getManager() != null) {
+        existing.setManager(incoming.getManager());
+    }
+    if (incoming.getIsActive() != null) {
+        existing.setIsActive(incoming.getIsActive());
+    }
+
+    // never overwrite createdDate or lastLogin here
+    return userRepository.save(existing);
+}
+
     public User updateUserPartial(Long id, User updatedUser) {
     User existingUser = userRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("User not found"));
