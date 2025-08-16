@@ -48,7 +48,6 @@ function AuditorDashboard() {
 
   return (
     <div className="expense-list">
-      {/* Back Button */}
       <div style={{ display: "flex", justifyContent:"flex-end", marginBottom:"15px" }}>
         <button
           onClick={() => window.history.back()}
@@ -67,7 +66,6 @@ function AuditorDashboard() {
 
       <h2>Auditor Dashboard - All Expenses</h2>
 
-      {/* Status Filter */}
       <label htmlFor="status-filter" style={{ marginRight: "8px" }}>
         Status:
       </label>
@@ -83,7 +81,6 @@ function AuditorDashboard() {
         <option value="REJECTED">Rejected</option>
       </select>
 
-      {/* Search by Employee ID */}
       <div style={{ marginBottom: "15px", marginTop: "10px" }}>
         <label style={{ marginRight: "8px", fontWeight: "bold" }}>
           Or Search by Employee ID:
@@ -110,7 +107,6 @@ function AuditorDashboard() {
         </button>
       </div>
 
-      {/* Expenses Table */}
       {filteredExpenses.length === 0 ? (
         <p>No expenses found</p>
       ) : (
@@ -153,3 +149,4 @@ function AuditorDashboard() {
 }
 
 export default AuditorDashboard;
+
