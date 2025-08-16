@@ -1,85 +1,59 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
-function Register() {
+export default function RegistrationPage() {
+  const [departments, setDepartments] = useState([]);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
-    password: "",
+    passwordHash: "",
+    role: "EMPLOYEE",
+    employeeId: "",
+    department: { id: 0 },
+    manager: "",
+    createdDate: new Date().toISOString(),
+    lastLogin: new Date().toISOString(),
+    isActive: true
   });
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const navigate = useNavigate();
 
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  useEffect(() => {
+    fetch("http://localhost:8080/departments")
+      .then(res => res.json())
+      .then(data => setDepartments(data));
+  }, []);
 
-  const handleRegister = async (e) => {
-  e.preventDefault();
-  setError("");
-  setSuccess("");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if(name === "departmentId") {
+      setFormData(prev => ({ ...prev, department: { id: Number(value) } }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
+  };
 
-  try {
-    const res = await fetch("/users", { // <-- match your backend path
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const res = await fetch("http://localhost:8080/users/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        username: formData.username,
-        email: formData.email,
-        passwordHash: formData.password,
-        role: "EMPLOYEE",
-        employeeId: "EMP" + Math.floor(Math.random() * 10000), // auto-generate unique id
-        department: null,
-        manager: null,
-        createdDate: new Date().toISOString(),
-        lastLogin: null,
-        isActive: true
-      }),
+      body: JSON.stringify(formData),
     });
-
-    if (!res.ok) throw new Error("Registration failed");
-
-    setSuccess("Account created successfully!");
-    setFormData({ username: "", email: "", password: "" });
-    setTimeout(() => navigate("/login"), 1500);
-  } catch (err) {
-    setError(err.message);
-  }
-};
-
+    if(res.ok) alert("User registered!");
+    else alert("Error registering user.");
+  };
 
   return (
-    <div className="register-page">
-      <h2>Employee Registration</h2>
-      {error && <p className="error">{error}</p>}
-      {success && <p className="success">{success}</p>}
-      <form onSubmit={handleRegister}>
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={formData.username}
-          onChange={handleChange}
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-        />
-        <button type="submit">Register</button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <input name="username" placeholder="Username" onChange={handleChange} required />
+      <input name="email" type="email" placeholder="Email" onChange={handleChange} required />
+      <input name="passwordHash" type="password" placeholder="Password" onChange={handleChange} required />
+      <input name="employeeId" placeholder="Employee ID" onChange={handleChange} required />
+      <select name="departmentId" onChange={handleChange} required>
+        <option value="">Select Department</option>
+        {departments.map(d => (
+          <option key={d.id} value={d.id}>{d.departmentName}</option>
+        ))}
+      </select>
+      <button type="submit">Register</button>
+    </form>
   );
 }
-
-export default Register;
-
