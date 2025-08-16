@@ -26,26 +26,13 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @PostMapping("/register")
-public ResponseEntity<?> registerUser(@RequestBody UserRegistrationRequest request) {
-    Department department = departmentRepository.findById(request.getDepartmentId())
-        .orElseThrow(() -> new RuntimeException("Department not found"));
-
-    User user = new User();
-    user.setUsername(request.getUsername());
-    user.setEmail(request.getEmail());
-    user.setPasswordHash(passwordEncoder.encode(request.getPassword()));
-    user.setRole(request.getRole());
-    user.setEmployeeId(request.getEmployeeId());
-    user.setDepartment(department);
-    user.setManager(department.getManager());
-    user.setCreatedDate(LocalDateTime.now());
-    user.setLastLogin(LocalDateTime.now());
-    user.setIsActive(true);
-
-    userRepository.save(user);
-    return ResponseEntity.ok("User registered successfully");
-}
+    @PostMapping
+    public User createUser(@RequestBody User user) {
+        // ignore any incoming createdDate or lastLogin from frontend
+        user.setCreatedDate(LocalDateTime.now());
+        user.setLastLogin(null); // or LocalDateTime.now() if you want a default
+        return userService.createUser(user);
+    }
 
 
     // ✅ Modified: allow partial update instead of overwriting with nulls
