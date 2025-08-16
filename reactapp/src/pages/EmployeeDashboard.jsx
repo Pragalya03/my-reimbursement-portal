@@ -103,6 +103,10 @@
 
 // export default EmployeeDashboard;
 
+import React, { useEffect, useState } from "react";
+import { getExpenses } from "../utils/api.js";
+import "../styles/EmployeeDashboard.css";
+
 
 function EmployeeDashboard() {
   const [expenses, setExpenses] = useState([]);
@@ -140,12 +144,12 @@ function EmployeeDashboard() {
   return (
     <>
       {/* Back button OUTSIDE expense-list */}
-      <button
+      {/* <button
         className="back-btn"
         onClick={() => window.history.back()}
       >
         Back
-      </button>
+      </button> */}
 
       <div className="expense-list">
         <div
