@@ -194,13 +194,13 @@ export default function Register() {
       );
 
       if (res.ok) {
-        const registeredUser = await res.json();
+        await res.json();
         alert("User registered!");
 
         // Redirect based on role
-        if (registeredUser.role === "EMPLOYEE") {
+        if (formData.role === "EMPLOYEE") {
           navigate("/employee-dashboard");
-        } else if (registeredUser.role === "MANAGER") {
+        } else if (formData.role === "MANAGER") {
           navigate("/manager");
         } else {
           navigate("/"); // fallback
