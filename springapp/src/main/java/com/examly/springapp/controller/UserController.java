@@ -28,14 +28,11 @@ public class UserController {
 
     @PostMapping
     public User createUser(@RequestBody User user) {
-        // ignore any incoming createdDate or lastLogin from frontend
         user.setCreatedDate(LocalDateTime.now());
-        user.setLastLogin(null); // or LocalDateTime.now() if you want a default
+        user.setLastLogin(null); 
         return userService.createUser(user);
     }
 
-
-    // ✅ Modified: allow partial update instead of overwriting with nulls
     @PutMapping("/{id}")
     public User updateUser(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
         return userService.updateUserSafe(id, updates);

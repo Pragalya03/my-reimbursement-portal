@@ -3,7 +3,7 @@ form {
   margin: 50px auto;
   padding: 25px;
   align-items: center;
-  background-color: #F2EFEA; /* soft warm background */
+  background-color: #F2EFEA; 
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   font-family: Arial, sans-serif;
@@ -29,14 +29,14 @@ form select {
 form input:focus,
 form select:focus {
   outline: none;
-  border-color: #D2691E; /* burnt orange accent */
+  border-color: #D2691E; 
   box-shadow: 0 0 5px rgba(210, 105, 30, 0.5);
 }
 
 form button {
   width: 100%;
   padding: 12px;
-  background-color: #D2691E; /* burnt orange button */
+  background-color: #D2691E; 
   color: #F2EFEA;
   border: none;
   border-radius: 8px;
@@ -46,11 +46,11 @@ form button {
 }
 
 form button:hover {
-  background-color: #DAA520; /* goldenrod on hover */
+  background-color: #DAA520; 
 }
 
 form h2 {
   text-align: center;
   margin-bottom: 20px;
-  color: #556B2F; /* deep olive heading */
+  color: #556B2F; 
 }

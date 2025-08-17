@@ -1,4 +1,3 @@
-// src/components/FinanceDashboard.jsx
 import React, { useEffect, useState } from "react";
 import { getExpenses } from "../utils/api.js";
 import "../styles/ExpenseList.css";
@@ -13,7 +12,6 @@ function FinanceDashboard() {
   const fetchExpenses = async () => {
     try {
       const data = await getExpenses();
-      // Only keep approved expenses
       const approvedExpenses = data.filter(exp => exp.status === "APPROVED");
       setExpenses(approvedExpenses);
     } catch (error) {
@@ -33,7 +31,6 @@ function FinanceDashboard() {
 
   return (
     <div className="expense-list">
-      {/* Back button */}
       <div style={{ display: "flex", justifyContent:"flex-end", marginBottom:"15px" }}>
         <button
           onClick={() => window.history.back()}

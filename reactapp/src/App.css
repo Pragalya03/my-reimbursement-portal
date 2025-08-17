@@ -1,7 +1,6 @@
 .App {
   font-family: Arial, sans-serif;
   padding: 20px;
-  /* background-color: #E0E8E0; */
   color: #333333;
   width:100%;
   min-height: 100vh;
@@ -9,16 +8,16 @@
 
 .full-width-navbar {
   display: flex;
-  justify-content: space-between; /* brand on left, buttons on right */
+  justify-content: space-between; 
   align-items: center;
-  background-color: #556B2F; /* Deep Olive */
+  background-color: #556B2F; 
   padding: 10px 20px;
 }
 
 .brand-name {
   font-size: 1.8rem;
   font-weight: bold;
-  background: linear-gradient(90deg, #ffb347, #ffcc33); /* pretty gradient */
+  background: linear-gradient(90deg, #ffb347, #ffcc33); 
   -webkit-background-clip:text;
   -webkit-text-fill-color: transparent;
   background-clip:text;
@@ -26,19 +25,15 @@
   letter-spacing:0.5px;
  
 }
-
-
-
 .user-type-btn {
-  color: #F2EFEA; /* Warm Gray text */
+  color: #F2EFEA; 
   text-decoration: none;
   padding: 8px 20px;
   border-radius: 5px;
-  background-color: #D2691E; /* Burnt Orange */
+  background-color: #D2691E; 
   transition: background 0.3s;
 }
-
 .user-type-btn.active,
 .user-type-btn:hover {
-  background-color: #DAA520; /* Goldenrod */
+  background-color: #DAA520; 
 }

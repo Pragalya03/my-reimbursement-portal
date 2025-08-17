@@ -1,4 +1,3 @@
-// src/components/TableView.jsx
 import React from "react";
 
 const TableView = ({ columns, data, onEdit, onDelete }) => {

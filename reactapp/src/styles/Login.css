@@ -1,6 +1,5 @@
 .login-page {
   font-family: Arial, sans-serif;
-  /* background-color: #E5E1D8;  */
   color: #333333;
   display: flex;
   flex-direction: column;
@@ -19,7 +18,7 @@
 .login-form {
   width: 100%;
   max-width: 400px;
-  background-color: #F2EFEA; /* lighter warm gray for contrast */
+  background-color: #F2EFEA; 
   padding: 35px;
   border-radius: 12px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);

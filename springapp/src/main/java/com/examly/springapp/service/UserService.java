@@ -58,7 +58,6 @@ public class UserService {
     User existing = userRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("User not found: " + id));
 
-    // Safely copy fields if present
     if (updates.containsKey("username")) {
         existing.setUsername(updates.get("username").toString());
     }
@@ -69,14 +68,12 @@ public class UserService {
         try {
             existing.setRole(User.Role.valueOf(updates.get("role").toString().toUpperCase()));
         } catch (IllegalArgumentException e) {
-            // ignore invalid role values instead of throwing 400
         }
     }
     if (updates.containsKey("password")) {
         existing.setPasswordHash(updates.get("password").toString());
     }
 
-    // ❌ Ignore createdDate and lastLogin, backend controls these
     return userRepository.save(existing);
 }
 
@@ -94,7 +91,6 @@ public class UserService {
     if (updatedUser.getManager() != null) existingUser.setManager(updatedUser.getManager());
     if (updatedUser.getIsActive() != null) existingUser.setIsActive(updatedUser.getIsActive());
 
-    // lastLogin should not be overwritten by update requests
     return userRepository.save(existingUser);
 }
 

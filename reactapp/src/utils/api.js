@@ -1,6 +1,5 @@
 const BASE_URL = "https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io";
 
-// ---------- Expenses ----------
 export async function createExpense(expense) {
   const res = await fetch(`${BASE_URL}/api/expenses`, {
     method: "POST",
@@ -39,7 +38,6 @@ export async function updateExpenseStatus(id, updateData) {
   return res.json();
 }
 
-// ---------- Departments ----------
 export const getDepartments = async () => {
   try {
     const res = await fetch(`${BASE_URL}/departments`);
@@ -90,7 +88,6 @@ export const deleteDepartment = async (id) => {
   }
 };
 
-// ---------- Users ----------
 export const getUsers = async () => {
   try {
     const res = await fetch(`${BASE_URL}/users`);
@@ -106,7 +103,6 @@ export const createUser = async (data) => {
   try {
     const payload = { ...data };
 
-    // transform departmentId into department object OR set null
     if (payload.departmentId) {
       payload.department = { id: payload.departmentId };
     } else {
@@ -114,10 +110,8 @@ export const createUser = async (data) => {
     }
     delete payload.departmentId;
 
-    // always send manager (null if not set)
     payload.manager = payload.manager || null;
 
-    // convert password to passwordHash
     if (payload.password) {
       payload.passwordHash = payload.password;
       delete payload.password;
@@ -186,7 +180,6 @@ export const deleteUser = async (id) => {
   }
 };
 
-// ---------- Policies ----------
 export const getPolicies = async () => {
   try {
     const res = await fetch(`${BASE_URL}/policies`);
@@ -237,7 +230,6 @@ export const deletePolicy = async (id) => {
   }
 };
 
-// ---------- Categories ----------
 export const getCategories = async () => {
   try {
     const res = await fetch(`${BASE_URL}/categories`);

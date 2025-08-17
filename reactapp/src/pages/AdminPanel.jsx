@@ -14,12 +14,11 @@ const AdminPanel = () => {
   const [modalSubmit, setModalSubmit] = useState(() => {});
   const [showModal, setShowModal] = useState(false);
 
-  // ---------------- Fetch functions ----------------
   const fetchDepartments = async () => {
   const data = await api.getDepartments();
   setDepartments(data.map(d => ({
     ...d,
-    isActive: d.isActive ? "Yes" : "No"   // only for display
+    isActive: d.isActive ? "Yes" : "No"   
   })));
 };
 
@@ -34,7 +33,6 @@ const AdminPanel = () => {
     fetchCategories();
   }, []);
 
-  // ---------------- Modal helpers ----------------
   const openModal = (fields, submitCallback, initialData = null) => {
     setModalFields(fields);
     setModalSubmit(() => submitCallback);
@@ -43,7 +41,6 @@ const AdminPanel = () => {
   };
   const closeModal = () => setShowModal(false);
 
-  // ---------------- Departments ----------------
   const handleDepartmentAdd = () => openModal(
     [
       { name: "departmentName", label: "Name", type: "text" },
@@ -64,7 +61,6 @@ const AdminPanel = () => {
     { name: "isActive", label: "Active", type: "checkbox" }
   ],
   async (data) => {
-    // 🔥 Ensure boolean, not "Yes"/"No"
     const payload = {
       ...data,
       isActive: !!data.isActive
@@ -76,7 +72,6 @@ const AdminPanel = () => {
   },
   {
     ...row,
-    // 🔥 convert "Yes"/"No" back to boolean for modal form
     isActive: row.isActive === "Yes"
   }
 );
@@ -84,8 +79,6 @@ const AdminPanel = () => {
 
   const handleDepartmentDelete = async (id) => { await api.deleteDepartment(id); fetchDepartments(); };
 
-  // ---------------- Users ----------------
-  // ---------------- Users ----------------
 const roleOptions = [
   { label: "EMPLOYEE", value: "EMPLOYEE" },
   { label: "MANAGER", value: "MANAGER" },
@@ -98,7 +91,7 @@ const handleUserAdd = () => openModal(
   [
     { name: "username", label: "Username", type: "text" },
     { name: "email", label: "Email", type: "email" },
-    { name: "passwordHash", label: "Password", type: "password" },  // user enters 'password'
+    { name: "passwordHash", label: "Password", type: "password" }, 
     { name: "employeeId", label: "Employee ID", type: "text" },
     { name: "role", label: "Role", type: "select", options: roleOptions },
     { name: "departmentId", label: "Department", type: "select", options: departments.map(d => ({ label: d.departmentName, value: d.id })) },
@@ -113,7 +106,7 @@ const handleUserAdd = () => openModal(
     delete payload.password;
     delete payload.departmentId;
 
-    console.log("Creating user with payload:", payload); // ✅ debug
+    console.log("Creating user with payload:", payload); 
     await api.createUser(payload);
     closeModal();
     fetchUsers();
@@ -132,11 +125,9 @@ const handleUserEdit = (row) => openModal(
     { name: "isActive", label: "Active", type: "checkbox" }
   ],
   async (data) => {
-    // If password entered, send it as passwordHash
     if (data.password) data.passwordHash = data.password;
     delete data.password;
 
-    // Only send departmentId
     if (!data.departmentId) delete data.departmentId;
 
     await api.updateUser(row.id, data);
@@ -151,10 +142,6 @@ const handleUserDelete = async (id) => {
   fetchUsers();
 };
 
-
-  // ---------------- Expense Policies ----------------
-  // ---------------- Expense Policies ----------------
-// ---------------- Expense Policies ----------------
 const handlePolicyAdd = () =>
   openModal(
     [
@@ -228,7 +215,6 @@ const handlePolicyEdit = (row) =>
 
   const handlePolicyDelete = async (id) => { await api.deletePolicy(id); fetchPolicies(); };
 
-  // ---------------- Expense Categories ----------------
   const handleCategoryAdd = () => openModal(
     [
       { name: "categoryName", label: "Name", type: "text" },
@@ -260,7 +246,6 @@ const handlePolicyEdit = (row) =>
   <div className="admin-panel">
     <h2>Admin Panel</h2>
 
-    {/* Departments */}
     <section>
       <h3>Departments</h3>
       <button onClick={handleDepartmentAdd}>Add Department</button>
@@ -272,7 +257,6 @@ const handlePolicyEdit = (row) =>
       />
     </section>
 
-    {/* Users */}
     <section>
       <h3>Users</h3>
       <button onClick={handleUserAdd}>Add User</button>
@@ -293,7 +277,6 @@ const handlePolicyEdit = (row) =>
 
     </section>
 
-    {/* Expense Policies */}
     <section>
       <h3>Expense Policies</h3>
       <button onClick={handlePolicyAdd}>Add Policy</button>
@@ -310,7 +293,6 @@ const handlePolicyEdit = (row) =>
       />
     </section>
 
-    {/* Expense Categories */}
     <section>
       <h3>Expense Categories</h3>
       <button onClick={handleCategoryAdd}>Add Category</button>
