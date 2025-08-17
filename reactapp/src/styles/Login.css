@@ -1,6 +1,6 @@
 .login-page {
   font-family: Arial, sans-serif;
-  background-color: #E5E1D8; /* slightly darker warm gray */
+  /* background-color: #E5E1D8;  */
   color: #333333;
   display: flex;
   flex-direction: column;
@@ -12,13 +12,10 @@
 }
 
 .login-page h2 {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #2F3A15; /* slightly darker Deep Olive for contrast */
-  margin-bottom: 30px;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* subtle shadow to make text pop */
+  color: #556B2F;
+  display: inline-block;
+  margin-right: 20px;
 }
-
 .login-form {
   width: 100%;
   max-width: 400px;

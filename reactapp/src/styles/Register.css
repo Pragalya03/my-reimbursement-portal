@@ -1,16 +1,19 @@
-/* src/styles/Register.css */
-
 form {
   max-width: 400px;
   margin: 50px auto;
   padding: 25px;
+  align-items: center;
   background-color: #F2EFEA; /* soft warm background */
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   font-family: Arial, sans-serif;
   color: #333333;
 }
-
+.register-page h2 {
+  color: #556B2F;
+  display: inline-block;
+  margin-right: 20px;
+}
 form input,
 form select {
   width: 100%;

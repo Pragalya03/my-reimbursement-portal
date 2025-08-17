@@ -14,6 +14,11 @@ function Home() {
         <Link to="/register">
           <button>Register</button>
         </Link>
+        <div className="nav-right">
+        <Link to="/admin">
+          <button>Admin</button>
+          </Link>
+        </div>
       </div>
     </div>
   );

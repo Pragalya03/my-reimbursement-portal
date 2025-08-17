@@ -85,7 +85,9 @@ export default function Register() {
   };
 
   return (
+    <div className="register-page">
     <form onSubmit={handleSubmit}>
+      <h2>Register</h2>
       <input
         name="username"
         placeholder="Username"
@@ -137,6 +139,7 @@ export default function Register() {
 
       <button type="submit">Register</button>
     </form>
+    </div>
   );
 }
 

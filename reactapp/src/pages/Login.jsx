@@ -48,8 +48,8 @@ export default function LoginPage() {
 
   return (
     <div className="login-page">
-      <h2>Login</h2>
       <form className="login-form" onSubmit={handleLogin}>
+      <h2>Login</h2>
         <input
           type="text"
           placeholder="Username"

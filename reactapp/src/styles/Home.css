@@ -13,7 +13,10 @@
   color: #556B2F; 
   margin-bottom: 20px;
 }
-
+.nav-right {
+  display: flex;
+  align-items: center;
+}
 .home-page p {
   font-size: 1.2rem;
   margin-bottom: 40px;

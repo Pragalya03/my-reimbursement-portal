@@ -65,9 +65,6 @@ function App() {
     <Router>
       <nav className="full-width-navbar">
         <h1 className="brand-name">ClaimEase</h1>
-        <div className="nav-right">
-        <NavLink to="/admin" className="user-type-btn">Admin</NavLink>
-        </div>
       </nav>
 
       <div className="App">

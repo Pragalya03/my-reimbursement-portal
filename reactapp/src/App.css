@@ -1,7 +1,7 @@
 .App {
   font-family: Arial, sans-serif;
   padding: 20px;
-  background-color: #E0E8E0;
+  /* background-color: #E0E8E0; */
   color: #333333;
   width:100%;
   min-height: 100vh;
@@ -18,15 +18,16 @@
 .brand-name {
   font-size: 1.8rem;
   font-weight: bold;
-  background: linear-gradient(45deg, #FF7F50, #FFD700, #98FB98); /* pretty gradient */
-  -webkit-background-clip: text;
+  background: linear-gradient(90deg, #ffb347, #ffcc33); /* pretty gradient */
+  -webkit-background-clip:text;
   -webkit-text-fill-color: transparent;
+  background-clip:text;
+  color:transparent;
+  letter-spacing:0.5px;
+ 
 }
 
-.nav-right {
-  display: flex;
-  align-items: center;
-}
+
 
 .user-type-btn {
   color: #F2EFEA; /* Warm Gray text */
