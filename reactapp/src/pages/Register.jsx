@@ -53,6 +53,10 @@ export default function Register() {
         const data = await res.json();
         alert("User registered!");
 
+         if (data.employeeId) {
+            localStorage.setItem("loggedInEmployeeId", data.employeeId);
+          }
+        
         const role = data.role?.toUpperCase();
         switch (role) {
           case "EMPLOYEE":
@@ -135,4 +139,5 @@ export default function Register() {
     </form>
   );
 }
+
 
