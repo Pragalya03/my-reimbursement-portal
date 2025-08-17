@@ -152,11 +152,26 @@ function EmployeeDashboard() {
   return (
     <>
       {/* Back Button */}
-      <button className="back-btn" onClick={() => window.history.back()}>
+      <div className="expense-list">
+      <div style ={{display:"flex", justifyContent:"flex-end", marginBottom:"15px"}}>
+      <button 
+      className="back-btn"
+      style={{
+        position: "absolute",
+        padding: "6px 12px",
+        backgroundColor: "#f87171",
+        color: "white",
+        // width:"fit-content",
+        border: "none",
+        borderRadius: "8px",
+        cursor: "pointer",
+    
+      }}
+       onClick={() => window.history.back()}>
         Back
       </button>
+      </div>
 
-      <div className="expense-list">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
           <h2>My Expenses</h2>
           <button onClick={handleAddExpense} className="add-expense-btn">

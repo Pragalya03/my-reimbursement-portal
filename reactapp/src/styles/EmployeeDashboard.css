@@ -1,13 +1,20 @@
 .expense-list {
-  max-width: 1200px;
-  margin: 30px auto;
-  padding: 20px;
-  background-color: #F2EFEA; 
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  font-family: Arial, sans-serif;
-  color: #333333;
-  margin-top: 120px; 
+  position: relative;
+  font-family: 'Inter', sans-serif;
+  color: #1B1D1E;
+  background-color: #FFFFFF;
+  max-width: 1000px;
+  min-width: 700px;
+  margin: 40px auto;
+  padding: 30px 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(47, 79, 79, 0.3);
+  box-sizing: border-box;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  overflow-x: auto;
+  font-size: 0.9rem;
 }
 
 .expense-list h2 {
@@ -58,9 +65,8 @@
   background-color: #f1f1f1;
 }
 
-/* Back button top-right */
-.back-btn {
-  position: fixed;
+/* .back-btn {
+  position: absolute;
   top: 25px;
   right: 25px;
   padding: 10px 18px;
@@ -70,15 +76,10 @@
   font-size: 1rem;
   border-radius: 14px;
   border: 2px solid #2F4F4F;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  box-shadow: 0 4px 12px rgba(47, 79, 79, 0.3);
-  z-index: 1000;
+  cursor: pointer; 
 }
 
-.back-btn:hover {
+ .back-btn:hover {
   background: #2F4F4F;
   color: white;
   box-shadow: 0 6px 16px rgba(47, 79, 79, 0.6);
@@ -89,4 +90,4 @@
   font-weight: 700;
   font-size: 1.2rem;
   line-height: 0;
-}
+}  */ 
