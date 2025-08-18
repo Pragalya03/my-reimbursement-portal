@@ -140,14 +140,15 @@ function FinanceDashboard() {
       const approvalLevelMap = { processing: 1, paid: 2, verifying: 3 };
 
       const approvalData = {
-        expense: { id: selectedExpense.id },
-        approver: { employeeId: Number(approverEmployeeId) },
-        approvalLevel: approvalLevelMap[approvalLevel],
-        approvalStatus: approvalStatus.toUpperCase(),
-        approvalDate: new Date().toISOString(),
-        comments,
-        isFinalApproval: finalApproval
-      };
+  expense: { id: selectedExpense.id },
+  approver: { id: Number(approverEmployeeId) },   // ✅ change here
+  approvalLevel: approvalLevelMap[approvalLevel],
+  approvalStatus: approvalStatus.toUpperCase(),
+  approvalDate: new Date().toISOString(),
+  comments,
+  isFinalApproval: finalApproval
+};
+
 
       const res = await fetch(
         "https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io/approvals",
@@ -292,3 +293,4 @@ function FinanceDashboard() {
 }
 
 export default FinanceDashboard;
+
