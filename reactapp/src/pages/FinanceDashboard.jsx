@@ -126,7 +126,6 @@ function FinanceDashboard() {
   const handleRowClick = (expense) => {
     setSelectedExpense(expense);
     setIsModalOpen(true);
-    // reset form
     setApprovalLevel("processing");
     setFinalApproval(false);
     setApprovalStatus("pending");
@@ -135,19 +134,19 @@ function FinanceDashboard() {
 
   const handleApprovalSubmit = async () => {
     try {
-      const approverId = localStorage.getItem("loggedInEmployeeId");
+      const approverEmployeeId = localStorage.getItem("loggedInEmployeeId"); // finance manager's employeeId
 
-      // Map approvalLevel string to integer
+      // Map approval level strings to integers
       const approvalLevelMap = { processing: 1, paid: 2, verifying: 3 };
 
       const approvalData = {
         expense: { id: selectedExpense.id },
-        approver: { employeeId: Number(approverId) },
+        approver: { employeeId: Number(approverEmployeeId) },
         approvalLevel: approvalLevelMap[approvalLevel],
-        isFinalApproval: finalApproval,
-        approvalStatus: approvalStatus.toUpperCase(), // must match enum
+        approvalStatus: approvalStatus.toUpperCase(),
+        approvalDate: new Date().toISOString(),
         comments,
-        approvalDate: new Date().toISOString()
+        isFinalApproval: finalApproval
       };
 
       const res = await fetch(
@@ -162,7 +161,7 @@ function FinanceDashboard() {
       if (res.ok) {
         alert("Approval submitted!");
         setIsModalOpen(false);
-        fetchExpenses();
+        fetchExpenses(); // refresh table
       } else {
         const errText = await res.text();
         alert("Failed to submit approval: " + errText);
@@ -209,7 +208,11 @@ function FinanceDashboard() {
           </thead>
           <tbody>
             {expenses.map((expense) => (
-              <tr key={expense.id} onClick={() => handleRowClick(expense)} style={{ cursor: "pointer" }}>
+              <tr
+                key={expense.id}
+                onClick={() => handleRowClick(expense)}
+                style={{ cursor: "pointer" }}
+              >
                 <td>{expense.employeeId}</td>
                 <td>${Number(expense.amount).toFixed(2)}</td>
                 <td>{expense.description}</td>
@@ -222,6 +225,7 @@ function FinanceDashboard() {
         </table>
       )}
 
+      {/* Modal */}
       {isModalOpen && (
         <div
           style={{
@@ -234,12 +238,14 @@ function FinanceDashboard() {
             zIndex: 9999
           }}
         >
-          <div style={{
-            backgroundColor: "white",
-            padding: "20px",
-            borderRadius: "10px",
-            width: "400px"
-          }}>
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "10px",
+              width: "400px"
+            }}
+          >
             <h3>Approve Expense #{selectedExpense.id}</h3>
 
             <label>Approval Level:</label>
@@ -267,7 +273,12 @@ function FinanceDashboard() {
             </select>
 
             <label>Comments:</label>
-            <textarea value={comments} onChange={e => setComments(e.target.value)} rows={3} style={{width: "100%"}} />
+            <textarea
+              value={comments}
+              onChange={e => setComments(e.target.value)}
+              rows={3}
+              style={{ width: "100%" }}
+            />
 
             <div style={{ display: "flex", justifyContent: "space-between", marginTop: "15px" }}>
               <button onClick={() => setIsModalOpen(false)}>Cancel</button>
