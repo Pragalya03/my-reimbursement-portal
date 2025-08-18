@@ -117,3 +117,16 @@ public class Approval {
         this.isFinalApproval = isFinalApproval;
     }
 }
+@Override
+public String toString() {
+    return "Approval{" +
+            "id=" + id +
+            ", expense=" + (expense != null ? expense.getId() : null) +
+            ", approver=" + (approver != null ? approver.getId() : null) +
+            ", approvalLevel=" + approvalLevel +
+            ", approvalStatus=" + approvalStatus +
+            ", approvalDate=" + approvalDate +
+            ", comments='" + comments + '\'' +
+            ", isFinalApproval=" + isFinalApproval +
+            '}';
+}
