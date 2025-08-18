@@ -123,7 +123,6 @@ function FinanceDashboard() {
     });
   };
 
-  // Open modal on row click
   const handleRowClick = (expense) => {
     setSelectedExpense(expense);
     setIsModalOpen(true);
@@ -134,16 +133,19 @@ function FinanceDashboard() {
     setComments("");
   };
 
-  // Submit approval
   const handleApprovalSubmit = async () => {
     try {
-      const approverId = localStorage.getItem("loggedInEmployeeId"); // finance manager logged in
+      const approverId = localStorage.getItem("loggedInEmployeeId");
+
+      // Map approvalLevel string to integer
+      const approvalLevelMap = { processing: 1, paid: 2, verifying: 3 };
+
       const approvalData = {
-        expenseId: selectedExpense.id,
-        approverId: Number(approverId),
-        approvalLevel,
+        expense: { id: selectedExpense.id },
+        approver: { employeeId: Number(approverId) },
+        approvalLevel: approvalLevelMap[approvalLevel],
         isFinalApproval: finalApproval,
-        approvalStatus,
+        approvalStatus: approvalStatus.toUpperCase(), // must match enum
         comments,
         approvalDate: new Date().toISOString()
       };
@@ -160,7 +162,7 @@ function FinanceDashboard() {
       if (res.ok) {
         alert("Approval submitted!");
         setIsModalOpen(false);
-        fetchExpenses(); // refresh table
+        fetchExpenses();
       } else {
         const errText = await res.text();
         alert("Failed to submit approval: " + errText);
@@ -220,7 +222,6 @@ function FinanceDashboard() {
         </table>
       )}
 
-      {/* Modal */}
       {isModalOpen && (
         <div
           style={{
