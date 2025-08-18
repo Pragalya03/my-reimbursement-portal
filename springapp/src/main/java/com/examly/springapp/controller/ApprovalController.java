@@ -13,7 +13,12 @@ public class ApprovalController {
 
     @Autowired
     private ApprovalService approvalService;
+    @Autowired
+    private ExpenseRepository expenseRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+    
     @GetMapping
     public List<Approval> getAllApprovals() {
         return approvalService.getAllApprovals();
@@ -25,8 +30,21 @@ public class ApprovalController {
     }
 
     @PostMapping
-    public Approval createApproval(@RequestBody Approval approval) {
-        System.out.println(">>> Received Approval = " + approval);
+    public Approval createApproval(@RequestBody ApprovalRequest request) {
+        Expense expense = expenseRepository.findById(request.getExpenseId())
+                                           .orElseThrow(() -> new RuntimeException("Expense not found"));
+        User approver = userRepository.findById(request.getApproverId())
+                                      .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Approval approval = new Approval();
+        approval.setExpense(expense);
+        approval.setApprover(approver);
+        approval.setApprovalLevel(request.getApprovalLevel());
+        approval.setApprovalStatus(Approval.ApprovalStatus.valueOf(request.getApprovalStatus()));
+        approval.setApprovalDate(LocalDateTime.parse(request.getApprovalDate()));
+        approval.setComments(request.getComments());
+        approval.setIsFinalApproval(request.getIsFinalApproval());
+
         return approvalService.createApproval(approval);
     }
 
