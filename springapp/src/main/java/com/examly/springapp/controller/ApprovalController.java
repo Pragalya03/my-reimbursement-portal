@@ -26,9 +26,10 @@ public class ApprovalController {
 
     @PostMapping
     public Approval createApproval(@RequestBody Approval approval) {
-        System.out.println("Received Approval: "+approval);
+        System.out.println(">>> Received Approval = " + approval);
         return approvalService.createApproval(approval);
     }
+
 
     @PutMapping("/{id}")
     public Approval updateApproval(@PathVariable Long id, @RequestBody Approval approval) {
