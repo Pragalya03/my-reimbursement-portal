@@ -1,10 +1,16 @@
 package com.examly.springapp.controller;
 
+import com.examly.springapp.dto.ApprovalRequest;
 import com.examly.springapp.model.Approval;
+import com.examly.springapp.model.Expense;
+import com.examly.springapp.model.User;
+import com.examly.springapp.repository.ExpenseRepository;
+import com.examly.springapp.repository.UserRepository;
 import com.examly.springapp.service.ApprovalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController

@@ -104,7 +104,6 @@ public class Approval {
         this.isFinalApproval = isFinalApproval;
     }
     
-    // Getters and setters
     public Approval(Long id, Expense expense, User approver, int approvalLevel, ApprovalStatus approvalStatus,
             LocalDateTime approvalDate, String comments, Boolean isFinalApproval) {
         this.id = id;
@@ -116,17 +115,6 @@ public class Approval {
         this.comments = comments;
         this.isFinalApproval = isFinalApproval;
     }
+    public Approval() {}
 }
-@Override
-public String toString() {
-    return "Approval{" +
-            "id=" + id +
-            ", expense=" + (expense != null ? expense.getId() : null) +
-            ", approver=" + (approver != null ? approver.getId() : null) +
-            ", approvalLevel=" + approvalLevel +
-            ", approvalStatus=" + approvalStatus +
-            ", approvalDate=" + approvalDate +
-            ", comments='" + comments + '\'' +
-            ", isFinalApproval=" + isFinalApproval +
-            '}';
-}
+
