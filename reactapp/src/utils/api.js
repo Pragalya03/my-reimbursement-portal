@@ -24,6 +24,11 @@ export async function getExpenses() {
   }
   return res.json();
 }
+export const getExpenseById = async (id) => {
+  const res = await fetch(`/api/expenses/${id}`);
+  if (!res.ok) throw new Error("Failed to fetch expense");
+  return res.json();
+};
 
 export async function updateExpenseStatus(id, updateData) {
   const res = await fetch(`${BASE_URL}/api/expenses/${id}/status`, {
@@ -289,3 +294,14 @@ export const createApproval=async(approvalData)=>{
   if(!response.ok) throw new Error("Failed to create approval");
   return response.json();
 }
+
+export const createPayment = async (payment) => {
+  const res = await fetch("/api/payments", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payment),
+  });
+  if (!res.ok) throw new Error("Failed to create payment");
+  return res.json();
+};
+
