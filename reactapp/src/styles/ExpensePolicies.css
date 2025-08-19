@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+.expense-policies {
+  font-family: 'Inter', sans-serif;
+  color: #1B1D1E;
+  background-color: #FFFFFF;
+  max-width: 1000px;
+  min-width: 700px;
+  margin: 40px auto;
+  padding: 30px 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(47, 79, 79, 0.3);
+  box-sizing: border-box;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  overflow-x: auto;
+  font-size: 0.9rem;
+}
+
+.expense-policies h2 {
+  font-weight: 700;
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #2F4F4F;
+  letter-spacing: 1px;
+}
+
+.expense-policies table {
+  width: 100%;
+  table-layout: fixed;
+  word-wrap: break-word;
+  border-collapse: separate;
+  border-spacing: 0 18px;
+}
+
+.expense-policies thead tr {
+  background: linear-gradient(90deg, #FFFDF8, #F1F3F2);
+  box-shadow: 0 4px 8px rgba(47, 79, 79, 0.15);
+}
+
+.expense-policies th,
+.expense-policies td {
+  white-space: normal;
+  overflow-wrap: break-word;
+  padding: 10px 8px;
+  text-align: center;
+}
+
+.expense-policies th {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-bottom: 3px solid #2F4F4F;
+  box-shadow: inset 0 -3px 5px rgba(47, 79, 79, 0.2);
+}
+
+.expense-policies tbody tr {
+  background: #FFFDF8;
+  border-radius: 12px;
+  transition: background-color 0.3s ease;
+  cursor: default;
+  height: 60px;
+}
+
+.expense-policies tbody tr:hover {
+  background-color: #F1F3F2;
+}
+
+.expense-policies tbody td {
+  font-weight: 500;
+  color: #5E6667;
+  vertical-align: middle;
+}
+
+.expense-policies button.back-btn {
+  padding: 6px 12px;
+  background-color: #f87171;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  align-self: flex-start;
+  font-weight: 600;
+}
+
+.expense-policies button.back-btn:hover {
+  background: #9B3A3A;
+}
