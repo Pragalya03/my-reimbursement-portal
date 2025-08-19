@@ -33,25 +33,24 @@ import "../styles/Home.css";
 function Home() {
   return (
     <div className="home-page">
-      {/* Floating money icons */}
-      <div className="floating-icons">
-        <span className="icon money">$</span>
-        <span className="icon money">$</span>
-        <span className="icon money">$</span>
-        <span className="icon wallet">💼</span>
-        <span className="icon wallet">💼</span>
+      {/* Animated floating coins */}
+      <div className="floating-coins">
+        {Array.from({ length: 10 }).map((_, i) => (
+          <span key={i} className="coin">💰</span>
+        ))}
       </div>
 
-      <h1 className="hero-heading">Welcome to Expense Management System</h1>
-      <p className="hero-text">Track, submit, and approve expenses with ease.</p>
-      
-      <div className="home-buttons">
-        <Link to="/login">
-          <button>Login</button>
-        </Link>
-        <Link to="/register">
-          <button>Register</button>
-        </Link>
+      <div className="hero-card">
+        <h1>Welcome to Expense Management System</h1>
+        <p>Track, submit, and approve expenses with ease.</p>
+        <div className="home-buttons">
+          <Link to="/login">
+            <button>Login</button>
+          </Link>
+          <Link to="/register">
+            <button>Register</button>
+          </Link>
+        </div>
       </div>
     </div>
   );
