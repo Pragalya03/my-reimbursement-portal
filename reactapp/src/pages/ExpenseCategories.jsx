@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCategories } from "../utils/api.js";
+import "../styles/ExpenseCategories.css";
 
 function ExpenseCategories() {
   const navigate = useNavigate();
@@ -25,18 +26,9 @@ function ExpenseCategories() {
   }, []);
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="expense-categories">
       <button
-        onClick={() => navigate("/finance-dashboard")}
-        style={{
-          padding: "6px 12px",
-          backgroundColor: "#f87171",
-          color: "white",
-          border: "none",
-          borderRadius: "8px",
-          cursor: "pointer",
-          marginBottom: "15px",
-        }}
+        className="back-btn" onClick={() => navigate("/finance-dashboard")}
       >
         Back
       </button>
