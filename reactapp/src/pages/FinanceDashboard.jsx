@@ -86,19 +86,18 @@
 
 // src/components/FinanceDashboard.jsx
 import React, { useEffect, useState } from "react";
-import { getExpenses } from "../utils/api.js";
+import { getExpenses, createApproval } from "../utils/api.js"; // make sure this exists
 import "../styles/ExpenseList.css";
 
 function FinanceDashboard() {
   const [expenses, setExpenses] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState(null);
-
-  // Approval form state
-  const [approvalLevel, setApprovalLevel] = useState("processing");
-  const [finalApproval, setFinalApproval] = useState(false);
-  const [approvalStatus, setApprovalStatus] = useState("pending");
-  const [comments, setComments] = useState("");
+  const [formData, setFormData] = useState({
+    approvalStatus: "PENDING",
+    comments: "",
+    isFinalApproval: false,
+  });
 
   useEffect(() => {
     fetchExpenses();
@@ -107,7 +106,7 @@ function FinanceDashboard() {
   const fetchExpenses = async () => {
     try {
       const data = await getExpenses();
-      const approvedExpenses = data.filter((exp) => exp.status === "APPROVED");
+      const approvedExpenses = data.filter(exp => exp.status === "APPROVED");
       setExpenses(approvedExpenses);
     } catch (error) {
       console.error("Failed to fetch expenses:", error);
@@ -126,58 +125,48 @@ function FinanceDashboard() {
 
   const handleRowClick = (expense) => {
     setSelectedExpense(expense);
-    setIsModalOpen(true);
-    setApprovalLevel("processing");
-    setFinalApproval(false);
-    setApprovalStatus("pending");
-    setComments("");
+    setFormData({
+      approvalStatus: "PENDING",
+      comments: "",
+      isFinalApproval: false,
+    });
+    setShowModal(true);
   };
 
-  const handleApprovalSubmit = async () => {
-    if (!selectedExpense) return;
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const payload = {
+      expenseId: selectedExpense.id,
+      approvalStatus: formData.approvalStatus,
+      approvalDate: new Date().toISOString(), // auto-generate
+      comments: formData.comments,
+      isFinalApproval: formData.isFinalApproval
+    };
 
     try {
-      const approverEmployeeId = localStorage.getItem("loggedInEmployeeId");
-
-      const approvalLevelMap = { processing: 1, paid: 2, verifying: 3 };
-
-      const approvalData = {
-        expense: { id: selectedExpense.id },
-        approver: { id: Number(approverEmployeeId) },
-        approvalLevel: approvalLevelMap[approvalLevel],
-        approvalStatus: approvalStatus.toUpperCase(),
-        approvalDate: new Date().toISOString(),
-        comments,
-        isFinalApproval: finalApproval,
-      };
-
-      const res = await fetch(
-        "https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io/approvals",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(approvalData),
-        }
-      );
-
-      if (res.ok) {
-        alert("Approval submitted!");
-        setIsModalOpen(false);
-        fetchExpenses(); // refresh list
-      } else {
-        const errText = await res.text();
-        alert("Failed to submit approval: " + errText);
-      }
+      await createApproval(payload); // POST to Approvals table
+      alert("Approval submitted successfully!");
+      setShowModal(false);
+      setSelectedExpense(null);
+      fetchExpenses();
     } catch (err) {
-      console.error("Approval submission error:", err);
-      alert("Failed to connect to server.");
+      console.error("Failed to submit approval:", err);
+      alert("Failed to submit approval");
     }
   };
 
   return (
     <div className="expense-list">
-      {/* Back button */}
-      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "15px" }}>
+      <div style={{ display: "flex", justifyContent:"flex-end", marginBottom:"15px" }}>
         <button
           onClick={() => window.history.back()}
           style={{
@@ -195,7 +184,6 @@ function FinanceDashboard() {
 
       <h2>Approved Expenses (Finance Dashboard)</h2>
 
-      {/* Table of approved expenses */}
       {expenses.length === 0 ? (
         <p>No approved expenses found</p>
       ) : (
@@ -212,9 +200,9 @@ function FinanceDashboard() {
           </thead>
           <tbody>
             {expenses.map((expense) => (
-              <tr
-                key={expense.id}
-                onClick={() => handleRowClick(expense)}
+              <tr 
+                key={expense.id} 
+                onClick={() => handleRowClick(expense)} 
                 style={{ cursor: "pointer" }}
               >
                 <td>{expense.employeeId}</td>
@@ -229,70 +217,51 @@ function FinanceDashboard() {
         </table>
       )}
 
-      {/* Approval Modal */}
-      {isModalOpen && selectedExpense && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0, left: 0, right: 0, bottom: 0,
-            backgroundColor: "rgba(0,0,0,0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 9999,
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "10px",
-              width: "400px",
-            }}
-          >
-            <h3>Approve Expense #{selectedExpense.id}</h3>
+      {/* Modal */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Approval for Expense #{selectedExpense.id}</h3>
+            <form onSubmit={handleSubmit}>
+              <label>
+                Approval Status:
+                <select
+                  name="approvalStatus"
+                  value={formData.approvalStatus}
+                  onChange={handleChange}
+                >
+                  <option value="PENDING">Pending</option>
+                  <option value="APPROVED">Approved</option>
+                  <option value="REJECTED">Rejected</option>
+                </select>
+              </label>
 
-            <label>Approval Level:</label>
-            <select value={approvalLevel} onChange={(e) => setApprovalLevel(e.target.value)}>
-              <option value="processing">Processing</option>
-              <option value="paid">Paid</option>
-              <option value="verifying">Verifying</option>
-            </select>
+              <label>
+                Comments:
+                <textarea
+                  name="comments"
+                  value={formData.comments}
+                  onChange={handleChange}
+                />
+              </label>
 
-            <div>
-              <input
-                type="checkbox"
-                checked={finalApproval}
-                onChange={(e) => setFinalApproval(e.target.checked)}
-                id="finalApproval"
-              />
-              <label htmlFor="finalApproval">Final Approval</label>
-            </div>
+              <label>
+                Final Approval:
+                <input
+                  type="checkbox"
+                  name="isFinalApproval"
+                  checked={formData.isFinalApproval}
+                  onChange={handleChange}
+                />
+              </label>
 
-            <label>Approval Status:</label>
-            <select value={approvalStatus} onChange={(e) => setApprovalStatus(e.target.value)}>
-              <option value="approved">Approved</option>
-              <option value="rejected">Rejected</option>
-              <option value="pending">Pending</option>
-            </select>
-
-            <label>Comments:</label>
-            <textarea
-              value={comments}
-              onChange={(e) => setComments(e.target.value)}
-              rows={3}
-              style={{ width: "100%" }}
-            />
-
-            <div style={{ display: "flex", justifyContent: "space-between", marginTop: "15px" }}>
-              <button onClick={() => setIsModalOpen(false)}>Cancel</button>
-              <button
-                onClick={handleApprovalSubmit}
-                style={{ backgroundColor: "#34d399", color: "white" }}
-              >
-                Submit
-              </button>
-            </div>
+              <div style={{ marginTop: "15px" }}>
+                <button type="submit">Submit</button>
+                <button type="button" onClick={() => setShowModal(false)} style={{ marginLeft: "10px" }}>
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
@@ -301,4 +270,5 @@ function FinanceDashboard() {
 }
 
 export default FinanceDashboard;
+
 
