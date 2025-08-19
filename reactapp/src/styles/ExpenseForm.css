@@ -1,13 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 body {
-  background: linear-gradient(135deg, #d9c8a9 0%, #e6d5b8 100%);
+  /* background: linear-gradient(135deg, #2F4F4F 0%, #5C7A4B 100%); */
+  background: rgb(200, 199, 168) url("https://www.transparenttextures.com/patterns/paper-fibers.png") ;
   font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
-}
-
-
+} 
 
 .page-container {
   display: flex;

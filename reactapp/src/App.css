@@ -25,7 +25,7 @@
 .brand-name {
   font-size: 1.8rem;
   font-weight: bold;
-  background: linear-gradient(90deg, #ffb347, #ffcc33); 
+  background: linear-gradient(90deg, rgb(31, 88, 58), #784716); 
   -webkit-background-clip:text;
   -webkit-text-fill-color: transparent;
   background-clip:text;
