@@ -104,7 +104,6 @@ public class Approval {
         this.isFinalApproval = isFinalApproval;
     }
     
-    // Getters and setters
     public Approval(Long id, Expense expense, User approver, int approvalLevel, ApprovalStatus approvalStatus,
             LocalDateTime approvalDate, String comments, Boolean isFinalApproval) {
         this.id = id;

@@ -1,19 +1,14 @@
+*{
+ box-sizing: border-box;
+}
 .App {
   font-family: Arial, sans-serif;
   padding: 20px;
   color: #333333;
   width:100%;
-  min-height: 100vh;
+  overflow-x: hidden;
+  /* min-height: 100vh; */
 }
-
-/* .full-width-navbar {
-  display: flex;
-  justify-content: space-between; 
-  align-items: center;
-  background-color: #556B2F; 
-  padding: 10px 20px;
-} */
-
 .full-width-navbar {
   background: url("https://www.transparenttextures.com/patterns/hexellence.png");
   display: flex;
@@ -21,7 +16,6 @@
   align-items: center;
   padding: 10px 20px;
 }
-
 .brand-name {
   font-size: 1.8rem;
   font-weight: bold;
@@ -32,7 +26,6 @@
   color:transparent;
   letter-spacing:0.5px;
 }
-
 .user-type-btn {
   color: #F2EFEA; 
   text-decoration: none;

@@ -1,4 +1,3 @@
-// src/pages/LoginPage.jsx
 import React, { useState } from "react";
 
 export default function LoginPage() {
@@ -10,20 +9,17 @@ export default function LoginPage() {
     e.preventDefault();
 
     try {
-      // Fetch all users from API
       const res = await fetch(
         "https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io/users"
       );
       const users = await res.json();
 
-      // Find user with matching username, password, and role
       const user = users.find(
         (u) => u.username === username && u.passwordHash === password && u.role === role
       );
 
       if (user) {
         if (role === "EMPLOYEE") {
-          // Save employeeId in localStorage for filtering expenses
           localStorage.setItem("loggedInEmployeeId", user.employeeId);
           window.location.href = "/employee-dashboard";
         } else if (role === "MANAGER") {
