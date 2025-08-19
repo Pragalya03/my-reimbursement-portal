@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 body {
-  background: linear-gradient(135deg, #88b04b 0%, #a8c66c 100%);
+  background: linear-gradient(135deg, #d9c8a9 0%, #e6d5b8 100%);
   font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
 }
+
 
 
 .page-container {
