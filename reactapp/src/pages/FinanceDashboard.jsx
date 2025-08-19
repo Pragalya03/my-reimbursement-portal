@@ -188,8 +188,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getExpenses, createApproval } from "../utils/api.js";
 import "../styles/ExpenseList.css";
-import "./ExpenseCategories.jsx";
-import "./ExpensePolicies.jsx";
 
 function FinanceDashboard() {
   const [expenses, setExpenses] = useState([]);
@@ -258,10 +256,15 @@ function FinanceDashboard() {
 
     try {
       await createApproval(payload);
-      alert("Approval submitted successfully!");
-      setShowModal(false);
-      setSelectedExpense(null);
-      fetchExpenses();
+
+      if (formData.approvalStatus === "PENDING") {
+        navigate(`/payments/${selectedExpense.id}`);
+      } else {
+        alert("Approval submitted successfully!");
+        setShowModal(false);
+        setSelectedExpense(null);
+        fetchExpenses();
+      }
     } catch (err) {
       console.error("Failed to submit approval:", err);
       alert("Failed to submit approval");
@@ -270,7 +273,7 @@ function FinanceDashboard() {
 
   return (
     <div className="expense-list">
-      {/* Top bar with Back + Navigation buttons */}
+      {/* Top bar */}
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "15px" }}>
         <button
           onClick={() => navigate("/")}
@@ -409,5 +412,6 @@ function FinanceDashboard() {
 }
 
 export default FinanceDashboard;
+
 
 
