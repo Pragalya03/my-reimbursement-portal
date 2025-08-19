@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getExpenseById, createPayment } from "../utils/api.js";
+import { getExpenseById, createPayment, getPayments } from "../utils/api.js";
 
 function PaymentsPage() {
   const { expenseId } = useParams();
   const navigate = useNavigate();
   const [expense, setExpense] = useState(null);
+  const [payments, setPayments] = useState([]);
+  const [showModal, setShowModal] = useState(!!expenseId);
   const [formData, setFormData] = useState({
     paymentAmount: "",
     paymentDate: new Date().toISOString(),
@@ -14,20 +16,36 @@ function PaymentsPage() {
   });
 
   useEffect(() => {
-    const fetchExpense = async () => {
-      try {
-        const data = await getExpenseById(expenseId);
-        setExpense(data);
-        setFormData((prev) => ({
-          ...prev,
-          paymentAmount: data.amount,
-        }));
-      } catch (err) {
-        console.error("Failed to fetch expense:", err);
-      }
-    };
-    fetchExpense();
+    fetchPayments();
+  }, []);
+
+  useEffect(() => {
+    if (expenseId) {
+      fetchExpense(expenseId);
+    }
   }, [expenseId]);
+
+  const fetchExpense = async (id) => {
+    try {
+      const data = await getExpenseById(id);
+      setExpense(data);
+      setFormData((prev) => ({
+        ...prev,
+        paymentAmount: data.amount,
+      }));
+    } catch (err) {
+      console.error("Failed to fetch expense:", err);
+    }
+  };
+
+  const fetchPayments = async () => {
+    try {
+      const data = await getPayments();
+      setPayments(data);
+    } catch (err) {
+      console.error("Failed to fetch payments:", err);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -36,9 +54,8 @@ function PaymentsPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const payload = {
-      expenseId: expenseId,
+      expenseId,
       paymentAmount: formData.paymentAmount,
       paymentDate: formData.paymentDate,
       paymentMethod: formData.paymentMethod,
@@ -47,59 +64,112 @@ function PaymentsPage() {
 
     try {
       await createPayment(payload);
-      alert("Payment has been made successfully!");
-      navigate("/payments-dashboard");
+      alert("Your payment has been made successfully");
+      setShowModal(false);
+      fetchPayments();
     } catch (err) {
       console.error("Payment failed:", err);
       alert("Failed to process payment");
     }
   };
 
-  if (!expense) return <p>Loading expense...</p>;
-
   return (
     <div style={{ padding: "20px" }}>
-      <h2>Make Payment for Expense #{expenseId}</h2>
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", maxWidth: "400px" }}>
-        
-        <label>
-          Expense ID:
-          <input type="text" value={expenseId} readOnly />
-        </label>
+      <h2>Payments Dashboard</h2>
+      <button
+        onClick={() => navigate("/finance-dashboard")}
+        style={{
+          marginBottom: "15px",
+          padding: "6px 12px",
+          backgroundColor: "#f87171",
+          color: "white",
+          border: "none",
+          borderRadius: "8px",
+          cursor: "pointer",
+        }}
+      >
+        Back
+      </button>
 
-        <label>
-          Payment Amount:
-          <input type="number" value={formData.paymentAmount} readOnly />
-        </label>
+      {/* Modal */}
+      {showModal && expense && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Make Payment for Expense #{expenseId}</h3>
+            <form onSubmit={handleSubmit}>
+              <label>
+                Expense ID:
+                <input type="text" value={expenseId} disabled />
+              </label>
 
-        <label>
-          Payment Date:
-          <input type="text" value={formData.paymentDate} readOnly />
-        </label>
+              <label>
+                Payment Amount:
+                <input type="number" value={formData.paymentAmount} readOnly />
+              </label>
 
-        <label>
-          Payment Method:
-          <select name="paymentMethod" value={formData.paymentMethod} onChange={handleChange}>
-            <option value="direct_deposit">Direct Deposit</option>
-            <option value="cheque">Cheque</option>
-            <option value="payroll">Payroll</option>
-          </select>
-        </label>
+              <label>
+                Payment Date:
+                <input type="text" value={formData.paymentDate} readOnly />
+              </label>
 
-        <label>
-          Payment Status:
-          <select name="paymentStatus" value={formData.paymentStatus} onChange={handleChange}>
-            <option value="pending">Pending</option>
-            <option value="processed">Processed</option>
-            <option value="completed">Completed</option>
-            <option value="failed">Failed</option>
-          </select>
-        </label>
+              <label>
+                Method:
+                <select
+                  name="paymentMethod"
+                  value={formData.paymentMethod}
+                  onChange={handleChange}
+                >
+                  <option value="direct_deposit">Direct Deposit</option>
+                  <option value="cheque">Cheque</option>
+                  <option value="payroll">Payroll</option>
+                </select>
+              </label>
 
-        <button type="submit" style={{ marginTop: "15px", padding: "8px 12px", backgroundColor: "#34d399", color: "white", border: "none", borderRadius: "8px", cursor: "pointer" }}>
-          Submit Payment
-        </button>
-      </form>
+              <label>
+                Status:
+                <select
+                  name="paymentStatus"
+                  value={formData.paymentStatus}
+                  onChange={handleChange}
+                >
+                  <option value="pending">Pending</option>
+                  <option value="processed">Processed</option>
+                  <option value="completed">Completed</option>
+                  <option value="failed">Failed</option>
+                </select>
+              </label>
+
+              <button type="submit">Submit Payment</button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Payments Table */}
+      <table border="1" style={{ marginTop: "20px", width: "100%" }}>
+        <thead>
+          <tr>
+            <th>Payment ID</th>
+            <th>Expense ID</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Method</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {payments.map((p) => (
+            <tr key={p.id}>
+              <td>{p.id}</td>
+              <td>{p.expenseId}</td>
+              <td>{p.paymentAmount}</td>
+              <td>{new Date(p.paymentDate).toLocaleString()}</td>
+              <td>{p.paymentMethod}</td>
+              <td>{p.paymentStatus}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
