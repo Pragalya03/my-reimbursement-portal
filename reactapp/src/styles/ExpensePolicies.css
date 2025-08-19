@@ -84,6 +84,8 @@
   margin-bottom: 15px;
   align-self: flex-start;
   font-weight: 600;
+  position : relative;
+  z-index: 5;
 }
 
 .expense-policies button.back-btn:hover {

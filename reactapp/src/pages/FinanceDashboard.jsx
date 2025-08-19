@@ -273,7 +273,7 @@ function FinanceDashboard() {
       {/* Top bar with Back + Navigation buttons */}
       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "15px" }}>
         <button
-          onClick={() => window.history.back()}
+          onClick={() => navigate("/")}
           style={{
             padding: "6px 12px",
             backgroundColor: "#f87171",
