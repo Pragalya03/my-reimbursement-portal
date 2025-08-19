@@ -42,7 +42,7 @@ function ExpenseCategories() {
       ) : categories.length === 0 ? (
         <p>No categories found.</p>
       ) : (
-        <table border="1" width="100%" style={{ borderCollapse: "collapse" }}>
+        <table>
           <thead>
             <tr>
               <th>ID</th>
