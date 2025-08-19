@@ -63,36 +63,75 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: relative;
   overflow: hidden;
+  position: relative;
 }
 
-.home-page h1 {
+/* Floating shapes */
+.floating-shapes span {
+  position: absolute;
+  opacity: 0.15;
+  animation: float-shape linear infinite;
+}
+
+.circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #D2691E;
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 40px solid transparent;
+  border-right: 40px solid transparent;
+  border-bottom: 70px solid #556B2F;
+}
+
+/* Random positions for shapes */
+.floating-shapes span:nth-child(1) { top: 20%; left: 10%; animation-duration: 10s; }
+.floating-shapes span:nth-child(2) { top: 40%; left: 80%; animation-duration: 14s; }
+.floating-shapes span:nth-child(3) { top: 70%; left: 30%; animation-duration: 12s; }
+.floating-shapes span:nth-child(4) { top: 10%; left: 50%; animation-duration: 18s; }
+.floating-shapes span:nth-child(5) { top: 60%; left: 60%; animation-duration: 16s; }
+
+/* Floating animation */
+@keyframes float-shape {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(180deg); }
+  100% { transform: translateY(0) rotate(360deg); }
+}
+
+/* Hero heading */
+.hero-heading {
   font-size: 3rem;
   font-weight: 700;
   color: #556B2F;
   margin-bottom: 20px;
   letter-spacing: 1px;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-  transition: transform 0.3s;
+  animation: fade-slide 1s ease forwards;
+  opacity: 0;
 }
 
-.home-page h1:hover {
-  transform: scale(1.05);
-}
-
-.home-page p {
+/* Hero text */
+.hero-text {
   font-size: 1.2rem;
-  margin-bottom: 40px;
   color: #556B2F;
+  margin-bottom: 40px;
   max-width: 500px;
+  animation: fade-slide 1.2s ease forwards;
+  opacity: 0;
 }
 
+/* Buttons */
 .home-buttons {
   display: flex;
   justify-content: center;
   gap: 20px;
   flex-wrap: wrap;
+  animation: fade-slide 1.4s ease forwards;
+  opacity: 0;
 }
 
 .home-buttons button {
@@ -104,7 +143,7 @@
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s;
   box-shadow: 0 6px 15px rgba(0,0,0,0.15);
 }
 
@@ -117,18 +156,8 @@
   text-decoration: none;
 }
 
-/* Decorative icon below the heading */
-.home-page::after {
-  content: url('https://img.icons8.com/ios-filled/100/556B2F/money.png');
-  display: block;
-  margin-top: 40px;
-  opacity: 0.15;
-  animation: float 3s ease-in-out infinite;
-}
-
-/* Floating animation for subtle movement */
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
-  100% { transform: translateY(0px); }
+/* Fade & slide animation for hero elements */
+@keyframes fade-slide {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
