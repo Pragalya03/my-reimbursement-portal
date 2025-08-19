@@ -19,12 +19,12 @@ public class Approval {
     @JoinColumn(name = "expense_id")
     private Expense expense;
 
-    @ManyToOne
-    @JoinColumn(name = "approver_id")
-    private User approver;
+    // @ManyToOne
+    // @JoinColumn(name = "approver_id")
+    // private User approver;
 
-    @Column(name = "approval_level", nullable = false)
-    private int approvalLevel;
+    // @Column(name = "approval_level", nullable = false)
+    // private int approvalLevel;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "approval_status")
@@ -56,21 +56,21 @@ public class Approval {
     }
 
     
-    public User getApprover() {
-        return approver;
-    }
+    // public User getApprover() {
+    //     return approver;
+    // }
     
-    public void setApprover(User approver) {
-        this.approver = approver;
-    }
+    // public void setApprover(User approver) {
+    //     this.approver = approver;
+    // }
 
-    public int getApprovalLevel() {
-        return approvalLevel;
-    }
+    // public int getApprovalLevel() {
+    //     return approvalLevel;
+    // }
     
-    public void setApprovalLevel(int approvalLevel) {
-        this.approvalLevel = approvalLevel;
-    }
+    // public void setApprovalLevel(int approvalLevel) {
+    //     this.approvalLevel = approvalLevel;
+    // }
     
     public ApprovalStatus getApprovalStatus() {
         return approvalStatus;
@@ -104,12 +104,12 @@ public class Approval {
         this.isFinalApproval = isFinalApproval;
     }
     
-    public Approval(Long id, Expense expense, User approver, int approvalLevel, ApprovalStatus approvalStatus,
+    public Approval(Long id, Expense expense, /*User approver, int approvalLevel,*/ ApprovalStatus approvalStatus,
             LocalDateTime approvalDate, String comments, Boolean isFinalApproval) {
         this.id = id;
         this.expense = expense;
-        this.approver = approver;
-        this.approvalLevel = approvalLevel;
+        // this.approver = approver;
+        // this.approvalLevel = approvalLevel;
         this.approvalStatus = approvalStatus;
         this.approvalDate = approvalDate;
         this.comments = comments;

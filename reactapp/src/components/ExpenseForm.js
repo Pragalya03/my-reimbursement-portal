@@ -71,6 +71,7 @@ function ExpenseForm({ onAdd }) {
       }}
     >Back</button>
     </div>
+    <div className="page-container">
     <form className="expense-form" onSubmit={handleSubmit}>
       <h2>Add Expense</h2>
 
@@ -129,7 +130,9 @@ function ExpenseForm({ onAdd }) {
         Submit
       </button>
     </form>
+    </div>
           </>
+    
   );
 }
 

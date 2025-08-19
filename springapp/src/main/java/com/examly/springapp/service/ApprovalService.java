@@ -34,8 +34,8 @@ public class ApprovalService {
         approval.setComments(approvalDetails.getComments());
         approval.setApprovalDate(approvalDetails.getApprovalDate());
         approval.setIsFinalApproval(approvalDetails.getIsFinalApproval());
-        approval.setApprovalLevel(approvalDetails.getApprovalLevel());
-        approval.setApprover(approvalDetails.getApprover());
+        // approval.setApprovalLevel(approvalDetails.getApprovalLevel());
+        // approval.setApprover(approvalDetails.getApprover());
         approval.setExpense(approvalDetails.getExpense());
         return approvalRepository.save(approval);
     }
