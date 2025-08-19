@@ -1,4 +1,4 @@
-.home-page {
+/* .home-page {
   font-family: Arial, sans-serif;
   background-color: #E5E1D8; 
   color: #333333;
@@ -48,4 +48,87 @@
 
 .home-buttons a {
   text-decoration: none;
+}
+ */
+
+/* Home Page */
+.home-page {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+  color: #333333;
+  text-align: center;
+  padding: 60px 20px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.home-page h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #556B2F;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+}
+
+.home-page h1:hover {
+  transform: scale(1.05);
+}
+
+.home-page p {
+  font-size: 1.2rem;
+  margin-bottom: 40px;
+  color: #556B2F;
+  max-width: 500px;
+}
+
+.home-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.home-buttons button {
+  background: linear-gradient(45deg, #D2691E, #DAA520);
+  color: #F2EFEA;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 36px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.3s;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.home-buttons button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.home-buttons a {
+  text-decoration: none;
+}
+
+/* Decorative icon below the heading */
+.home-page::after {
+  content: url('https://img.icons8.com/ios-filled/100/556B2F/money.png');
+  display: block;
+  margin-top: 40px;
+  opacity: 0.15;
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Floating animation for subtle movement */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
 }
