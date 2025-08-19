@@ -13,7 +13,7 @@ public class ApprovalController {
 
     @Autowired
     private ApprovalService approvalService;
-
+  
     @GetMapping
     public List<Approval> getAllApprovals() {
         return approvalService.getAllApprovals();
