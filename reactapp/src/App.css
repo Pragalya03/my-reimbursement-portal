@@ -15,7 +15,11 @@
 } */
 
 .full-width-navbar {
-  background: url("https://www.transparenttextures.com/patterns/asfalt-dark.png");
+  background: url("https://www.transparenttextures.com/patterns/hexellence.png");
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  padding: 10px 20px;
 }
 
 .brand-name {
