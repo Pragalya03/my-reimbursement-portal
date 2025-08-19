@@ -306,7 +306,10 @@ export const createPayment = async (payment) => {
 };
 
 export const getPayments = async () => {
-  const res = await fetch(`${BASE_URL}/api/payments`);
+  const res = await fetch(`${BASE_URL}/api/payments`,{
+    method: "GET",
+    headers: {"Content-Type" : "application/json"},
+  });
   if (!res.ok) throw new Error("Failed to fetch payments");
   return res.json();
 };

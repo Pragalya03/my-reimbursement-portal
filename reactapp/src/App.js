@@ -53,7 +53,9 @@ import ExpensePolicies from "./pages/ExpensePolicies";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
 import Home from "./pages/Home";
+import PaymentsPage from "./pages/PaymentsPage";
 import Navbar from "./pages/Navbar";   // ✅ Import Navbar
+import PaymentsDashboard from "./pages/PaymentsDashboard";
 
 function App() {
   return (
@@ -74,6 +76,8 @@ function App() {
           <Route path="/auditor-dashboard" element={<AuditorDashboard />} /> 
           <Route path="/categories" element={<ExpenseCategories />} /> 
           <Route path="/policies" element={<ExpensePolicies />} /> 
+          <Route path="/payments/:expenseId" element={<PaymentsPage />} /> 
+          <Route path="/payments-dashboard" element={<PaymentsDashboard />} /> 
         </Routes>
       </div>
     </Router>
