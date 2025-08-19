@@ -115,4 +115,5 @@ public class Approval {
         this.comments = comments;
         this.isFinalApproval = isFinalApproval;
     }
+    public Approval() {}
 }

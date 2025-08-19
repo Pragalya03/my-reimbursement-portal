@@ -1,9 +1,103 @@
+// import React, { useEffect, useState } from "react";
+// import { getExpenses } from "../utils/api.js";
+// import "../styles/ExpenseList.css";
+
+// function FinanceDashboard() {
+//   const [expenses, setExpenses] = useState([]);
+
+//   useEffect(() => {
+//     fetchExpenses();
+//   }, []);
+
+//   const fetchExpenses = async () => {
+//     try {
+//       const data = await getExpenses();
+//       const approvedExpenses = data.filter(exp => exp.status === "APPROVED");
+//       setExpenses(approvedExpenses);
+//     } catch (error) {
+//       console.error("Failed to fetch expenses:", error);
+//       setExpenses([]);
+//     }
+//   };
+
+//   const formatDate = (dateString) => {
+//     const date = new Date(dateString);
+//     return date.toLocaleDateString("en-US", {
+//       month: "short",
+//       day: "numeric",
+//       year: "numeric",
+//     });
+//   };
+
+//   return (
+//     <div className="expense-list">
+//       <div style={{ display: "flex", justifyContent:"flex-end", marginBottom:"15px" }}>
+//         <button
+//           onClick={() => window.history.back()}
+//           style={{
+//             padding: "6px 12px",
+//             backgroundColor: "#f87171",
+//             color: "white",
+//             border: "none",
+//             borderRadius: "8px",
+//             cursor: "pointer",
+//           }}
+//         >
+//           Back
+//         </button>
+//       </div>
+
+//       <h2>Approved Expenses (Finance Dashboard)</h2>
+
+//       {expenses.length === 0 ? (
+//         <p>No approved expenses found</p>
+//       ) : (
+//         <table style={{ width: "100%", borderCollapse: "collapse" }}>
+//           <thead>
+//             <tr>
+//               <th>Employee ID</th>
+//               <th>Amount</th>
+//               <th>Description</th>
+//               <th>Date</th>
+//               <th>Status</th>
+//               <th>Remarks</th>
+//             </tr>
+//           </thead>
+//           <tbody>
+//             {expenses.map((expense) => (
+//               <tr key={expense.id}>
+//                 <td>{expense.employeeId}</td>
+//                 <td>${Number(expense.amount).toFixed(2)}</td>
+//                 <td>{expense.description}</td>
+//                 <td>{formatDate(expense.date)}</td>
+//                 <td>{expense.status}</td>
+//                 <td>{expense.remarks || ""}</td>
+//               </tr>
+//             ))}
+//           </tbody>
+//         </table>
+//       )}
+//     </div>
+//   );
+// }
+
+// export default FinanceDashboard;
+
+
+// src/components/FinanceDashboard.jsx
 import React, { useEffect, useState } from "react";
-import { getExpenses } from "../utils/api.js";
+import { getExpenses, createApproval } from "../utils/api.js"; // make sure this exists
 import "../styles/ExpenseList.css";
 
 function FinanceDashboard() {
   const [expenses, setExpenses] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedExpense, setSelectedExpense] = useState(null);
+  const [formData, setFormData] = useState({
+    approvalStatus: "PENDING",
+    comments: "",
+    isFinalApproval: false,
+  });
 
   useEffect(() => {
     fetchExpenses();
@@ -27,6 +121,47 @@ function FinanceDashboard() {
       day: "numeric",
       year: "numeric",
     });
+  };
+
+  const handleRowClick = (expense) => {
+    setSelectedExpense(expense);
+    setFormData({
+      approvalStatus: "PENDING",
+      comments: "",
+      isFinalApproval: false,
+    });
+    setShowModal(true);
+  };
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const payload = {
+      expenseId: selectedExpense.id,
+      approvalStatus: formData.approvalStatus,
+      approvalDate: new Date().toISOString(), // auto-generate
+      comments: formData.comments,
+      isFinalApproval: formData.isFinalApproval
+    };
+
+    try {
+      await createApproval(payload); // POST to Approvals table
+      alert("Approval submitted successfully!");
+      setShowModal(false);
+      setSelectedExpense(null);
+      fetchExpenses();
+    } catch (err) {
+      console.error("Failed to submit approval:", err);
+      alert("Failed to submit approval");
+    }
   };
 
   return (
@@ -65,7 +200,11 @@ function FinanceDashboard() {
           </thead>
           <tbody>
             {expenses.map((expense) => (
-              <tr key={expense.id}>
+              <tr 
+                key={expense.id} 
+                onClick={() => handleRowClick(expense)} 
+                style={{ cursor: "pointer" }}
+              >
                 <td>{expense.employeeId}</td>
                 <td>${Number(expense.amount).toFixed(2)}</td>
                 <td>{expense.description}</td>
@@ -77,8 +216,59 @@ function FinanceDashboard() {
           </tbody>
         </table>
       )}
+
+      {/* Modal */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Approval for Expense #{selectedExpense.id}</h3>
+            <form onSubmit={handleSubmit}>
+              <label>
+                Approval Status:
+                <select
+                  name="approvalStatus"
+                  value={formData.approvalStatus}
+                  onChange={handleChange}
+                >
+                  <option value="PENDING">Pending</option>
+                  <option value="APPROVED">Approved</option>
+                  <option value="REJECTED">Rejected</option>
+                </select>
+              </label>
+
+              <label>
+                Comments:
+                <textarea
+                  name="comments"
+                  value={formData.comments}
+                  onChange={handleChange}
+                />
+              </label>
+
+              <label>
+                Final Approval:
+                <input
+                  type="checkbox"
+                  name="isFinalApproval"
+                  checked={formData.isFinalApproval}
+                  onChange={handleChange}
+                />
+              </label>
+
+              <div style={{ marginTop: "15px" }}>
+                <button type="submit">Submit</button>
+                <button type="button" onClick={() => setShowModal(false)} style={{ marginLeft: "10px" }}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
 export default FinanceDashboard;
+
+
