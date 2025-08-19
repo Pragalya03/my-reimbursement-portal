@@ -33,16 +33,19 @@ import "../styles/Home.css";
 function Home() {
   return (
     <div className="home-page">
-      {/* Animated floating coins */}
-      <div className="floating-coins">
-        {Array.from({ length: 10 }).map((_, i) => (
-          <span key={i} className="coin">💰</span>
+      {/* Background particles */}
+      <div className="particles">
+        {Array.from({ length: 30 }).map((_, i) => (
+          <span key={i} className="particle">💰</span>
         ))}
       </div>
 
+      {/* Hero card */}
       <div className="hero-card">
-        <h1>Welcome to Expense Management System</h1>
-        <p>Track, submit, and approve expenses with ease.</p>
+        <h1 className="hero-heading">Welcome to Expense Management System</h1>
+        <p className="hero-text">
+          Track, submit, and approve expenses with ease. Manage budgets, policies, and approvals in one place.
+        </p>
         <div className="home-buttons">
           <Link to="/login">
             <button>Login</button>
