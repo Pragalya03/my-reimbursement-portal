@@ -1,4 +1,4 @@
-.login-page {
+/* .login-page {
   font-family: Arial, sans-serif;
   color: #333333;
   display: flex;
@@ -60,4 +60,86 @@
   background-color: #DAA520; 
   transform: scale(1.03);
 }
+ */
+/* Full page container */
+.login-page {
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 70px); /* ✅ subtract navbar height */
+  background: linear-gradient(135deg, #e9f1e7, #f5efe6);
+  overflow: hidden;  /* ✅ no scroll */
+  padding: 20px;
+  box-sizing: border-box;
+}
 
+/* Title */
+.login-page h2 {
+  color: #2f4f4f;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-align: center;
+  animation: fadeInDown 0.8s ease forwards;
+}
+
+/* Card Form */
+.login-form {
+  width: 100%;
+  max-width: 400px;
+  background-color: #ffffff;
+  padding: 35px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  animation: fadeInUp 1s ease forwards;
+}
+
+/* Inputs */
+.login-form input,
+.login-form select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #bfb7a5;
+  font-size: 1rem;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+.login-form input:focus,
+.login-form select:focus {
+  border-color: #556B2F;
+  box-shadow: 0 0 6px rgba(85, 107, 47, 0.35);
+  outline: none;
+}
+
+/* Button */
+.login-form button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(45deg, #D2691E, #DAA520);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.login-form button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+}
+
+/* Subtle Animations */
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  0% { opacity: 0; transform: translateY(-20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
