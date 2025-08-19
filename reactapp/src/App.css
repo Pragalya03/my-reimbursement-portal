@@ -14,7 +14,7 @@
   padding: 10px 20px;
 }
 
-.brand-name {
+/* .brand-name {
   font-size: 1.8rem;
   font-weight: bold;
   background: linear-gradient(90deg, #ffb347, #ffcc33); 
@@ -23,8 +23,12 @@
   background-clip:text;
   color:transparent;
   letter-spacing:0.5px;
- 
+}*/
+.brand-name {
+  color: #fff;
+  backdrop-filter: blur(4px) brightness(1.2);
 }
+
 .user-type-btn {
   color: #F2EFEA; 
   text-decoration: none;
