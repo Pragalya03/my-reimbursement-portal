@@ -52,101 +52,136 @@
  */
 
 /* Full page */
+/* General */
 .home-page {
   font-family: 'Arial', sans-serif;
-  min-height: 100vh;
+  background: linear-gradient(135deg, #e9f1e7, #f5efe6);
+  color: #333;
+  overflow-x: hidden;
+}
+
+/* Hero Section */
+.hero {
   display: flex;
-  justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #e6f0ea, #d9e2dc);
-  overflow: hidden;
+  justify-content: space-between;
+  padding: 80px 10%;
+  min-height: 80vh;
+  background: linear-gradient(135deg, #eef5ee, #f9f7f3);
   position: relative;
-  padding: 20px;
 }
 
-/* Hero card in center */
-.hero-card {
-  background: #F2EFEA;
-  padding: 50px 40px;
-  border-radius: 20px;
-  text-align: center;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
-  max-width: 650px;
-  z-index: 2;
-  position: relative;
-  animation: fade-slide 1s ease forwards;
-  opacity: 0;
+.hero-content {
+  max-width: 600px;
+  animation: fadeInUp 1.2s ease forwards;
 }
 
-/* Hero heading */
-.hero-heading {
-  font-size: 3rem;
-  font-weight: 700;
-  color: #556B2F;
+.hero-content h1 {
+  font-size: 3.2rem;
+  color: #2f4f4f;
   margin-bottom: 20px;
-  letter-spacing: 1px;
 }
 
-/* Hero text */
-.hero-text {
+.hero-content p {
   font-size: 1.2rem;
-  color: #556B2F;
-  margin-bottom: 40px;
-  max-width: 500px;
+  color: #444;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 20px;
 }
 
 /* Buttons */
-.home-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.home-buttons button {
+.primary-btn {
   background: linear-gradient(45deg, #D2691E, #DAA520);
-  color: #F2EFEA;
+  color: #fff;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 14px 36px;
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
   transition: transform 0.3s, box-shadow 0.3s;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
 }
 
-.home-buttons button:hover {
+.primary-btn:hover {
   transform: scale(1.05);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
 
-/* Fade & slide animation */
-@keyframes fade-slide {
+.secondary-btn {
+  background: transparent;
+  color: #2f4f4f;
+  border: 2px solid #2f4f4f;
+  border-radius: 8px;
+  padding: 14px 36px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.secondary-btn:hover {
+  background: #2f4f4f;
+  color: #fff;
+}
+
+/* Hero Illustration */
+.hero-illustration img {
+  width: 350px;
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Features Section */
+.features {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 60px 10%;
+  flex-wrap: wrap;
+  background: #fafafa;
+}
+
+.feature-card {
+  background: #fff;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  max-width: 300px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+}
+
+.feature-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #556B2F;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 30px;
+  background: #2f4f4f;
+  color: #f2efea;
+  margin-top: 40px;
+}
+
+/* Animations */
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
   0% { opacity: 0; transform: translateY(20px); }
   100% { opacity: 1; transform: translateY(0); }
-}
-
-/* Particles */
-.particles .particle {
-  position: absolute;
-  font-size: 1.2rem;
-  animation: float 12s linear infinite;
-  opacity: 0.15;
-}
-
-.particles .particle:nth-child(odd) {
-  animation-duration: 10s;
-}
-
-.particles .particle:nth-child(even) {
-  animation-duration: 14s;
-}
-
-@keyframes float {
-  0% { transform: translateX(0) translateY(0) rotate(0deg); }
-  25% { transform: translateX(50px) translateY(-30px) rotate(90deg); }
-  50% { transform: translateX(-50px) translateY(30px) rotate(180deg); }
-  75% { transform: translateX(30px) translateY(-50px) rotate(270deg); }
-  100% { transform: translateX(0) translateY(0) rotate(360deg); }
 }
