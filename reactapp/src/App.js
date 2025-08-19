@@ -77,7 +77,7 @@ function App() {
           <Route path="/categories" element={<ExpenseCategories />} /> 
           <Route path="/policies" element={<ExpensePolicies />} /> 
           <Route path="/payments/:expenseId" element={<PaymentsPage />} /> 
-          <Route path="/payments-dashboard" element={<PaymentsDashboard />} /> 
+          <Route path="/payments" element={<PaymentsDashboard />} /> 
         </Routes>
       </div>
     </Router>
