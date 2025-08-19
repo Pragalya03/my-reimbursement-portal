@@ -6,15 +6,19 @@
   min-height: 100vh;
 }
 
-.full-width-navbar {
+/* .full-width-navbar {
   display: flex;
   justify-content: space-between; 
   align-items: center;
   background-color: #556B2F; 
   padding: 10px 20px;
+} */
+
+.full-width-navbar {
+  background: url("https://www.transparenttextures.com/patterns/asfalt-dark.png");
 }
 
-/* .brand-name {
+.brand-name {
   font-size: 1.8rem;
   font-weight: bold;
   background: linear-gradient(90deg, #ffb347, #ffcc33); 
@@ -23,10 +27,6 @@
   background-clip:text;
   color:transparent;
   letter-spacing:0.5px;
-}*/
-.brand-name {
-  color: #fff;
-  backdrop-filter: blur(4px) brightness(1.2);
 }
 
 .user-type-btn {
