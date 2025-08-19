@@ -71,6 +71,9 @@ export default function Register() {
           case "AUDITOR":
             navigate("/auditor-dashboard");
             break;
+            case "ADMIN":
+            navigate("/admin");
+            break;
           default:
             navigate("/");
         }
@@ -124,6 +127,7 @@ export default function Register() {
         <option value="MANAGER">MANAGER</option>
         <option value="FINANCE_MANAGER">FINANCE_MANAGER</option>
         <option value="AUDITOR">AUDITOR</option>
+        <option value="ADMIN">ADMIN</option>
       </select>
 
       {departments.length > 0 ? (
