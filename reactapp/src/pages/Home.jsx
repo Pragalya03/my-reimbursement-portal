@@ -75,7 +75,7 @@ function Home() {
 
       {/* Footer */}
       <footer className="footer">
-        <p>© {new Date().getFullYear()} Expense Management System. All Rights Reserved.</p>
+        <p>© {new Date().getFullYear()} ClaimEase. All Rights Reserved.</p>
       </footer>
     </div>
   );

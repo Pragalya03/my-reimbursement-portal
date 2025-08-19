@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import '../styles/Login.css';
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -52,7 +52,6 @@ export default function LoginPage() {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
-          style={{ width: "100%", marginBottom: "10px", padding: "8px" }}
         />
         <input
           type="password"
@@ -60,12 +59,10 @@ export default function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          style={{ width: "100%", marginBottom: "10px", padding: "8px" }}
         />
         <select
           value={role}
           onChange={(e) => setRole(e.target.value)}
-          style={{ width: "100%", marginBottom: "10px", padding: "8px" }}
         >
           <option value="EMPLOYEE">Employee</option>
           <option value="MANAGER">Manager</option>
