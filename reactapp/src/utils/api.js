@@ -279,3 +279,13 @@ export const deleteCategory = async (id) => {
     console.error("Failed to delete category:", err);
   }
 };
+
+export const createApproval=async(approvalData)=>{
+  const response=await fetch(`${BASE_URL}/approvals`,{
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body:JSON.stringify(approvalData),
+  });
+  if(!response.ok) throw new Error("Failed to create approval");
+  return response.json();
+}
