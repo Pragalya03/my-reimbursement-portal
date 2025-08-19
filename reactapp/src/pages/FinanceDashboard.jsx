@@ -184,6 +184,7 @@
 
 // export default FinanceDashboard;
 
+// src/pages/FinanceDashboard.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getExpenses, createApproval } from "../utils/api.js";
@@ -258,6 +259,7 @@ function FinanceDashboard() {
       await createApproval(payload);
 
       if (formData.approvalStatus === "PENDING") {
+        // 👉 Redirect directly to PaymentsDashboard with expenseId
         navigate(`/payments/${selectedExpense.id}`);
       } else {
         alert("Approval submitted successfully!");
@@ -412,6 +414,7 @@ function FinanceDashboard() {
 }
 
 export default FinanceDashboard;
+
 
 
 
