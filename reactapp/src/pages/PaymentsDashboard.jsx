@@ -1,15 +1,47 @@
 // src/pages/PaymentsDashboard.jsx
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getPayments } from "../utils/api.js";
+import { useNavigate, useParams } from "react-router-dom";
+import { getExpenseById, createPayment, getPayments } from "../utils/api.js";
 
 function PaymentsDashboard() {
-  const [payments, setPayments] = useState([]);
+  const { expenseId } = useParams(); // comes from /payments/:expenseId
   const navigate = useNavigate();
 
+  const [expense, setExpense] = useState(null);
+  const [payments, setPayments] = useState([]);
+  const [showModal, setShowModal] = useState(!!expenseId);
+  const [formData, setFormData] = useState({
+    paymentAmount: "",
+    paymentDate: new Date().toISOString(),
+    paymentMethod: "direct_deposit",
+    paymentStatus: "pending",
+  });
+
+  // Fetch all payments always
   useEffect(() => {
     fetchPayments();
   }, []);
+
+  // If expenseId exists, fetch that expense and prefill modal
+  useEffect(() => {
+    if (expenseId) {
+      fetchExpense(expenseId);
+    }
+  }, [expenseId]);
+
+  const fetchExpense = async (id) => {
+    try {
+      const data = await getExpenseById(id);
+      setExpense(data);
+      setFormData((prev) => ({
+        ...prev,
+        paymentAmount: data.amount,
+      }));
+      setShowModal(true);
+    } catch (err) {
+      console.error("Failed to fetch expense:", err);
+    }
+  };
 
   const fetchPayments = async () => {
     try {
@@ -18,6 +50,33 @@ function PaymentsDashboard() {
     } catch (err) {
       console.error("Failed to fetch payments:", err);
       setPayments([]);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const payload = {
+      expenseId,
+      paymentAmount: formData.paymentAmount,
+      paymentDate: formData.paymentDate,
+      paymentMethod: formData.paymentMethod,
+      paymentStatus: formData.paymentStatus,
+    };
+
+    try {
+      await createPayment(payload);
+      alert("Your payment has been made successfully");
+      setShowModal(false);
+      fetchPayments(); // refresh payments table
+      navigate("/payments"); // stay in payments dashboard but remove expenseId param
+    } catch (err) {
+      console.error("Payment failed:", err);
+      alert("Failed to process payment");
     }
   };
 
@@ -51,6 +110,70 @@ function PaymentsDashboard() {
         Back to Finance Dashboard
       </button>
 
+      {/* Modal */}
+      {showModal && expense && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Make Payment for Expense #{expenseId}</h3>
+            <form onSubmit={handleSubmit}>
+              <label>
+                Expense ID:
+                <input type="text" value={expenseId} disabled />
+              </label>
+
+              <label>
+                Payment Amount:
+                <input type="number" value={formData.paymentAmount} readOnly />
+              </label>
+
+              <label>
+                Payment Date:
+                <input type="text" value={formData.paymentDate} readOnly />
+              </label>
+
+              <label>
+                Method:
+                <select
+                  name="paymentMethod"
+                  value={formData.paymentMethod}
+                  onChange={handleChange}
+                >
+                  <option value="direct_deposit">Direct Deposit</option>
+                  <option value="cheque">Cheque</option>
+                  <option value="payroll">Payroll</option>
+                </select>
+              </label>
+
+              <label>
+                Status:
+                <select
+                  name="paymentStatus"
+                  value={formData.paymentStatus}
+                  onChange={handleChange}
+                >
+                  <option value="pending">Pending</option>
+                  <option value="processed">Processed</option>
+                  <option value="completed">Completed</option>
+                  <option value="failed">Failed</option>
+                </select>
+              </label>
+
+              <div style={{ marginTop: "15px" }}>
+                <button type="submit">Submit Payment</button>
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  style={{ marginLeft: "10px" }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Payments Table */}
       {payments.length === 0 ? (
         <p>No payments found</p>
       ) : (
