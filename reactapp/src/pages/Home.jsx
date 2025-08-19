@@ -50,7 +50,10 @@ function Home() {
           </div>
         </div>
         <div className="hero-illustration">
-          <img src="https://cdn-icons-png.flaticon.com/512/2331/2331941.png" alt="expenses" />
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/2331/2331941.png"
+            alt="expenses"
+          />
         </div>
       </section>
 
