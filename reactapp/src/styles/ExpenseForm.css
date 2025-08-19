@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
 body {
-  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e8449 100%);
+  background: #2c2c2c url("https://www.transparenttextures.com/patterns/asfalt-dark.png");
   font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
