@@ -188,6 +188,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getExpenses, createApproval } from "../utils/api.js";
 import "../styles/ExpenseList.css";
+import "./ExpenseCategories.jsx";
+import "./ExpensePolicies.jsx";
 
 function FinanceDashboard() {
   const [expenses, setExpenses] = useState([]);

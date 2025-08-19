@@ -48,6 +48,8 @@ import AdminPanel from "./pages/AdminPanel";
 import EmployeeDashboard from "./pages/EmployeeDashboard";
 import FinanceDashboard from "./pages/FinanceDashboard";
 import AuditorDashboard from "./pages/AuditorDashboard";
+import ExpenseCategories from "./pages/ExpenseCategories";
+import ExpensePolicies from "./pages/ExpensePolicies";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
 import Home from "./pages/Home";
@@ -70,6 +72,8 @@ function App() {
           <Route path="/manager-dashboard" element={<ExpenseList />} /> 
           <Route path="/finance-dashboard" element={<FinanceDashboard />} /> 
           <Route path="/auditor-dashboard" element={<AuditorDashboard />} /> 
+          <Route path="/categories" element={<ExpenseCategories />} /> 
+          <Route path="/policies" element={<ExpensePolicies />} /> 
         </Routes>
       </div>
     </Router>
