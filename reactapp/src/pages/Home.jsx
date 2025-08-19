@@ -33,12 +33,13 @@ import "../styles/Home.css";
 function Home() {
   return (
     <div className="home-page">
-      <div className="floating-shapes">
-        <span className="circle"></span>
-        <span className="circle"></span>
-        <span className="circle"></span>
-        <span className="triangle"></span>
-        <span className="triangle"></span>
+      {/* Floating money icons */}
+      <div className="floating-icons">
+        <span className="icon money">$</span>
+        <span className="icon money">$</span>
+        <span className="icon money">$</span>
+        <span className="icon wallet">💼</span>
+        <span className="icon wallet">💼</span>
       </div>
 
       <h1 className="hero-heading">Welcome to Expense Management System</h1>
