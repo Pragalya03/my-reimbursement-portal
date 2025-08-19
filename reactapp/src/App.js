@@ -51,7 +51,7 @@ import AuditorDashboard from "./pages/AuditorDashboard";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
 import Home from "./pages/Home";
-import Navbar from "./components/Navbar";   // ✅ Import Navbar
+import Navbar from "./pages/Navbar";   // ✅ Import Navbar
 
 function App() {
   return (
