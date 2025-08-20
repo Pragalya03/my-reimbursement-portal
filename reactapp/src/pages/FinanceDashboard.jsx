@@ -187,7 +187,7 @@
 // src/pages/FinanceDashboard.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getExpenses, createApproval } from "../utils/api.js";
+import { getExpenses, createApproval, getPayments } from "../utils/api.js";
 import "../styles/ExpenseList.css";
 
 function FinanceDashboard() {
@@ -206,13 +206,33 @@ function FinanceDashboard() {
     fetchExpenses();
   }, []);
 
+  // const fetchExpenses = async () => {
+  //   try {
+  //     const data = await getExpenses();
+  //     const approvedExpenses = data.filter((exp) => exp.status === "APPROVED");
+  //     setExpenses(approvedExpenses);
+  //   } catch (error) {
+  //     console.error("Failed to fetch expenses:", error);
+  //     setExpenses([]);
+  //   }
+  // };
   const fetchExpenses = async () => {
-    try {
-      const data = await getExpenses();
-      const approvedExpenses = data.filter((exp) => exp.status === "APPROVED");
-      setExpenses(approvedExpenses);
-    } catch (error) {
-      console.error("Failed to fetch expenses:", error);
+    try{
+      const [expenseData, paymentData]=await Promise.all([getExpenses(), getApprovals(), getPayments()]);
+      const approvedApprovals = approvalData.filter(
+        (appr)=>appr.approvalStatus==="APPROVED");
+      
+        const approvedExpenses = expenseData.filter((exp)=>
+        approvedApprovals.some((appr)=>appr.expense.id===exp.id)
+      );
+
+      const unpaidExpenses=approvedExpenses.filter(
+        (exp)=>!paymentData.some((p)=>p.expense.id===exp.id)
+      );
+
+      setExpenses(unpaidExpenses);
+    } catch (error){
+      console.error("Failed to fetch expenses or payments: ", error);
       setExpenses([]);
     }
   };
@@ -292,6 +312,20 @@ function FinanceDashboard() {
         </button>
 
         <div>
+        <button
+            onClick={() => navigate("/payments")}
+            style={{
+              padding: "6px 12px",
+              backgroundColor: "#34d399",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              marginRight: "10px",
+            }}
+          >
+            View Expense Categories
+          </button>
           <button
             onClick={() => navigate("/categories")}
             style={{

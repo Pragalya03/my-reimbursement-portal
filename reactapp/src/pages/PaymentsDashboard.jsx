@@ -25,14 +25,46 @@ function PaymentsDashboard() {
   });
 
   useEffect(() => {
-    fetchExpenses();
-    fetchPayments();
-  }, []);
+    const loadData=async()=>{
+      try{
+        const paymentData=await getPayments();
+        setPayments(paymentData);
 
+        const expenseData=await getExpenses();
+        const approvedExpenses=expenseData.filter(exp=>exp.status==="APPROVED");
+
+        const unpaidExpenses=approvedExpenses.filter(
+          exp=>!paymentData.some(p=>p.expense.id===exp.id)
+        );
+
+        setExpenses(unpaidExpenses);
+      } catch (err) {
+        console.error(err);
+        setExpenses([]);
+        setPayments([]);
+      }
+    };
+    loadData();
+  },[]);
+
+  // const fetchExpenses = async () => {
+  //   try {
+  //     const data = await getExpenses();
+  //     setExpenses(data.filter((exp) => exp.status === "APPROVED"));
+  //   } catch (err) {
+  //     console.error(err);
+  //     setExpenses([]);
+  //   }
+  // };
   const fetchExpenses = async () => {
     try {
       const data = await getExpenses();
-      setExpenses(data.filter((exp) => exp.status === "APPROVED"));
+      const approvedExpenses=data.filter((exp)=>exp.status==="APPROVED");
+
+      const unpaidExpenses=approvedExpenses.filter(
+        (exp)=>!payments.some((p)=>p.expense.id===exp.id)
+      );
+      setExpenses(unpaidExpenses);
     } catch (err) {
       console.error(err);
       setExpenses([]);
@@ -88,11 +120,11 @@ function PaymentsDashboard() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = {
-      expenseId: formData.expenseId,
-      paymentAmount: formData.paymentAmount,
-      paymentDate: formData.paymentDate,
+      expense: {id: formData.expenseId},
+      paymentAmount: Number(formData.paymentAmount),
+      paymentDate: new Date().toISOString(),
       paymentMethod: formData.paymentMethod,
-      paymentStatus: formData.status,
+      status: formData.status,
     };
 
     try {
@@ -106,9 +138,10 @@ function PaymentsDashboard() {
         alert("Payment created successfully");
       }
       setShowModal(false);
+      fetchExpenses();
       fetchPayments();
     } catch (err) {
-      console.error(err);
+      console.error("Payment failed",err);
       alert("Failed to save payment");
     }
   };
@@ -163,7 +196,7 @@ function PaymentsDashboard() {
                 <td>{exp.employeeId}</td>
                 <td>${exp.amount.toFixed(2)}</td>
                 <td>{exp.description}</td>
-                <td>{exp.date}</td>
+                <td>{new Date(exp.date).toLocaleDateString()}</td>
                 <td>
                   <button onClick={() => openPaymentModal(exp)}>
                     Make/Edit Payment
@@ -264,9 +297,9 @@ function PaymentsDashboard() {
             {payments.map((p) => (
               <tr key={p.id}>
                 <td>{p.id}</td>
-                <td>{p.expenseId}</td>
+                <td>{p.expense.id}</td>
                 <td>${Number(p.paymentAmount).toFixed(2)}</td>
-                <td>{formatDate(p.paymentDate)}</td>
+                <td>{new Date(p.date).toLocaleDateString()}</td>
                 <td>{p.paymentMethod}</td>
                 <td>{p.paymentStatus || p.status}</td>
               </tr>

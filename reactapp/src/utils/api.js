@@ -296,7 +296,7 @@ export const createApproval=async(approvalData)=>{
 }
 
 export const createPayment = async (payment) => {
-  const res = await fetch("/api/payments", {
+  const res = await fetch(`${BASE_URL}/payments`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payment),
@@ -306,12 +306,26 @@ export const createPayment = async (payment) => {
 };
 
 export const getPayments = async () => {
-  const res = await fetch(`${BASE_URL}/api/payments`,{
+  const res = await fetch(`${BASE_URL}/payments`,{
     method: "GET",
     headers: {"Content-Type" : "application/json"},
   });
   if (!res.ok) throw new Error("Failed to fetch payments");
   return res.json();
 };
+
+export const updatePayment=async(id,payment)=>{
+  const res=await fetch(`${BASE_URL}/payments`,{
+    method:"PUT",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(payment),
+  });
+  if(!res.ok){
+    const errorData=await res.json().catch(()=>null);
+    throw new Error(errorData?.message || "Failed to update payment");
+  }
+  return res.json();
+}
+
 
 
