@@ -34,18 +34,18 @@ public class Payment {
     @Column(name = "payment_method")
     private PaymentMethod paymentMethod;
 
-    @Column(name = "transaction_id", length = 100)
-    private String transactionId;
+    // @Column(name = "transaction_id", length = 100)
+    // private String transactionId;
 
-    @Column(name = "bank_account_id", length = 50)
-    private String bankAccountId;
+    // @Column(name = "bank_account_id", length = 50)
+    // private String bankAccountId;
 
     @Enumerated(EnumType.STRING)
     private PaymentStatus status;
 
-    @ManyToOne
-    @JoinColumn(name = "processed_by")
-    private User processedBy;
+    // @ManyToOne
+    // @JoinColumn(name = "processed_by")
+    // private User processedBy;
 
     public Long getId() {
         return id;
@@ -87,21 +87,21 @@ public class Payment {
         this.paymentMethod = paymentMethod;
     }
 
-    public String getTransactionId() {
-        return transactionId;
-    }
+    // public String getTransactionId() {
+    //     return transactionId;
+    // }
 
-    public void setTransactionId(String transactionId) {
-        this.transactionId = transactionId;
-    }
+    // public void setTransactionId(String transactionId) {
+    //     this.transactionId = transactionId;
+    // }
 
-    public String getBankAccountId() {
-        return bankAccountId;
-    }
+    // public String getBankAccountId() {
+    //     return bankAccountId;
+    // }
 
-    public void setBankAccountId(String bankAccountId) {
-        this.bankAccountId = bankAccountId;
-    }
+    // public void setBankAccountId(String bankAccountId) {
+    //     this.bankAccountId = bankAccountId;
+    // }
 
     public PaymentStatus getStatus() {
         return status;
@@ -111,26 +111,26 @@ public class Payment {
         this.status = status;
     }
 
-    public User getProcessedBy() {
-        return processedBy;
-    }
+    // public User getProcessedBy() {
+    //     return processedBy;
+    // }
 
-    public void setProcessedBy(User processedBy) {
-        this.processedBy = processedBy;
-    }
+    // public void setProcessedBy(User processedBy) {
+    //     this.processedBy = processedBy;
+    // }
 
     public Payment(Long id, Expense expense, BigDecimal paymentAmount, LocalDateTime paymentDate,
-            PaymentMethod paymentMethod, String transactionId, String bankAccountId, PaymentStatus status,
-            User processedBy) {
+            PaymentMethod paymentMethod, /*String transactionId, String bankAccountId,*/ PaymentStatus status
+            /*User processedBy*/) {
         this.id = id;
         this.expense = expense;
         this.paymentAmount = paymentAmount;
         this.paymentDate = paymentDate;
         this.paymentMethod = paymentMethod;
-        this.transactionId = transactionId;
-        this.bankAccountId = bankAccountId;
+        // this.transactionId = transactionId;
+        // this.bankAccountId = bankAccountId;
         this.status = status;
-        this.processedBy = processedBy;
+        // this.processedBy = processedBy;
     }
 
     // Getters and setters

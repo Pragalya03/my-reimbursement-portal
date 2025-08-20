@@ -15,5 +15,5 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     List<Payment> findByPaymentMethod(String paymentMethod);
 
-    List<Payment> findByProcessedBy(User user);
+    // List<Payment> findByProcessedBy(User user);
 }
