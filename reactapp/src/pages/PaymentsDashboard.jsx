@@ -1,45 +1,43 @@
 // src/pages/PaymentsDashboard.jsx
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getExpenseById, createPayment, getPayments } from "../utils/api.js";
+import { useNavigate } from "react-router-dom";
+import {
+  getExpenseById,
+  getExpenses,
+  createPayment,
+  getPayments,
+} from "../utils/api.js";
 
 function PaymentsDashboard() {
-  const { expenseId } = useParams(); // comes from /payments/:expenseId
   const navigate = useNavigate();
 
-  const [expense, setExpense] = useState(null);
+  const [expenses, setExpenses] = useState([]);
   const [payments, setPayments] = useState([]);
-  const [showModal, setShowModal] = useState(!!expenseId);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedExpense, setSelectedExpense] = useState(null);
   const [formData, setFormData] = useState({
+    expenseId: "",
     paymentAmount: "",
     paymentDate: new Date().toISOString(),
-    paymentMethod: "direct_deposit",
-    paymentStatus: "pending",
+    paymentMethod: "DIRECT_DEPOSIT",
+    status: "PENDING",
   });
 
-  // Fetch all payments always
+  // Fetch approved expenses
   useEffect(() => {
+    fetchExpenses();
     fetchPayments();
   }, []);
 
-  // If expenseId exists, fetch that expense and prefill modal
-  useEffect(() => {
-    if (expenseId) {
-      fetchExpense(expenseId);
-    }
-  }, [expenseId]);
-
-  const fetchExpense = async (id) => {
+  const fetchExpenses = async () => {
     try {
-      const data = await getExpenseById(id);
-      setExpense(data);
-      setFormData((prev) => ({
-        ...prev,
-        paymentAmount: data.amount,
-      }));
-      setShowModal(true);
+      const data = await getExpenses();
+      // filter only approved expenses
+      const approved = data.filter((exp) => exp.status === "APPROVED");
+      setExpenses(approved);
     } catch (err) {
-      console.error("Failed to fetch expense:", err);
+      console.error("Failed to fetch expenses:", err);
+      setExpenses([]);
     }
   };
 
@@ -53,6 +51,23 @@ function PaymentsDashboard() {
     }
   };
 
+  const openPaymentModal = async (expense) => {
+    try {
+      const fullExpense = await getExpenseById(expense.id);
+      setSelectedExpense(fullExpense);
+      setFormData({
+        expenseId: fullExpense.id,
+        paymentAmount: fullExpense.amount,
+        paymentDate: new Date().toISOString(),
+        paymentMethod: "DIRECT_DEPOSIT",
+        status: "PENDING",
+      });
+      setShowModal(true);
+    } catch (err) {
+      console.error("Failed to load expense:", err);
+    }
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -61,22 +76,21 @@ function PaymentsDashboard() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = {
-      expenseId,
+      expenseId: formData.expenseId,
       paymentAmount: formData.paymentAmount,
       paymentDate: formData.paymentDate,
       paymentMethod: formData.paymentMethod,
-      paymentStatus: formData.paymentStatus,
+      paymentStatus: formData.status,
     };
 
     try {
       await createPayment(payload);
-      alert("Your payment has been made successfully");
+      alert("Payment saved successfully");
       setShowModal(false);
-      fetchPayments(); // refresh payments table
-      navigate("/payments"); // stay in payments dashboard but remove expenseId param
+      fetchPayments();
     } catch (err) {
       console.error("Payment failed:", err);
-      alert("Failed to process payment");
+      alert("Failed to save payment");
     }
   };
 
@@ -110,20 +124,61 @@ function PaymentsDashboard() {
         Back to Finance Dashboard
       </button>
 
+      {/* Approved Expenses List */}
+      <h3>Approved Expenses</h3>
+      {expenses.length === 0 ? (
+        <p>No approved expenses found</p>
+      ) : (
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Employee</th>
+              <th>Amount</th>
+              <th>Description</th>
+              <th>Date</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {expenses.map((exp) => (
+              <tr key={exp.id}>
+                <td>{exp.id}</td>
+                <td>{exp.employeeId}</td>
+                <td>${exp.amount.toFixed(2)}</td>
+                <td>{exp.description}</td>
+                <td>{exp.date}</td>
+                <td>
+                  <button onClick={() => openPaymentModal(exp)}>
+                    Make/Edit Payment
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+
       {/* Modal */}
-      {showModal && expense && (
+      {showModal && selectedExpense && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h3>Make Payment for Expense #{expenseId}</h3>
+            <h3>Payment for Expense #{formData.expenseId}</h3>
             <form onSubmit={handleSubmit}>
               <label>
                 Expense ID:
-                <input type="text" value={expenseId} disabled />
+                <input type="text" value={formData.expenseId} readOnly />
               </label>
 
               <label>
                 Payment Amount:
-                <input type="number" value={formData.paymentAmount} readOnly />
+                <input
+                  type="number"
+                  name="paymentAmount"
+                  value={formData.paymentAmount}
+                  onChange={handleChange}
+                  step="0.01"
+                />
               </label>
 
               <label>
@@ -138,28 +193,28 @@ function PaymentsDashboard() {
                   value={formData.paymentMethod}
                   onChange={handleChange}
                 >
-                  <option value="direct_deposit">Direct Deposit</option>
-                  <option value="cheque">Cheque</option>
-                  <option value="payroll">Payroll</option>
+                  <option value="DIRECT_DEPOSIT">Direct Deposit</option>
+                  <option value="CHECK">Cheque</option>
+                  <option value="PAYROLL">Payroll</option>
                 </select>
               </label>
 
               <label>
                 Status:
                 <select
-                  name="paymentStatus"
-                  value={formData.paymentStatus}
+                  name="status"
+                  value={formData.status}
                   onChange={handleChange}
                 >
-                  <option value="pending">Pending</option>
-                  <option value="processed">Processed</option>
-                  <option value="completed">Completed</option>
-                  <option value="failed">Failed</option>
+                  <option value="PENDING">Pending</option>
+                  <option value="PROCESSED">Processed</option>
+                  <option value="COMPLETED">Completed</option>
+                  <option value="FAILED">Failed</option>
                 </select>
               </label>
 
               <div style={{ marginTop: "15px" }}>
-                <button type="submit">Submit Payment</button>
+                <button type="submit">Save Payment</button>
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
@@ -174,6 +229,7 @@ function PaymentsDashboard() {
       )}
 
       {/* Payments Table */}
+      <h3 style={{ marginTop: "30px" }}>All Payments</h3>
       {payments.length === 0 ? (
         <p>No payments found</p>
       ) : (
@@ -196,7 +252,7 @@ function PaymentsDashboard() {
                 <td>${Number(payment.paymentAmount).toFixed(2)}</td>
                 <td>{formatDate(payment.paymentDate)}</td>
                 <td>{payment.paymentMethod}</td>
-                <td>{payment.paymentStatus}</td>
+                <td>{payment.paymentStatus || payment.status}</td>
               </tr>
             ))}
           </tbody>
