@@ -176,78 +176,74 @@ function PaymentsDashboard() {
       )}
 
       {/* Modal */}
-      {showModal && selectedExpense && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3>
-              {formData.paymentId ? "Edit Payment" : "Make Payment"} for Expense #
-              {formData.expenseId}
-            </h3>
-            <form onSubmit={handleSubmit}>
-              <label>
-                Expense ID:
-                <input type="text" value={formData.expenseId} readOnly />
-              </label>
+      {/* Modal */}
+{showModal && selectedExpense && (
+  <div className="modal-overlay">
+    <div className="modal-content">
+      <h3>
+        {formData.paymentId ? "Edit Payment" : "Make Payment"} for Expense
+      </h3>
+      <form onSubmit={handleSubmit}>
 
-              <label>
-                Payment Amount:
-                <input
-                  type="number"
-                  name="paymentAmount"
-                  value={formData.paymentAmount}
-                  onChange={handleChange}
-                  step="0.01"
-                />
-              </label>
+        <label>
+          Payment Amount:
+          <input
+            type="number"
+            name="paymentAmount"
+            value={formData.paymentAmount}
+            readOnly
+          />
+        </label>
 
-              <label>
-                Payment Date:
-                <input type="text" value={formData.paymentDate} readOnly />
-              </label>
+        <label>
+          Payment Date:
+          <input type="text" value={formData.paymentDate} readOnly />
+        </label>
 
-              <label>
-                Method:
-                <select
-                  name="paymentMethod"
-                  value={formData.paymentMethod}
-                  onChange={handleChange}
-                >
-                  <option value="DIRECT_DEPOSIT">Direct Deposit</option>
-                  <option value="CHECK">Cheque</option>
-                  <option value="PAYROLL">Payroll</option>
-                </select>
-              </label>
+        <label>
+          Method:
+          <select
+            name="paymentMethod"
+            value={formData.paymentMethod}
+            onChange={handleChange}
+          >
+            <option value="DIRECT_DEPOSIT">Direct Deposit</option>
+            <option value="CHECK">Cheque</option>
+            <option value="PAYROLL">Payroll</option>
+          </select>
+        </label>
 
-              <label>
-                Status:
-                <select
-                  name="status"
-                  value={formData.status}
-                  onChange={handleChange}
-                >
-                  <option value="PENDING">Pending</option>
-                  <option value="PROCESSED">Processed</option>
-                  <option value="COMPLETED">Completed</option>
-                  <option value="FAILED">Failed</option>
-                </select>
-              </label>
+        <label>
+          Status:
+          <select
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+          >
+            <option value="PENDING">Pending</option>
+            <option value="PROCESSED">Processed</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="FAILED">Failed</option>
+          </select>
+        </label>
 
-              <div style={{ marginTop: "15px" }}>
-                <button type="submit">
-                  {formData.paymentId ? "Update Payment" : "Create Payment"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  style={{ marginLeft: "10px" }}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
+        <div style={{ marginTop: "15px" }}>
+          <button type="submit">
+            {formData.paymentId ? "Update Payment" : "Create Payment"}
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowModal(false)}
+            style={{ marginLeft: "10px" }}
+          >
+            Cancel
+          </button>
         </div>
-      )}
+      </form>
+    </div>
+  </div>
+)}
+
 
       <h3 style={{ marginTop: "30px" }}>All Payments</h3>
       {payments.length === 0 ? (
