@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+.payment-list {
+  font-family: 'Inter', sans-serif;
+  color: #1B1D1E;
+  background-color: #FFFFFF;
+  max-width: 1000px;
+  min-width: 700px;
+  margin: 40px auto;
+  padding: 30px 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(47, 79, 79, 0.3);
+  box-sizing: border-box;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  overflow-x: auto;
+  font-size: 0.9rem;
+}
+
+.payment-list h2 {
+  font-weight: 700;
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #2F4F4F;
+  letter-spacing: 1px;
+}
+
+.payment-list label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #2F4F4F;
+  margin-right: 12px;
+}
+
+.payment-list select,
+.payment-list input[type="text"],
+.payment-list input[type="number"],
+.payment-list input[type="date"] {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 2px solid #6A8D8F;
+  font-size: 0.9rem;
+  font-family: 'Inter', sans-serif;
+  color: #1B1D1E;
+  outline-offset: 2px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+  background: #FFFFFF;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.payment-list select:focus,
+.payment-list input:focus {
+  border-color: #2F4F4F;
+  box-shadow: 0 0 8px #2F4F4F55;
+  outline: none;
+}
+
+.payment-list table {
+  width: 100%;
+  table-layout: fixed;
+  word-wrap: break-word;
+  border-collapse: separate;
+  border-spacing: 0 18px;
+}
+
+.payment-list thead tr {
+  background: linear-gradient(90deg, #FFFDF8, #F1F3F2);
+  box-shadow: 0 4px 8px rgba(47, 79, 79, 0.15);
+}
+
+.payment-list th,
+.payment-list td {
+  white-space: normal;
+  overflow-wrap: break-word;
+  padding: 10px 8px;
+}
+
+.payment-list th {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  border-bottom: 3px solid #2F4F4F;
+  box-shadow: inset 0 -3px 5px rgba(47, 79, 79, 0.2);
+}
+
+.payment-list tbody tr {
+  background: #FFFDF8;
+  border-radius: 12px;
+  transition: background-color 0.3s ease;
+  cursor: default;
+  height: 60px;
+}
+
+.payment-list tbody tr:hover {
+  background-color: #F1F3F2;
+}
+
+.payment-list tbody td {
+  font-weight: 500;
+  color: #5E6667;
+  vertical-align: middle;
+}
+
+.payment-list button.submit-btn {
+  background: #E6F4EA;
+  color: #5C7A4B;
+  border: 2px solid #5C7A4B;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.payment-list button.submit-btn:hover {
+  background: #5C7A4B;
+  color: white;
+  box-shadow: 0 6px 12px rgba(92, 122, 75, 0.6);
+}
+
+.payment-list button.cancel-btn {
+  background: white;
+  color: #2F4F4F;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.payment-list button.cancel-btn:hover {
+  background: #2F4F4F !important;
+  color: #ffffff !important;
+  border-color: #2F4F4F;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  width: 400px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
