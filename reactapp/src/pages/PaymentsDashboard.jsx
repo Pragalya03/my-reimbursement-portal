@@ -1,157 +1,154 @@
+// src/pages/PaymentsDashboard.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getPayments, createPayment, updatePayment } from "../utils/api.js";
-import "../styles/PaymentList.css";
+import { getExpenses, getPayments, createPayment, updatePayment } from "../utils/api.js";
 
 function PaymentsDashboard() {
-  const [payments, setPayments] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [editingPayment, setEditingPayment] = useState(null);
-  const [formData, setFormData] = useState({
-    paymentAmount: "",
-    paymentDate: "",
-    status: "PENDING",
-    paymentMethod: "",
-  });
-
   const navigate = useNavigate();
 
+  const [expenses, setExpenses] = useState([]);
+  const [payments, setPayments] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedExpense, setSelectedExpense] = useState(null);
+  const [formData, setFormData] = useState({
+    paymentId: null,
+    expenseId: "",
+    paymentAmount: "",
+    paymentDate: new Date().toISOString(),
+    paymentMethod: "DIRECT_DEPOSIT",
+    status: "PENDING",
+  });
+
   useEffect(() => {
-    fetchPayments();
+    loadData();
   }, []);
 
-  const fetchPayments = async () => {
+  const loadData = async () => {
     try {
-      const data = await getPayments();
-      setPayments(data);
-    } catch (error) {
-      console.error("Failed to fetch payments:", error);
+      const [paymentData, expenseData] = await Promise.all([getPayments(), getExpenses()]);
+      setPayments(paymentData);
+
+      // Only show expenses with status "APPROVED"
+      const approvedExpenses = expenseData.filter(exp => exp.status === "APPROVED");
+
+      // Exclude expenses that already have a payment
+      const unpaidExpenses = approvedExpenses.filter(
+        exp => !paymentData.some(p => p.expense.id === exp.id)
+      );
+
+      setExpenses(unpaidExpenses);
+    } catch (err) {
+      console.error("Failed to load data:", err);
+      setExpenses([]);
       setPayments([]);
     }
   };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "-";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
+  const openPaymentModal = (expenseOrPayment, isPayment = false) => {
+    if (isPayment) {
+      // Editing an existing payment
+      setFormData({
+        paymentId: expenseOrPayment.id,
+        expenseId: expenseOrPayment.expense.id,
+        paymentAmount: expenseOrPayment.paymentAmount,
+        paymentDate: expenseOrPayment.paymentDate,
+        paymentMethod: expenseOrPayment.paymentMethod,
+        status: expenseOrPayment.status,
+      });
+      setSelectedExpense(expenseOrPayment.expense);
+    } else {
+      // New payment from approved expense
+      setFormData({
+        paymentId: null,
+        expenseId: expenseOrPayment.id,
+        paymentAmount: expenseOrPayment.amount,
+        paymentDate: new Date().toISOString(),
+        paymentMethod: "DIRECT_DEPOSIT",
+        status: "PENDING",
+      });
+      setSelectedExpense(expenseOrPayment);
+    }
+
+    setShowModal(true);
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleCreatePayment = () => {
-    setEditingPayment(null);
-    setFormData({
-      paymentAmount: "",
-      paymentDate: "",
-      status: "PENDING",
-      paymentMethod: "",
-    });
-    setShowModal(true);
-  };
-
-  const handleEditPayment = (payment) => {
-    setEditingPayment(payment);
-    setFormData({
-      paymentAmount: payment.paymentAmount,
-      paymentDate: payment.paymentDate ? payment.paymentDate.split("T")[0] : "",
-      status: payment.status,
-      paymentMethod: payment.paymentMethod,
-    });
-    setShowModal(true);
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const payload = {
+      expense: { id: formData.expenseId },
+      paymentAmount: Number(formData.paymentAmount),
+      paymentDate: new Date().toISOString().slice(0,19),
+      paymentMethod: formData.paymentMethod,
+      status: formData.status,
+    };
+
     try {
-      if (editingPayment) {
-        await updatePayment(editingPayment.id, formData);
-        alert("Payment updated successfully!");
+      if (formData.paymentId) {
+        await updatePayment(formData.paymentId, payload);
+        alert("Payment updated successfully");
       } else {
-        await createPayment(formData);
-        alert("Payment created successfully!");
+        await createPayment(payload);
+        alert("Payment created successfully");
       }
       setShowModal(false);
-      setEditingPayment(null);
-      fetchPayments();
-    } catch (error) {
-      console.error("Failed to save payment:", error);
+      loadData();
+    } catch (err) {
+      console.error("Payment failed:", err);
       alert("Failed to save payment");
     }
   };
 
   return (
-    <div className="payment-list">
-      {/* Top bar */}
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "15px" }}>
-        <button
-          onClick={() => navigate("/finance")}
-          className="cancel-btn"
-        >
-          Back
-        </button>
-        <button
-          onClick={handleCreatePayment}
-          className="create-btn"
-        >
-          Create Payment
-        </button>
-      </div>
-
+    <div className="expense-list" style={{ padding: "20px" }}>
       <h2>Payments Dashboard</h2>
+      <button
+        onClick={() => navigate("/finance-dashboard")}
+        className="cancel-btn"
+        style={{
+          marginBottom: "15px",
+          padding: "6px 12px",
+          borderRadius: "8px",
+          cursor: "pointer",
+        }}
+      >
+        Back to Finance Dashboard
+      </button>
 
-      {payments.length === 0 ? (
-        <p>No payments found</p>
+      <h3>Approved Expenses</h3>
+      {expenses.length === 0 ? (
+        <p>No approved expenses</p>
       ) : (
-        <table>
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead>
             <tr>
-              <th>Payment ID</th>
+              <th>ID</th>
+              <th>Employee</th>
               <th>Amount</th>
+              <th>Description</th>
               <th>Date</th>
-              <th>Status</th>
-              <th>Method</th>
-              <th>Actions</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
-            {payments.map((payment) => (
-              <tr key={payment.id}>
-                <td>{payment.id}</td>
-                <td>${Number(payment.paymentAmount).toFixed(2)}</td>
-                <td>{formatDate(payment.paymentDate)}</td>
-                <td>{payment.status}</td>
-                <td>{payment.paymentMethod}</td>
+            {expenses.map(exp => (
+              <tr key={exp.id}>
+                <td>{exp.id}</td>
+                <td>{exp.employeeId}</td>
+                <td>${exp.amount.toFixed(2)}</td>
+                <td>{exp.description}</td>
+                <td>{new Date(exp.date).toLocaleDateString()}</td>
                 <td>
-                  <div className="action-buttons">
-                    <button
-                      className="make-payment-btn"
-                      onClick={() => alert(`Making payment for ID ${payment.id}`)}
-                    >
-                      Make Payment
-                    </button>
-                    <button
-                      className="edit-btn"
-                      onClick={() => handleEditPayment(payment)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="cancel-btn"
-                      onClick={() => alert(`Cancel payment ID ${payment.id}`)}
-                    >
-                      Cancel
-                    </button>
-                  </div>
+                  <button
+                    className="make-payment-btn"
+                    onClick={() => openPaymentModal(exp)}
+                  >
+                    Make Payment
+                  </button>
                 </td>
               </tr>
             ))}
@@ -159,66 +156,91 @@ function PaymentsDashboard() {
         </table>
       )}
 
-      {/* Modal for Create / Update */}
-      {showModal && (
+      <h3 style={{ marginTop: "30px" }}>All Payments</h3>
+      {payments.length === 0 ? (
+        <p>No payments</p>
+      ) : (
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <thead>
+            <tr>
+              <th>Payment ID</th>
+              <th>Expense ID</th>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Method</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {payments.map(p => (
+              <tr key={p.id}>
+                <td>{p.id}</td>
+                <td>{p.expense.id}</td>
+                <td>${Number(p.paymentAmount).toFixed(2)}</td>
+                <td>{new Date(p.paymentDate).toLocaleDateString()}</td>
+                <td>{p.paymentMethod}</td>
+                <td>{p.status}</td>
+                <td>
+                  <button
+                    className="edit-btn"
+                    onClick={() => openPaymentModal(p, true)}
+                  >
+                    EDIT
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+
+      {showModal && selectedExpense && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h3>{editingPayment ? "Update Payment" : "Create Payment"}</h3>
+            <h3>{formData.paymentId ? "Edit Payment" : "Make Payment"} for Expense</h3>
             <form onSubmit={handleSubmit}>
               <label>
-                Amount:
-                <input
-                  type="text"
-                  name="paymentAmount"
-                  value={formData.paymentAmount}
-                  onChange={handleChange}
-                  required
-                />
+                Payment Amount:
+                <input type="number" name="paymentAmount" value={formData.paymentAmount} readOnly />
               </label>
+
               <label>
-                Date:
-                <input
-                  type="date"
-                  name="paymentDate"
-                  value={formData.paymentDate}
-                  onChange={handleChange}
-                  required
-                />
+                Payment Date:
+                <input type="text" value={formData.paymentDate} readOnly />
               </label>
+
+              <label>
+                Method:
+                <select name="paymentMethod" value={formData.paymentMethod} onChange={handleChange}>
+                  <option value="DIRECT_DEPOSIT">Direct Deposit</option>
+                  <option value="CHECK">Cheque</option>
+                  <option value="PAYROLL">Payroll</option>
+                </select>
+              </label>
+
               <label>
                 Status:
-                <select
-                  name="status"
-                  value={formData.status}
-                  onChange={handleChange}
-                >
+                <select name="status" value={formData.status} onChange={handleChange}>
                   <option value="PENDING">Pending</option>
+                  <option value="PROCESSED">Processed</option>
                   <option value="COMPLETED">Completed</option>
                   <option value="FAILED">Failed</option>
                 </select>
               </label>
-              <label>
-                Method:
-                <input
-                  type="text"
-                  name="paymentMethod"
-                  value={formData.paymentMethod}
-                  onChange={handleChange}
-                  required
-                />
-              </label>
 
-              <div className="action-buttons">
+              <div style={{ marginTop: "15px" }}>
                 <button
                   type="submit"
-                  className={editingPayment ? "update-btn" : "create-btn"}
+                  className={formData.paymentId ? "update-btn" : "create-btn"}
                 >
-                  {editingPayment ? "Update Payment" : "Create Payment"}
+                  {formData.paymentId ? "Update Payment" : "Create Payment"}
                 </button>
                 <button
                   type="button"
                   className="cancel-btn"
                   onClick={() => setShowModal(false)}
+                  style={{ marginLeft: "10px" }}
                 >
                   Cancel
                 </button>
