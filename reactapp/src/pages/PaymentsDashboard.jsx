@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getExpenses, getPayments, createPayment, updatePayment } from "../utils/api.js";
-
+import "../styles/PaymentsDashboard.css";
 function PaymentsDashboard() {
   const navigate = useNavigate();
 
@@ -104,7 +104,7 @@ function PaymentsDashboard() {
   };
 
   return (
-    <div className="expense-list" style={{ padding: "20px" }}>
+    <div className="payment-list" style={{ padding: "20px" }}>
       <h2>Payments Dashboard</h2>
       <button
         onClick={() => navigate("/finance-dashboard")}
@@ -118,7 +118,21 @@ function PaymentsDashboard() {
       >
         Back to Finance Dashboard
       </button>
-
+      {/*<button 
+      // className="back-btn"
+      // style={{
+      //   position: "absolute",
+      //   padding: "6px 12px",
+      //   backgroundColor: "#f87171",
+      //   color: "white",
+      //   border: "none",
+      //   borderRadius: "8px",
+      //   cursor: "pointer",
+    
+      // }}
+      //  onClick={() => winavigate("/finance-dashboard")}>
+      //   Back
+      // </button> */}
       <h3>Approved Expenses</h3>
       {expenses.length === 0 ? (
         <p>No approved expenses</p>

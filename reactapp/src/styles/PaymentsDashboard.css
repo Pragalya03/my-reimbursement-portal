@@ -125,17 +125,18 @@
 
 .payment-list button.cancel-btn {
   background: white;
-  color: #2F4F4F;
-  border: none;
+  color: #f87171;
+  border: #9B3A3A;
   border-radius: 8px;
   padding: 8px 16px;
   cursor: pointer;
+  align-self: flex-start;
 }
 
 .payment-list button.cancel-btn:hover {
-  background: #2F4F4F !important;
+  background: #9B3A3A !important;
   color: #ffffff !important;
-  border-color: #2F4F4F;
+  border-color: #9B3A3A;
 }
 
 .modal-overlay {
@@ -164,10 +165,10 @@
   background: #E6F4EA;
   color: #2F4F4F;
   border: 2px solid #5C7A4B;
-  padding: 10px 18px;
+  padding: 6px 14px;
   border-radius: 12px;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -181,10 +182,10 @@
   background: #F0F6FF;
   color: #2F4F4F;
   border: 2px solid #4B6A9B;
-  padding: 10px 18px;
+  padding: 6px 14px;
   border-radius: 12px;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -198,10 +199,10 @@
   background: #F8D7DA;
   color: #9B3A3A;
   border: 2px solid #9B3A3A;
-  padding: 10px 18px;
+  padding: 6px 14px;
   border-radius: 12px;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -215,10 +216,10 @@
   background: #FFF9E6;
   color: #A88734;
   border: 2px solid #A88734;
-  padding: 10px 18px;
+  padding: 6px 14px;
   border-radius: 12px;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -232,10 +233,10 @@
   background: #E6F0FF;
   color: #2F4F4F;
   border: 2px solid #2F4F4F;
-  padding: 10px 18px;
+  padding: 6px 14px;
   border-radius: 12px;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   cursor: pointer;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
