@@ -28,10 +28,7 @@ function PaymentsDashboard() {
       const [paymentData, expenseData] = await Promise.all([getPayments(), getExpenses()]);
       setPayments(paymentData);
 
-      // Only show expenses with status "APPROVED"
       const approvedExpenses = expenseData.filter(exp => exp.status === "APPROVED");
-
-      // Exclude expenses that already have a payment
       const unpaidExpenses = approvedExpenses.filter(
         exp => !paymentData.some(p => p.expense.id === exp.id)
       );
@@ -44,30 +41,31 @@ function PaymentsDashboard() {
     }
   };
 
-  const openPaymentModal = (expense) => {
-    const existingPayment = payments.find(p => p.expense.id === expense.id);
-
-    if (existingPayment) {
+  const openPaymentModal = (expenseOrPayment, isPayment = false) => {
+    if (isPayment) {
+      // Editing an existing payment
       setFormData({
-        paymentId: existingPayment.id,
-        expenseId: existingPayment.expense.id,
-        paymentAmount: existingPayment.paymentAmount,
-        paymentDate: existingPayment.paymentDate,
-        paymentMethod: existingPayment.paymentMethod,
-        status: existingPayment.status,
+        paymentId: expenseOrPayment.id,
+        expenseId: expenseOrPayment.expense.id,
+        paymentAmount: expenseOrPayment.paymentAmount,
+        paymentDate: expenseOrPayment.paymentDate,
+        paymentMethod: expenseOrPayment.paymentMethod,
+        status: expenseOrPayment.status,
       });
+      setSelectedExpense(expenseOrPayment.expense);
     } else {
+      // New payment from approved expense
       setFormData({
         paymentId: null,
-        expenseId: expense.id,
-        paymentAmount: expense.amount,
+        expenseId: expenseOrPayment.id,
+        paymentAmount: expenseOrPayment.amount,
         paymentDate: new Date().toISOString(),
         paymentMethod: "DIRECT_DEPOSIT",
         status: "PENDING",
       });
+      setSelectedExpense(expenseOrPayment);
     }
 
-    setSelectedExpense(expense);
     setShowModal(true);
   };
 
@@ -144,7 +142,41 @@ function PaymentsDashboard() {
                 <td>{exp.description}</td>
                 <td>{new Date(exp.date).toLocaleDateString()}</td>
                 <td>
-                  <button onClick={() => openPaymentModal(exp)}>Make/Edit Payment</button>
+                  <button onClick={() => openPaymentModal(exp)}>Make Payment</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+
+      <h3 style={{ marginTop: "30px" }}>All Payments</h3>
+      {payments.length === 0 ? (
+        <p>No payments</p>
+      ) : (
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <thead>
+            <tr>
+              <th>Payment ID</th>
+              <th>Expense ID</th>
+              <th>Amount</th>
+              <th>Date</th>
+              <th>Method</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {payments.map(p => (
+              <tr key={p.id}>
+                <td>{p.id}</td>
+                <td>{p.expense.id}</td>
+                <td>${Number(p.paymentAmount).toFixed(2)}</td>
+                <td>{new Date(p.paymentDate).toLocaleDateString()}</td>
+                <td>{p.paymentMethod}</td>
+                <td>{p.status}</td>
+                <td>
+                  <button onClick={() => openPaymentModal(p, true)}>EDIT</button>
                 </td>
               </tr>
             ))}
@@ -193,36 +225,6 @@ function PaymentsDashboard() {
             </form>
           </div>
         </div>
-      )}
-
-      <h3 style={{ marginTop: "30px" }}>All Payments</h3>
-      {payments.length === 0 ? (
-        <p>No payments</p>
-      ) : (
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr>
-              <th>Payment ID</th>
-              <th>Expense ID</th>
-              <th>Amount</th>
-              <th>Date</th>
-              <th>Method</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {payments.map(p => (
-              <tr key={p.id}>
-                <td>{p.id}</td>
-                <td>{p.expense.id}</td>
-                <td>${Number(p.paymentAmount).toFixed(2)}</td>
-                <td>{new Date(p.paymentDate).toLocaleDateString()}</td>
-                <td>{p.paymentMethod}</td>
-                <td>{p.status}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
       )}
     </div>
   );
