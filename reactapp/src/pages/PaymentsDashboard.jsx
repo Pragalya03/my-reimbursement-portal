@@ -2,10 +2,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  getExpenseById,
   getExpenses,
-  createPayment,
   getPayments,
+  createPayment,
+  updatePayment,
 } from "../utils/api.js";
 
 function PaymentsDashboard() {
@@ -16,6 +16,7 @@ function PaymentsDashboard() {
   const [showModal, setShowModal] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState(null);
   const [formData, setFormData] = useState({
+    paymentId: null, // track if editing
     expenseId: "",
     paymentAmount: "",
     paymentDate: new Date().toISOString(),
@@ -23,7 +24,6 @@ function PaymentsDashboard() {
     status: "PENDING",
   });
 
-  // Fetch approved expenses
   useEffect(() => {
     fetchExpenses();
     fetchPayments();
@@ -32,11 +32,9 @@ function PaymentsDashboard() {
   const fetchExpenses = async () => {
     try {
       const data = await getExpenses();
-      // filter only approved expenses
-      const approved = data.filter((exp) => exp.status === "APPROVED");
-      setExpenses(approved);
+      setExpenses(data.filter((exp) => exp.status === "APPROVED"));
     } catch (err) {
-      console.error("Failed to fetch expenses:", err);
+      console.error(err);
       setExpenses([]);
     }
   };
@@ -46,26 +44,40 @@ function PaymentsDashboard() {
       const data = await getPayments();
       setPayments(data);
     } catch (err) {
-      console.error("Failed to fetch payments:", err);
+      console.error(err);
       setPayments([]);
     }
   };
 
-  const openPaymentModal = async (expense) => {
-    try {
-      const fullExpense = await getExpenseById(expense.id);
-      setSelectedExpense(fullExpense);
+  const openPaymentModal = (expense) => {
+    const existingPayment = payments.find(
+      (p) => p.expenseId === expense.id
+    );
+
+    if (existingPayment) {
+      // Edit mode
       setFormData({
-        expenseId: fullExpense.id,
-        paymentAmount: fullExpense.amount,
+        paymentId: existingPayment.id,
+        expenseId: existingPayment.expenseId,
+        paymentAmount: existingPayment.paymentAmount,
+        paymentDate: existingPayment.paymentDate,
+        paymentMethod: existingPayment.paymentMethod,
+        status: existingPayment.paymentStatus || existingPayment.status,
+      });
+    } else {
+      // New payment
+      setFormData({
+        paymentId: null,
+        expenseId: expense.id,
+        paymentAmount: expense.amount,
         paymentDate: new Date().toISOString(),
         paymentMethod: "DIRECT_DEPOSIT",
         status: "PENDING",
       });
-      setShowModal(true);
-    } catch (err) {
-      console.error("Failed to load expense:", err);
     }
+
+    setSelectedExpense(expense);
+    setShowModal(true);
   };
 
   const handleChange = (e) => {
@@ -84,26 +96,31 @@ function PaymentsDashboard() {
     };
 
     try {
-      await createPayment(payload);
-      alert("Payment saved successfully");
+      if (formData.paymentId) {
+        // Edit existing payment
+        await updatePayment(formData.paymentId, payload);
+        alert("Payment updated successfully");
+      } else {
+        // Create new payment
+        await createPayment(payload);
+        alert("Payment created successfully");
+      }
       setShowModal(false);
       fetchPayments();
     } catch (err) {
-      console.error("Payment failed:", err);
+      console.error(err);
       alert("Failed to save payment");
     }
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleString("en-US", {
+  const formatDate = (dateString) =>
+    new Date(dateString).toLocaleString("en-US", {
       month: "short",
       day: "numeric",
       year: "numeric",
       hour: "2-digit",
       minute: "2-digit",
     });
-  };
 
   return (
     <div style={{ padding: "20px" }}>
@@ -124,10 +141,9 @@ function PaymentsDashboard() {
         Back to Finance Dashboard
       </button>
 
-      {/* Approved Expenses List */}
       <h3>Approved Expenses</h3>
       {expenses.length === 0 ? (
-        <p>No approved expenses found</p>
+        <p>No approved expenses</p>
       ) : (
         <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead>
@@ -163,7 +179,10 @@ function PaymentsDashboard() {
       {showModal && selectedExpense && (
         <div className="modal-overlay">
           <div className="modal-content">
-            <h3>Payment for Expense #{formData.expenseId}</h3>
+            <h3>
+              {formData.paymentId ? "Edit Payment" : "Make Payment"} for Expense #
+              {formData.expenseId}
+            </h3>
             <form onSubmit={handleSubmit}>
               <label>
                 Expense ID:
@@ -214,7 +233,9 @@ function PaymentsDashboard() {
               </label>
 
               <div style={{ marginTop: "15px" }}>
-                <button type="submit">Save Payment</button>
+                <button type="submit">
+                  {formData.paymentId ? "Update Payment" : "Create Payment"}
+                </button>
                 <button
                   type="button"
                   onClick={() => setShowModal(false)}
@@ -228,10 +249,9 @@ function PaymentsDashboard() {
         </div>
       )}
 
-      {/* Payments Table */}
       <h3 style={{ marginTop: "30px" }}>All Payments</h3>
       {payments.length === 0 ? (
-        <p>No payments found</p>
+        <p>No payments</p>
       ) : (
         <table style={{ width: "100%", borderCollapse: "collapse" }}>
           <thead>
@@ -245,14 +265,14 @@ function PaymentsDashboard() {
             </tr>
           </thead>
           <tbody>
-            {payments.map((payment) => (
-              <tr key={payment.id}>
-                <td>{payment.id}</td>
-                <td>{payment.expenseId}</td>
-                <td>${Number(payment.paymentAmount).toFixed(2)}</td>
-                <td>{formatDate(payment.paymentDate)}</td>
-                <td>{payment.paymentMethod}</td>
-                <td>{payment.paymentStatus || payment.status}</td>
+            {payments.map((p) => (
+              <tr key={p.id}>
+                <td>{p.id}</td>
+                <td>{p.expenseId}</td>
+                <td>${Number(p.paymentAmount).toFixed(2)}</td>
+                <td>{formatDate(p.paymentDate)}</td>
+                <td>{p.paymentMethod}</td>
+                <td>{p.paymentStatus || p.status}</td>
               </tr>
             ))}
           </tbody>
