@@ -1,12 +1,7 @@
 // src/pages/PaymentsDashboard.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  getExpenses,
-  getPayments,
-  createPayment,
-  updatePayment,
-} from "../utils/api.js";
+import { getExpenses, getPayments, createPayment, updatePayment } from "../utils/api.js";
 
 function PaymentsDashboard() {
   const navigate = useNavigate();
@@ -16,7 +11,7 @@ function PaymentsDashboard() {
   const [showModal, setShowModal] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState(null);
   const [formData, setFormData] = useState({
-    paymentId: null, // track if editing
+    paymentId: null,
     expenseId: "",
     paymentAmount: "",
     paymentDate: new Date().toISOString(),
@@ -25,66 +20,33 @@ function PaymentsDashboard() {
   });
 
   useEffect(() => {
-    const loadData=async()=>{
-      try{
-        const paymentData=await getPayments();
-        setPayments(paymentData);
-
-        const expenseData=await getExpenses();
-        const approvedExpenses=expenseData.filter(exp=>exp.status==="APPROVED");
-
-        const unpaidExpenses=approvedExpenses.filter(
-          exp=>!paymentData.some(p=>p.expense.id===exp.id)
-        );
-
-        setExpenses(unpaidExpenses);
-      } catch (err) {
-        console.error(err);
-        setExpenses([]);
-        setPayments([]);
-      }
-    };
     loadData();
-  },[]);
+  }, []);
 
-  // const fetchExpenses = async () => {
-  //   try {
-  //     const data = await getExpenses();
-  //     setExpenses(data.filter((exp) => exp.status === "APPROVED"));
-  //   } catch (err) {
-  //     console.error(err);
-  //     setExpenses([]);
-  //   }
-  // };
-  const fetchExpenses = async () => {
+  // Load both payments and only expenses approved in Approval table
+  const loadData = async () => {
     try {
-      const data = await getExpenses();
-      const approvedExpenses=data.filter((exp)=>exp.status==="APPROVED");
+      const [paymentData, expenseData] = await Promise.all([getPayments(), getExpenses()]);
+      setPayments(paymentData);
 
-      const unpaidExpenses=approvedExpenses.filter(
-        (exp)=>!payments.some((p)=>p.expense.id===exp.id)
+      // Only expenses that are approved in the approval table
+      const approvedExpenses = expenseData.filter(exp => exp.approvalStatus === "APPROVED");
+
+      // Filter out already paid expenses
+      const unpaidExpenses = approvedExpenses.filter(
+        exp => !paymentData.some(p => p.expense.id === exp.id)
       );
+
       setExpenses(unpaidExpenses);
     } catch (err) {
-      console.error(err);
+      console.error("Failed to load data:", err);
       setExpenses([]);
-    }
-  };
-
-  const fetchPayments = async () => {
-    try {
-      const data = await getPayments();
-      setPayments(data);
-    } catch (err) {
-      console.error(err);
       setPayments([]);
     }
   };
 
   const openPaymentModal = (expense) => {
-    const existingPayment = payments.find(
-      (p) => p.expenseId === expense.id
-    );
+    const existingPayment = payments.find(p => p.expenseId === expense.id);
 
     if (existingPayment) {
       // Edit mode
@@ -114,13 +76,13 @@ function PaymentsDashboard() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const payload = {
-      expense: {id: formData.expenseId},
+      expense: { id: formData.expenseId },
       paymentAmount: Number(formData.paymentAmount),
       paymentDate: new Date().toISOString(),
       paymentMethod: formData.paymentMethod,
@@ -129,19 +91,16 @@ function PaymentsDashboard() {
 
     try {
       if (formData.paymentId) {
-        // Edit existing payment
         await updatePayment(formData.paymentId, payload);
         alert("Payment updated successfully");
       } else {
-        // Create new payment
         await createPayment(payload);
         alert("Payment created successfully");
       }
       setShowModal(false);
-      fetchExpenses();
-      fetchPayments();
+      loadData();
     } catch (err) {
-      console.error("Payment failed",err);
+      console.error("Payment failed:", err);
       alert("Failed to save payment");
     }
   };
@@ -190,7 +149,7 @@ function PaymentsDashboard() {
             </tr>
           </thead>
           <tbody>
-            {expenses.map((exp) => (
+            {expenses.map(exp => (
               <tr key={exp.id}>
                 <td>{exp.id}</td>
                 <td>{exp.employeeId}</td>
@@ -208,75 +167,56 @@ function PaymentsDashboard() {
         </table>
       )}
 
-      {/* Modal */}
-      {/* Modal */}
-{showModal && selectedExpense && (
-  <div className="modal-overlay">
-    <div className="modal-content">
-      <h3>
-        {formData.paymentId ? "Edit Payment" : "Make Payment"} for Expense
-      </h3>
-      <form onSubmit={handleSubmit}>
+      {showModal && selectedExpense && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>{formData.paymentId ? "Edit Payment" : "Make Payment"} for Expense</h3>
+            <form onSubmit={handleSubmit}>
+              <label>
+                Payment Amount:
+                <input type="number" name="paymentAmount" value={formData.paymentAmount} readOnly />
+              </label>
 
-        <label>
-          Payment Amount:
-          <input
-            type="number"
-            name="paymentAmount"
-            value={formData.paymentAmount}
-            readOnly
-          />
-        </label>
+              <label>
+                Payment Date:
+                <input type="text" value={formData.paymentDate} readOnly />
+              </label>
 
-        <label>
-          Payment Date:
-          <input type="text" value={formData.paymentDate} readOnly />
-        </label>
+              <label>
+                Method:
+                <select name="paymentMethod" value={formData.paymentMethod} onChange={handleChange}>
+                  <option value="DIRECT_DEPOSIT">Direct Deposit</option>
+                  <option value="CHECK">Cheque</option>
+                  <option value="PAYROLL">Payroll</option>
+                </select>
+              </label>
 
-        <label>
-          Method:
-          <select
-            name="paymentMethod"
-            value={formData.paymentMethod}
-            onChange={handleChange}
-          >
-            <option value="DIRECT_DEPOSIT">Direct Deposit</option>
-            <option value="CHECK">Cheque</option>
-            <option value="PAYROLL">Payroll</option>
-          </select>
-        </label>
+              <label>
+                Status:
+                <select name="status" value={formData.status} onChange={handleChange}>
+                  <option value="PENDING">Pending</option>
+                  <option value="PROCESSED">Processed</option>
+                  <option value="COMPLETED">Completed</option>
+                  <option value="FAILED">Failed</option>
+                </select>
+              </label>
 
-        <label>
-          Status:
-          <select
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
-          >
-            <option value="PENDING">Pending</option>
-            <option value="PROCESSED">Processed</option>
-            <option value="COMPLETED">Completed</option>
-            <option value="FAILED">Failed</option>
-          </select>
-        </label>
-
-        <div style={{ marginTop: "15px" }}>
-          <button type="submit">
-            {formData.paymentId ? "Update Payment" : "Create Payment"}
-          </button>
-          <button
-            type="button"
-            onClick={() => setShowModal(false)}
-            style={{ marginLeft: "10px" }}
-          >
-            Cancel
-          </button>
+              <div style={{ marginTop: "15px" }}>
+                <button type="submit">
+                  {formData.paymentId ? "Update Payment" : "Create Payment"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  style={{ marginLeft: "10px" }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-      </form>
-    </div>
-  </div>
-)}
-
+      )}
 
       <h3 style={{ marginTop: "30px" }}>All Payments</h3>
       {payments.length === 0 ? (
@@ -294,7 +234,7 @@ function PaymentsDashboard() {
             </tr>
           </thead>
           <tbody>
-            {payments.map((p) => (
+            {payments.map(p => (
               <tr key={p.id}>
                 <td>{p.id}</td>
                 <td>{p.expense.id}</td>
