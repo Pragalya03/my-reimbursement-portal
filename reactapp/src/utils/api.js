@@ -315,7 +315,7 @@ export const getPayments = async () => {
 };
 
 export const updatePayment=async(id,payment)=>{
-  const res=await fetch(`${BASE_URL}/payments`,{
+  const res=await fetch(`${BASE_URL}/payments/${id}`,{
     method:"PUT",
     headers: {"Content-Type":"application/json"},
     body: JSON.stringify(payment),

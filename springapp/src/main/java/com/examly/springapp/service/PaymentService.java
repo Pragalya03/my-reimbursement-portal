@@ -31,6 +31,8 @@ public class PaymentService {
         existingPayment.setPaymentAmount(payment.getPaymentAmount());
         // existingPayment.setProcessedBy(payment.getProcessedBy());
         existingPayment.setPaymentDate(payment.getPaymentDate());
+        existingPayment.setStatus(payment.getStatus());
+        existingPayment.setPaymentMethod(payment.getPaymentMethod());
         return paymentRepository.save(existingPayment);
     }
 

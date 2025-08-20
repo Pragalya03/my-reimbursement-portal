@@ -273,15 +273,10 @@ function FinanceDashboard() {
     try {
       await createApproval(payload);
 
-      if (formData.approvalStatus === "PENDING") {
-        // 👉 Redirect directly to PaymentsDashboard with expenseId
-        navigate(`/payments/${selectedExpense.id}`);
-      } else {
         alert("Approval submitted successfully!");
         setShowModal(false);
         setSelectedExpense(null);
         fetchExpenses();
-      }
     } catch (err) {
       console.error("Failed to submit approval:", err);
       alert("Failed to submit approval");
@@ -319,7 +314,7 @@ function FinanceDashboard() {
               marginRight: "10px",
             }}
           >
-            View Expense Categories
+            Check Payments
           </button>
           <button
             onClick={() => navigate("/categories")}

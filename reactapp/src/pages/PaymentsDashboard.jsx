@@ -79,7 +79,7 @@ function PaymentsDashboard() {
     const payload = {
       expense: { id: formData.expenseId },
       paymentAmount: Number(formData.paymentAmount),
-      paymentDate: new Date().toISOString(),
+      paymentDate: new Date().toISOString().slice(0,19),
       paymentMethod: formData.paymentMethod,
       status: formData.status,
     };
@@ -101,7 +101,7 @@ function PaymentsDashboard() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="payment-list">
       <h2>Payments Dashboard</h2>
       <button
         onClick={() => navigate("/finance-dashboard")}
