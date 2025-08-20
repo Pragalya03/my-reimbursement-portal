@@ -23,16 +23,15 @@ function PaymentsDashboard() {
     loadData();
   }, []);
 
-  // Load both payments and only expenses approved in Approval table
   const loadData = async () => {
     try {
       const [paymentData, expenseData] = await Promise.all([getPayments(), getExpenses()]);
       setPayments(paymentData);
 
-      // Only expenses that are approved in the approval table
-      const approvedExpenses = expenseData.filter(exp => exp.approvalStatus === "APPROVED");
+      // Only show expenses with status "APPROVED"
+      const approvedExpenses = expenseData.filter(exp => exp.status === "APPROVED");
 
-      // Filter out already paid expenses
+      // Exclude expenses that already have a payment
       const unpaidExpenses = approvedExpenses.filter(
         exp => !paymentData.some(p => p.expense.id === exp.id)
       );
@@ -46,20 +45,18 @@ function PaymentsDashboard() {
   };
 
   const openPaymentModal = (expense) => {
-    const existingPayment = payments.find(p => p.expenseId === expense.id);
+    const existingPayment = payments.find(p => p.expense.id === expense.id);
 
     if (existingPayment) {
-      // Edit mode
       setFormData({
         paymentId: existingPayment.id,
-        expenseId: existingPayment.expenseId,
+        expenseId: existingPayment.expense.id,
         paymentAmount: existingPayment.paymentAmount,
         paymentDate: existingPayment.paymentDate,
         paymentMethod: existingPayment.paymentMethod,
-        status: existingPayment.paymentStatus || existingPayment.status,
+        status: existingPayment.status,
       });
     } else {
-      // New payment
       setFormData({
         paymentId: null,
         expenseId: expense.id,
@@ -105,19 +102,9 @@ function PaymentsDashboard() {
     }
   };
 
-  const formatDate = (dateString) =>
-    new Date(dateString).toLocaleString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
   return (
     <div style={{ padding: "20px" }}>
       <h2>Payments Dashboard</h2>
-
       <button
         onClick={() => navigate("/finance-dashboard")}
         style={{
@@ -157,9 +144,7 @@ function PaymentsDashboard() {
                 <td>{exp.description}</td>
                 <td>{new Date(exp.date).toLocaleDateString()}</td>
                 <td>
-                  <button onClick={() => openPaymentModal(exp)}>
-                    Make/Edit Payment
-                  </button>
+                  <button onClick={() => openPaymentModal(exp)}>Make/Edit Payment</button>
                 </td>
               </tr>
             ))}
@@ -202,16 +187,8 @@ function PaymentsDashboard() {
               </label>
 
               <div style={{ marginTop: "15px" }}>
-                <button type="submit">
-                  {formData.paymentId ? "Update Payment" : "Create Payment"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  style={{ marginLeft: "10px" }}
-                >
-                  Cancel
-                </button>
+                <button type="submit">{formData.paymentId ? "Update Payment" : "Create Payment"}</button>
+                <button type="button" onClick={() => setShowModal(false)} style={{ marginLeft: "10px" }}>Cancel</button>
               </div>
             </form>
           </div>
@@ -239,9 +216,9 @@ function PaymentsDashboard() {
                 <td>{p.id}</td>
                 <td>{p.expense.id}</td>
                 <td>${Number(p.paymentAmount).toFixed(2)}</td>
-                <td>{new Date(p.date).toLocaleDateString()}</td>
+                <td>{new Date(p.paymentDate).toLocaleDateString()}</td>
                 <td>{p.paymentMethod}</td>
-                <td>{p.paymentStatus || p.status}</td>
+                <td>{p.status}</td>
               </tr>
             ))}
           </tbody>
