@@ -218,15 +218,10 @@ function FinanceDashboard() {
   // };
   const fetchExpenses = async () => {
     try{
-      const [expenseData, paymentData]=await Promise.all([getExpenses(), getApprovals(), getPayments()]);
-      const approvedApprovals = approvalData.filter(
-        (appr)=>appr.approvalStatus==="APPROVED");
-      
-        const approvedExpenses = expenseData.filter((exp)=>
-        approvedApprovals.some((appr)=>appr.expense.id===exp.id)
-      );
+      const [expenseData, paymentData]=await Promise.all([getExpenses(), getPayments()]);
+      const approvedExpense = expenseData.filter((exp)=>exp.status==="APPROVED");
 
-      const unpaidExpenses=approvedExpenses.filter(
+      const unpaidExpenses=approvedExpense.filter(
         (exp)=>!paymentData.some((p)=>p.expense.id===exp.id)
       );
 
