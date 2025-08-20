@@ -157,3 +157,98 @@
   width: 400px;
   box-shadow: 0 8px 20px rgba(0,0,0,0.3);
 }
+
+/* === Payment Buttons Styling === */
+
+.payment-list button.make-payment-btn {
+  background: #E6F4EA;
+  color: #2F4F4F;
+  border: 2px solid #5C7A4B;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.payment-list button.make-payment-btn:hover {
+  background: #5C7A4B;
+  color: white;
+  box-shadow: 0 6px 12px rgba(92, 122, 75, 0.4);
+}
+
+.payment-list button.edit-btn {
+  background: #F0F6FF;
+  color: #2F4F4F;
+  border: 2px solid #4B6A9B;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.payment-list button.edit-btn:hover {
+  background: #4B6A9B;
+  color: white;
+  box-shadow: 0 6px 12px rgba(75, 106, 155, 0.4);
+}
+
+.payment-list button.cancel-btn {
+  background: #F8D7DA;
+  color: #9B3A3A;
+  border: 2px solid #9B3A3A;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.payment-list button.cancel-btn:hover {
+  background: #9B3A3A;
+  color: white;
+  box-shadow: 0 6px 12px rgba(155, 58, 58, 0.4);
+}
+
+.payment-list button.create-btn {
+  background: #FFF9E6;
+  color: #A88734;
+  border: 2px solid #A88734;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.payment-list button.create-btn:hover {
+  background: #A88734;
+  color: white;
+  box-shadow: 0 6px 12px rgba(168, 135, 52, 0.4);
+}
+
+.payment-list button.update-btn {
+  background: #E6F0FF;
+  color: #2F4F4F;
+  border: 2px solid #2F4F4F;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+.payment-list button.update-btn:hover {
+  background: #2F4F4F;
+  color: white;
+  box-shadow: 0 6px 12px rgba(47, 79, 79, 0.4);
+}
+
+/* Align buttons nicely */
+.payment-list .action-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start;
+  margin-top: 20px;
+}
