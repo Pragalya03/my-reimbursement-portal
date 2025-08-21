@@ -122,9 +122,10 @@ import "../styles/EmployeeDashboard.css";
 
 function EmployeeDashboard() {
   const [expenses, setExpenses] = useState([]);
+  const [showModal, setShowModal] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState(null);
   const [file, setFile] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+
   const loggedInEmployeeId = localStorage.getItem("loggedInEmployeeId");
 
   useEffect(() => {
@@ -133,24 +134,17 @@ function EmployeeDashboard() {
     const fetchExpenses = async () => {
       try {
         const data = await getExpenses();
-        const filtered = data.filter(exp => String(exp.employeeId) === String(loggedInEmployeeId));
+        const filtered = data.filter(
+          (exp) => String(exp.employeeId) === String(loggedInEmployeeId)
+        );
         setExpenses(filtered);
-      } catch (error) {
-        console.error("Failed to fetch expenses:", error);
+      } catch (err) {
+        console.error(err);
       }
     };
 
     fetchExpenses();
   }, [loggedInEmployeeId]);
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
 
   const handleAddExpense = () => {
     window.location.href = "/expenses/new";
@@ -162,9 +156,7 @@ function EmployeeDashboard() {
   };
 
   const handleFileChange = (e) => {
-    if (e.target.files.length > 0) {
-      setFile(e.target.files[0]);
-    }
+    setFile(e.target.files[0]);
   };
 
   const handleUpload = async () => {
@@ -175,8 +167,12 @@ function EmployeeDashboard() {
       fileName: file.name,
       fileSize: file.size,
       fileType: file.type,
-      filePath: `/receipts/${file.name}`, // adjust storage path as per your backend
+      filePath: `/uploads/${file.name}`,
       uploadDate: new Date().toISOString(),
+      ocrText: "",
+      ocrAmount: 0,
+      ocrDate: null,
+      ocrVendor: "",
     };
 
     try {
@@ -185,9 +181,18 @@ function EmployeeDashboard() {
       setShowModal(false);
       setFile(null);
     } catch (err) {
-      console.error("Failed to upload receipt:", err);
-      alert("Failed to upload receipt");
+      alert(err.message || "Failed to upload receipt. Maybe a receipt already exists.");
+      console.error(err);
     }
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
   };
 
   return (
@@ -211,9 +216,18 @@ function EmployeeDashboard() {
           </button>
         </div>
 
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "15px",
+          }}
+        >
           <h2>My Expenses</h2>
-          <button onClick={handleAddExpense} className="add-expense-btn">Add Expense</button>
+          <button onClick={handleAddExpense} className="add-expense-btn">
+            Add Expense
+          </button>
         </div>
 
         {expenses.length === 0 ? (
@@ -232,7 +246,7 @@ function EmployeeDashboard() {
             </thead>
             <tbody>
               {expenses.map((expense) => (
-                <tr key={expense.id} onClick={() => handleRowClick(expense)} style={{ cursor: "pointer" }}>
+                <tr key={expense.id} onClick={() => handleRowClick(expense)}>
                   <td>{expense.employeeId}</td>
                   <td>${Number(expense.amount).toFixed(2)}</td>
                   <td>{expense.description}</td>
@@ -245,21 +259,20 @@ function EmployeeDashboard() {
           </table>
         )}
 
-        {/* Modal */}
         {showModal && (
-          <div className="modal-overlay">
-            <div className="modal">
-              <h3>Upload Receipt for Expense ID: {selectedExpense.id}</h3>
+          <div className="modal">
+            <div className="modal-content">
+              <h3>Upload Receipt for Expense #{selectedExpense.id}</h3>
               <input type="file" onChange={handleFileChange} />
               {file && (
-                <div style={{ marginTop: "10px" }}>
-                  <p><strong>File Name:</strong> {file.name}</p>
-                  <p><strong>File Size:</strong> {file.size} bytes</p>
-                  <p><strong>File Type:</strong> {file.type}</p>
+                <div>
+                  <p>File Name: {file.name}</p>
+                  <p>File Size: {file.size} bytes</p>
+                  <p>File Type: {file.type}</p>
                 </div>
               )}
-              <button onClick={handleUpload} disabled={!file} style={{ marginTop: "10px" }}>Upload</button>
-              <button onClick={() => setShowModal(false)} style={{ marginTop: "10px", marginLeft: "10px" }}>Cancel</button>
+              <button onClick={handleUpload}>Upload</button>
+              <button onClick={() => setShowModal(false)}>Cancel</button>
             </div>
           </div>
         )}
@@ -269,6 +282,8 @@ function EmployeeDashboard() {
 }
 
 export default EmployeeDashboard;
+
+
 
 
 
