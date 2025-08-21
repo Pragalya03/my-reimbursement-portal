@@ -400,7 +400,7 @@ function FinanceDashboard() {
                 <ul>
                   {receipts.map((receipt)=>(
                     <li key={receipt.id}>
-                      <a href={receipt.filePath} target="_blank" rel="noopener noreferrer">
+                      <a href={`https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io/receipts/download/${receipt.fileName}` target="_blank" rel="noopener noreferrer">
                         {receipt.fileName}({(receipt.fileSize/1024).toFixed(2)} KB)
                       </a>
                       <span> | Uploaded in: {new Date(receipt.uploadDate).toLocaleDateString()}</span>
@@ -460,6 +460,7 @@ function FinanceDashboard() {
 }
 
 export default FinanceDashboard;
+
 
 
 
