@@ -36,7 +36,7 @@ public class ExpenseCategoryService {
         category.setRequiresReceipt(categoryDetails.getRequiresReceipt());
         category.setRequiresBusinessPurpose(categoryDetails.getRequiresBusinessPurpose());
         category.setIsActive(categoryDetails.getIsActive());
-        category.setParentCategory(categoryDetails.getParentCategory());
+        //category.setParentCategory(categoryDetails.getParentCategory());
         return expenseCategoryRepository.save(category);
     }
 

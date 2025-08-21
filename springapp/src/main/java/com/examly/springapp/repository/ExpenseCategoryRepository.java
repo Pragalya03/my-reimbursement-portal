@@ -12,5 +12,5 @@ public interface ExpenseCategoryRepository extends JpaRepository<ExpenseCategory
 
     List<ExpenseCategory> findByIsActiveTrue();
 
-    List<ExpenseCategory> findByParentCategoryId(Long parentCategoryId);
+    //List<ExpenseCategory> findByParentCategoryId(Long parentCategoryId);
 }

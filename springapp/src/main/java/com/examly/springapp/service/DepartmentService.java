@@ -38,7 +38,7 @@ public class DepartmentService {
 
         department.setDepartmentName(departmentDetails.getDepartmentName());
         department.setDepartmentCode(departmentDetails.getDepartmentCode());
-        department.setManager(departmentDetails.getManager());
+        // department.setManager(departmentDetails.getManager());
         department.setBudgetLimit(departmentDetails.getBudgetLimit());
         department.setCostCenter(departmentDetails.getCostCenter());
         department.setIsActive(departmentDetails.getIsActive());

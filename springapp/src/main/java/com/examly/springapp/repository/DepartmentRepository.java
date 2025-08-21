@@ -12,5 +12,5 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
 
     List<Department> findByIsActiveTrue();
 
-    List<Department> findByManagerId(Long managerId);
+    //List<Department> findByManagerId(Long managerId);
 }

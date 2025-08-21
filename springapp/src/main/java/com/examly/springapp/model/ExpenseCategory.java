@@ -31,12 +31,12 @@ public class ExpenseCategory {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
 
-    @ManyToOne
-    @JoinColumn(name = "parent_category_id")
-    private ExpenseCategory parentCategory;
+    // @ManyToOne
+    // @JoinColumn(name = "parent_category_id")
+    // private ExpenseCategory parentCategory;
 
-    @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL)
-    private List<ExpenseCategory> subCategories = new ArrayList<>();
+    // @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL)
+    // private List<ExpenseCategory> subCategories = new ArrayList<>();
 
     public ExpenseCategory(){}
     public Long getId() {
@@ -95,25 +95,25 @@ public class ExpenseCategory {
         this.isActive = isActive;
     }
 
-    public ExpenseCategory getParentCategory() {
-        return parentCategory;
-    }
+    // public ExpenseCategory getParentCategory() {
+    //     return parentCategory;
+    // }
 
-    public void setParentCategory(ExpenseCategory parentCategory) {
-        this.parentCategory = parentCategory;
-    }
+    // public void setParentCategory(ExpenseCategory parentCategory) {
+    //     this.parentCategory = parentCategory;
+    // }
 
-    public List<ExpenseCategory> getSubCategories() {
-        return subCategories;
-    }
+    // public List<ExpenseCategory> getSubCategories() {
+    //     return subCategories;
+    // }
 
-    public void setSubCategories(List<ExpenseCategory> subCategories) {
-        this.subCategories = subCategories = subCategories!=null?subCategories:new ArrayList<>();
-    }
+    // public void setSubCategories(List<ExpenseCategory> subCategories) {
+    //     this.subCategories = subCategories = subCategories!=null?subCategories:new ArrayList<>();
+    // }
 
     public ExpenseCategory(Long id, String categoryName, String categoryCode, BigDecimal policyLimit,
-            Boolean requiresReceipt, Boolean requiresBusinessPurpose, Boolean isActive, ExpenseCategory parentCategory,
-            List<ExpenseCategory> subCategories) {
+            Boolean requiresReceipt, Boolean requiresBusinessPurpose, Boolean isActive /*, ExpenseCategory parentCategory,
+            List<ExpenseCategory> subCategories*/) {
         this.id = id;
         this.categoryName = categoryName;
         this.categoryCode = categoryCode;
@@ -121,7 +121,7 @@ public class ExpenseCategory {
         this.requiresReceipt = requiresReceipt;
         this.requiresBusinessPurpose = requiresBusinessPurpose;
         this.isActive = isActive;
-        this.parentCategory = parentCategory;
-        this.subCategories = subCategories!=null?subCategories:new ArrayList<>();
+        // this.parentCategory = parentCategory;
+        // this.subCategories = subCategories!=null?subCategories:new ArrayList<>();
     }   
 }

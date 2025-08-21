@@ -11,5 +11,5 @@ public interface ReceiptRepository extends JpaRepository<Receipt, Long> {
 
     List<Receipt> findByFileType(String fileType);
 
-    List<Receipt> findByOcrVendor(String ocrVendor);
+    //List<Receipt> findByOcrVendor(String ocrVendor);
 }

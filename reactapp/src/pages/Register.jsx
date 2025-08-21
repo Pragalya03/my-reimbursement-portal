@@ -12,9 +12,9 @@ export default function Register() {
     role: "EMPLOYEE",
     employeeId: "",
     department: null,
-    manager: null,
+    // manager: null,
     createdDate: "",
-    lastLogin: "",
+    // lastLogin: "",
     isActive: true
   });
 

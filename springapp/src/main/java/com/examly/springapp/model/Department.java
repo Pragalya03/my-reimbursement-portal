@@ -19,10 +19,10 @@ public class Department {
     @Column(name = "department_code", unique = true, nullable = false, length = 10)
     private String departmentCode;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "manager_id")
-    @JsonIgnoreProperties({"department", "passwordHash"}) 
-    private User manager;
+    // @OneToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "manager_id")
+    // @JsonIgnoreProperties({"department", "passwordHash"}) 
+    // private User manager;
 
     @Column(name = "budget_limit", precision = 12, scale = 2)
     private BigDecimal budgetLimit;
@@ -34,7 +34,7 @@ public class Department {
     private Boolean isActive = true;
 
     @OneToMany(mappedBy = "department", fetch = FetchType.EAGER)
-    @JsonIgnoreProperties({"department", "manager", "passwordHash"})
+    @JsonIgnoreProperties({"department", /*"manager",*/ "passwordHash"})
     private List<User> users;
 
     public Department() {}
@@ -44,7 +44,7 @@ public class Department {
         this.id = id;
         this.departmentName = departmentName;
         this.departmentCode = departmentCode;
-        this.manager = manager;
+        // this.manager = manager;
         this.budgetLimit = budgetLimit;
         this.costCenter = costCenter;
         this.isActive = isActive;
@@ -60,8 +60,8 @@ public class Department {
     public String getDepartmentCode() { return departmentCode; }
     public void setDepartmentCode(String departmentCode) { this.departmentCode = departmentCode; }
 
-    public User getManager() { return manager; }
-    public void setManager(User manager) { this.manager = manager; }
+    // public User getManager() { return manager; }
+    // public void setManager(User manager) { this.manager = manager; }
 
     public BigDecimal getBudgetLimit() { return budgetLimit; }
     public void setBudgetLimit(BigDecimal budgetLimit) { this.budgetLimit = budgetLimit; }

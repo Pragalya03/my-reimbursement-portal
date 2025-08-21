@@ -113,10 +113,10 @@ public class ReceiptService {
         receipt.setFileSize(receiptDetails.getFileSize());
         receipt.setFileType(receiptDetails.getFileType());
         receipt.setFilePath(receiptDetails.getFilePath());
-        receipt.setOcrText(receiptDetails.getOcrText());
-        receipt.setOcrAmount(receiptDetails.getOcrAmount());
-        receipt.setOcrDate(receiptDetails.getOcrDate());
-        receipt.setOcrVendor(receiptDetails.getOcrVendor());
+        // receipt.setOcrText(receiptDetails.getOcrText());
+        // receipt.setOcrAmount(receiptDetails.getOcrAmount());
+        // receipt.setOcrDate(receiptDetails.getOcrDate());
+        // receipt.setOcrVendor(receiptDetails.getOcrVendor());
         receipt.setUploadDate(receiptDetails.getUploadDate());
         return receiptRepository.save(receipt);
     }

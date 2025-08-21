@@ -29,7 +29,7 @@ public class UserController {
     @PostMapping
     public User createUser(@RequestBody User user) {
         user.setCreatedDate(LocalDateTime.now());
-        user.setLastLogin(null); 
+        //user.setLastLogin(null); 
         return userService.createUser(user);
     }
 

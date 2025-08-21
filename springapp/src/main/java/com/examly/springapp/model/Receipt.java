@@ -29,17 +29,17 @@ public class Receipt {
     @Column(name = "file_path", nullable = false, length = 500)
     private String filePath;
 
-    @Column(columnDefinition = "TEXT")
-    private String ocrText;
+    // @Column(columnDefinition = "TEXT")
+    // private String ocrText;
 
-    @Column(name = "ocr_amount", precision = 10, scale = 2)
-    private BigDecimal ocrAmount;
+    // @Column(name = "ocr_amount", precision = 10, scale = 2)
+    // private BigDecimal ocrAmount;
 
-    @Column(name = "ocr_date")
-    private LocalDate ocrDate;
+    // @Column(name = "ocr_date")
+    // private LocalDate ocrDate;
 
-    @Column(name = "ocr_vendor", length = 100)
-    private String ocrVendor;
+    // @Column(name = "ocr_vendor", length = 100)
+    // private String ocrVendor;
 
     @Column(name = "upload_date", nullable = false)
     private LocalDateTime uploadDate = LocalDateTime.now();
@@ -92,37 +92,37 @@ public class Receipt {
         this.filePath = filePath;
     }
 
-    public String getOcrText() {
-        return ocrText;
-    }
+    // public String getOcrText() {
+    //     return ocrText;
+    // }
 
-    public void setOcrText(String ocrText) {
-        this.ocrText = ocrText;
-    }
+    // public void setOcrText(String ocrText) {
+    //     this.ocrText = ocrText;
+    // }
 
-    public BigDecimal getOcrAmount() {
-        return ocrAmount;
-    }
+    // public BigDecimal getOcrAmount() {
+    //     return ocrAmount;
+    // }
 
-    public void setOcrAmount(BigDecimal ocrAmount) {
-        this.ocrAmount = ocrAmount;
-    }
+    // public void setOcrAmount(BigDecimal ocrAmount) {
+    //     this.ocrAmount = ocrAmount;
+    // }
 
-    public LocalDate getOcrDate() {
-        return ocrDate;
-    }
+    // public LocalDate getOcrDate() {
+    //     return ocrDate;
+    // }
 
-    public void setOcrDate(LocalDate ocrDate) {
-        this.ocrDate = ocrDate;
-    }
+    // public void setOcrDate(LocalDate ocrDate) {
+    //     this.ocrDate = ocrDate;
+    // }
 
-    public String getOcrVendor() {
-        return ocrVendor;
-    }
+    // public String getOcrVendor() {
+    //     return ocrVendor;
+    // }
 
-    public void setOcrVendor(String ocrVendor) {
-        this.ocrVendor = ocrVendor;
-    }
+    // public void setOcrVendor(String ocrVendor) {
+    //     this.ocrVendor = ocrVendor;
+    // }
 
     public LocalDateTime getUploadDate() {
         return uploadDate;
@@ -133,17 +133,17 @@ public class Receipt {
     }
 
     public Receipt(Long id, Expense expense, String fileName, Long fileSize, String fileType, String filePath,
-            String ocrText, BigDecimal ocrAmount, LocalDate ocrDate, String ocrVendor, LocalDateTime uploadDate) {
+            /*String ocrText, BigDecimal ocrAmount, LocalDate ocrDate, String ocrVendor,*/ LocalDateTime uploadDate) {
         this.id = id;
         this.expense = expense;
         this.fileName = fileName;
         this.fileSize = fileSize;
         this.fileType = fileType;
         this.filePath = filePath;
-        this.ocrText = ocrText;
-        this.ocrAmount = ocrAmount;
-        this.ocrDate = ocrDate;
-        this.ocrVendor = ocrVendor;
+        // this.ocrText = ocrText;
+        // this.ocrAmount = ocrAmount;
+        // this.ocrDate = ocrDate;
+        // this.ocrVendor = ocrVendor;
         this.uploadDate = uploadDate;
     }
     public Receipt(){};

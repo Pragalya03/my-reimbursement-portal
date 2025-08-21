@@ -49,8 +49,8 @@ public class UserService {
         user.setRole(userDetails.getRole());
         user.setEmployeeId(userDetails.getEmployeeId());
         user.setDepartment(userDetails.getDepartment());
-        user.setManager(userDetails.getManager());
-        user.setLastLogin(userDetails.getLastLogin());
+        // user.setManager(userDetails.getManager());
+        // user.setLastLogin(userDetails.getLastLogin());
         user.setIsActive(userDetails.getIsActive());
         return userRepository.save(user);
     }
@@ -88,7 +88,7 @@ public class UserService {
     if (updatedUser.getRole() != null) existingUser.setRole(updatedUser.getRole());
     if (updatedUser.getEmployeeId() != null) existingUser.setEmployeeId(updatedUser.getEmployeeId());
     if (updatedUser.getDepartment() != null) existingUser.setDepartment(updatedUser.getDepartment());
-    if (updatedUser.getManager() != null) existingUser.setManager(updatedUser.getManager());
+    //if (updatedUser.getManager() != null) existingUser.setManager(updatedUser.getManager());
     if (updatedUser.getIsActive() != null) existingUser.setIsActive(updatedUser.getIsActive());
 
     return userRepository.save(existingUser);
