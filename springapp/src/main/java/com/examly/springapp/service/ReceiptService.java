@@ -96,7 +96,7 @@ public class ReceiptService {
 
     public Receipt createReceipt(Receipt receipt){
         if(receipt.getExpense()!=null && receipt.getExpense().getId()!=null){
-            Expense expense = ExpenseRepository.findById(receipt.getExpense().getId())
+            Expense expense = expenseRepository.findById(receipt.getExpense().getId())
             .orElseThrow(()-> new RuntimeException("Expense not found"));
             receipt.setExpense(expense);
         }

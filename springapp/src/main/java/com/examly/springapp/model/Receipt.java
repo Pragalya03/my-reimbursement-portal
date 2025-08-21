@@ -146,5 +146,5 @@ public class Receipt {
         this.ocrVendor = ocrVendor;
         this.uploadDate = uploadDate;
     }
-    
+    public Receipt(){};
 }

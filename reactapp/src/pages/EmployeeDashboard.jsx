@@ -172,7 +172,7 @@ function EmployeeDashboard() {
     formData.append("fileSize", Number(file.size));
     formData.append("fileType", file.type);
     formData.append("filePath", `/uploads/${file.name}`);
-    formData.append("uploadDate", new Date().toISOString());
+    formData.append("uploadDate", new Date().toISOString().replace("Z",""));
 
     try {
       const created = await uploadReceipt(formData);
