@@ -49,50 +49,47 @@ public class UserService {
         user.setRole(userDetails.getRole());
         user.setEmployeeId(userDetails.getEmployeeId());
         user.setDepartment(userDetails.getDepartment());
-        // user.setManager(userDetails.getManager());
-        // user.setLastLogin(userDetails.getLastLogin());
         user.setIsActive(userDetails.getIsActive());
         return userRepository.save(user);
     }
     public User updateUserSafe(Long id, Map<String, Object> updates) {
-    User existing = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("User not found: " + id));
-
-    if (updates.containsKey("username")) {
-        existing.setUsername(updates.get("username").toString());
-    }
-    if (updates.containsKey("email")) {
-        existing.setEmail(updates.get("email").toString());
-    }
-    if (updates.containsKey("role")) {
-        try {
-            existing.setRole(User.Role.valueOf(updates.get("role").toString().toUpperCase()));
-        } catch (IllegalArgumentException e) {
+        User existing = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found: " + id));
+    
+        if (updates.containsKey("username")) {
+            existing.setUsername(updates.get("username").toString());
         }
+        if (updates.containsKey("email")) {
+            existing.setEmail(updates.get("email").toString());
+        }
+        if (updates.containsKey("role")) {
+            try {
+                existing.setRole(User.Role.valueOf(updates.get("role").toString().toUpperCase()));
+            } catch (IllegalArgumentException e) {
+            }
+        }
+        if (updates.containsKey("password")) {
+            existing.setPasswordHash(updates.get("password").toString());
+        }
+    
+        return userRepository.save(existing);
     }
-    if (updates.containsKey("password")) {
-        existing.setPasswordHash(updates.get("password").toString());
-    }
-
-    return userRepository.save(existing);
-}
 
 
     public User updateUserPartial(Long id, User updatedUser) {
-    User existingUser = userRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("User not found"));
-
-    if (updatedUser.getUsername() != null) existingUser.setUsername(updatedUser.getUsername());
-    if (updatedUser.getEmail() != null) existingUser.setEmail(updatedUser.getEmail());
-    if (updatedUser.getPasswordHash() != null) existingUser.setPasswordHash(updatedUser.getPasswordHash());
-    if (updatedUser.getRole() != null) existingUser.setRole(updatedUser.getRole());
-    if (updatedUser.getEmployeeId() != null) existingUser.setEmployeeId(updatedUser.getEmployeeId());
-    if (updatedUser.getDepartment() != null) existingUser.setDepartment(updatedUser.getDepartment());
-    //if (updatedUser.getManager() != null) existingUser.setManager(updatedUser.getManager());
-    if (updatedUser.getIsActive() != null) existingUser.setIsActive(updatedUser.getIsActive());
-
-    return userRepository.save(existingUser);
-}
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    
+        if (updatedUser.getUsername() != null) existingUser.setUsername(updatedUser.getUsername());
+        if (updatedUser.getEmail() != null) existingUser.setEmail(updatedUser.getEmail());
+        if (updatedUser.getPasswordHash() != null) existingUser.setPasswordHash(updatedUser.getPasswordHash());
+        if (updatedUser.getRole() != null) existingUser.setRole(updatedUser.getRole());
+        if (updatedUser.getEmployeeId() != null) existingUser.setEmployeeId(updatedUser.getEmployeeId());
+        if (updatedUser.getDepartment() != null) existingUser.setDepartment(updatedUser.getDepartment());
+        if (updatedUser.getIsActive() != null) existingUser.setIsActive(updatedUser.getIsActive());
+    
+        return userRepository.save(existingUser);
+    }
 
     public void deleteUser(Long id) {
         User user = getUserById(id);
