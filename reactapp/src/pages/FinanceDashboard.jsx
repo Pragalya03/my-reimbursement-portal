@@ -527,21 +527,21 @@ function FinanceDashboard() {
     }
   };
 
-  // const fetchReceipt = async (fileName) => {
-  //   try {
-  //     const encodedFileName=encodeURIComponent(fileName);
-  //     const res = await fetch(
-  //       `receipts/download/${encodedFileName}`
-  //     );
-  //     if (!res.ok) throw new Error(`File not found: ${fileName}`);
-  //     const blob = await res.blob();
-  //     const url = URL.createObjectURL(blob);
+  const fetchReceipt = async (fileName) => {
+    try {
+      const encodedFileName=encodeURIComponent(fileName);
+      const res = await fetch(
+        `receipts/download/${encodedFileName}`
+      );
+      if (!res.ok) throw new Error(`File not found: ${fileName}`);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
 
-  //     setReceiptBlobs((prev) => ({ ...prev, [fileName]: url }));
-  //   } catch (err) {
-  //     console.error("Failed to fetch receipt: ", err);
-  //   }
-  // };
+      setReceiptBlobs((prev) => ({ ...prev, [fileName]: url }));
+    } catch (err) {
+      console.error("Failed to fetch receipt: ", err);
+    }
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -564,7 +564,9 @@ function FinanceDashboard() {
     try {
       const expenseReceipts = await getReceiptsByExpense(expense.id);
       setReceipts(expenseReceipts);
-      // expenseReceipts.forEach(r => fetchReceipt(r.fileName));
+
+      // Fetch blob URLs for each receipt
+      expenseReceipts.forEach(r => fetchReceipt(r.fileName));
     } catch (err) {
       console.error("Failed to fetch receipts: ", err);
       setReceipts([]);
@@ -601,10 +603,6 @@ function FinanceDashboard() {
       alert("Failed to submit approval");
     }
   };
-
-  const getReceiptUrl=(fileName)=>{
-    return "https://via.placeholder.com/300x200/3B82F6/FFFFFF?text=Receipt+Image";
-  }
 
   return (
     <div className="expense-list">
@@ -715,14 +713,13 @@ function FinanceDashboard() {
                 {receipts.map(receipt => (
                   <div key={receipt.id} style={{ marginBottom: "15px" }}>
                     <p>{receipt.fileName} ({(receipt.fileSize / 1024).toFixed(2)} KB)</p>
-                    //{receiptBlobs[receipt.fileName] && receipt.fileName.endsWith(".png") && (
+                    {receiptBlobs[receipt.fileName] && receipt.fileName.endsWith(".png") && (
                       <img
-                        src={getReceiptUrl(receipt.fileName)}
-                        alt={receipt.fileName}
+                        //src={receiptBlobs[receipt.fileName]}
+                        src="springapp/uploads/Screenshot 2025-08-04 103144.png"
+                        //alt={receipt.fileName}
+                        alt="dummy receipt"
                         style={{ maxWidth: "300px" }}
-                        onError={(e)=>{
-                          e.target.style.display='none';
-                        }}
                       />
                     )}
                     {receiptBlobs[receipt.fileName] && receipt.fileName.endsWith(".pdf") && (
@@ -790,8 +787,3 @@ function FinanceDashboard() {
 }
 
 export default FinanceDashboard;
-
-
-
-
-
