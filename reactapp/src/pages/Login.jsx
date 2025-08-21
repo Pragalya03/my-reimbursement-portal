@@ -3,7 +3,7 @@ import '../styles/Login.css';
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("EMPLOYEE"); // default role
+  const [role, setRole] = useState("EMPLOYEE"); 
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -79,4 +79,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
