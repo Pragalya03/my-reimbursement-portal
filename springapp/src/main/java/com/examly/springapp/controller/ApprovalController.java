@@ -9,7 +9,6 @@ import com.examly.springapp.repository.UserRepository;
 import com.examly.springapp.service.ApprovalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -40,13 +39,9 @@ public class ApprovalController {
     public Approval createApproval(@RequestBody ApprovalRequest request) {
         Expense expense = expenseRepository.findById(request.getExpenseId())
                                            .orElseThrow(() -> new RuntimeException("Expense not found"));
-        // User approver = userRepository.findById(request.getApproverId())
-        //                               .orElseThrow(() -> new RuntimeException("User not found"));
 
         Approval approval = new Approval();
         approval.setExpense(expense);
-        // approval.setApprover(approver);
-        // approval.setApprovalLevel(request.getApprovalLevel());
         approval.setApprovalStatus(Approval.ApprovalStatus.valueOf(request.getApprovalStatus()));
         approval.setApprovalDate(LocalDateTime.now());
         approval.setComments(request.getComments());
