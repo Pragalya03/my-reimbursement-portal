@@ -527,22 +527,50 @@ function FinanceDashboard() {
     }
   };
 
-  const fetchReceipt = async (fileName) => {
-    try {
-      const encodedFileName=encodeURIComponent(fileName);
-      const res = await fetch(
-        `receipts/download/${encodedFileName}`
-      );
-      if (!res.ok) throw new Error(`File not found: ${fileName}`);
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
+  // const fetchReceipt = async (fileName) => {
+  //   try {
+  //     const encodedFileName=encodeURIComponent(fileName);
+  //     const res = await fetch(
+  //       `receipts/download/${encodedFileName}`
+  //     );
+  //     if (!res.ok) throw new Error(`File not found: ${fileName}`);
+  //     const blob = await res.blob();
+  //     const url = URL.createObjectURL(blob);
 
-      setReceiptBlobs((prev) => ({ ...prev, [fileName]: url }));
-    } catch (err) {
-      console.error("Failed to fetch receipt: ", err);
+  //     setReceiptBlobs((prev) => ({ ...prev, [fileName]: url }));
+  //   } catch (err) {
+  //     console.error("Failed to fetch receipt: ", err);
+  //   }
+  // };
+
+  const fetchReceipt = async(fileName)=>{
+    try{
+      const encodedFileName = encodeURIComponent(fileName);
+      const url= `receipts/download/${encodedFileName}`;
+      console.log("[fetchReceipt] Requesting:", url);
+
+      const res = await fetch(url);
+
+      console.log("[fetchReceipt] HTTP status:", res.status, res.statusText);
+      console.log("[fetchReceipt] Content-Type:", res.headers.get("content-type"));
+
+      if(!res.ok){
+        const errText=await res.text();
+        console.error("[fetchReceipt] Server error body:", errText);
+        return;
+      }
+
+      const blob = await res.blob();
+      console.log("[fecthReceipt] Blob type:", blob.type, "size:", blob.size, "bytes");
+
+      const objectUrl = URL.createdObjectURL(blob);
+      console.log("[fetchReceipt] Blob URL: ", objectUrl);
+
+      setReceiptBlobs((prev)=>({...prev, [fileName]: objectUrl}));
+    } catch (err){
+      console.error("[fetchReceipt] Failed:", err);
     }
   };
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
@@ -715,10 +743,8 @@ function FinanceDashboard() {
                     <p>{receipt.fileName} ({(receipt.fileSize / 1024).toFixed(2)} KB)</p>
                     {receiptBlobs[receipt.fileName] && receipt.fileName.endsWith(".png") && (
                       <img
-                        //src={receiptBlobs[receipt.fileName]}
-                        src="springapp/uploads/Screenshot 2025-08-04 103144.png"
-                        //alt={receipt.fileName}
-                        alt="dummy receipt"
+                        src={receiptBlobs[receipt.fileName]}
+                        alt={receipt.fileName}
                         style={{ maxWidth: "300px" }}
                       />
                     )}
