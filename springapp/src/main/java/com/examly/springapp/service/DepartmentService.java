@@ -38,7 +38,6 @@ public class DepartmentService {
 
         department.setDepartmentName(departmentDetails.getDepartmentName());
         department.setDepartmentCode(departmentDetails.getDepartmentCode());
-        // department.setManager(departmentDetails.getManager());
         department.setBudgetLimit(departmentDetails.getBudgetLimit());
         department.setCostCenter(departmentDetails.getCostCenter());
         department.setIsActive(departmentDetails.getIsActive());
@@ -58,7 +57,6 @@ public class DepartmentService {
                 .map(this::sanitizeDepartment)
                 .collect(Collectors.toList());
     }
-
 
     private Department sanitizeDepartment(Department dept) {
         if (dept.getUsers() == null) {
