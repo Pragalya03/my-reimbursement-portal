@@ -159,27 +159,38 @@ function EmployeeDashboard() {
     setFile(e.target.files[0]);
   };
 
-  const handleUpload = async () => {
-    if (!file || !selectedExpense) return;
+const handleUpload = async () => {
+  if (!selectedFile || !selectedExpense) return;
 
-    const existing=await getReceiptsByExpense(selectedExpense.id);
-    if(existing.length>0){
-      alert("A receipt for this expense already exists");
-      return;
+  const formData = new FormData();
+  formData.append("file", selectedFile); // actual file
+  formData.append("expenseId", selectedExpense.id); // expense reference
+  formData.append("fileName", selectedFile.name);
+  formData.append("fileSize", Number(selectedFile.size));
+  formData.append("fileType", selectedFile.type);
+  formData.append("filePath", `/uploads/${selectedFile.name}`);
+  formData.append("uploadDate", new Date().toISOString());
+
+  try {
+    const res = await fetch(`${BASE_URL}/receipts/upload`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(err || "Failed to create receipt");
     }
 
-    const receiptData = {
-      expense: { id: selectedExpense.id },
-      fileName: file.name,
-      fileSize: Number(file.size),
-      fileType: file.type || "unknown",
-      filePath: `/uploads/${file.name}`,
-      uploadDate: new Date().toISOString(),
-      ocrText: "",
-      ocrAmount: 0,
-      ocrDate: null,
-      ocrVendor: "",
-    };
+    const created = await res.json();
+    console.log("Receipt created:", created);
+    setShowModal(false);
+  } catch (err) {
+    console.error("Upload error", err);
+    alert("Failed to create receipt: " + err.message);
+  }
+};
+
 
     // try {
     //   await createReceipt(receiptData);
@@ -296,6 +307,7 @@ function EmployeeDashboard() {
 }
 
 export default EmployeeDashboard;
+
 
 
 
