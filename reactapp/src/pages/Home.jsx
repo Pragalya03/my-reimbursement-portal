@@ -7,7 +7,7 @@ function Home() {
     <div className="home-page">
       <section className="hero">
         <div className="hero-content">
-          <h1>Smart Expense Management</h1>
+          <h1>Smart Expense Reimbursement</h1>
           <p>
             Track, submit, and approve expenses with ease. Save time and control budgets effortlessly.
           </p>
@@ -51,4 +51,5 @@ function Home() {
 }
 
 export default Home;
+
 
