@@ -115,7 +115,8 @@
 
 // export default EmployeeDashboard;
 
-
+/////////////////////////
+/* failed to upload receipt
 import React, { useEffect, useState } from "react";
 import { getExpenses, createReceipt, getReceiptsByExpense } from "../utils/api.js";
 import "../styles/EmployeeDashboard.css";
@@ -289,7 +290,166 @@ function EmployeeDashboard() {
 
 export default EmployeeDashboard;
 
+*/
 
+
+import React, { useEffect, useState } from "react";
+import { getExpenses, createReceipt } from "../utils/api.js";
+import "../styles/EmployeeDashboard.css";
+
+function EmployeeDashboard() {
+  const [expenses, setExpenses] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedExpense, setSelectedExpense] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const loggedInEmployeeId = localStorage.getItem("loggedInEmployeeId");
+
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      try {
+        const data = await getExpenses();
+        const filtered = data.filter(
+          (exp) => String(exp.employeeId) === String(loggedInEmployeeId)
+        );
+        setExpenses(filtered);
+      } catch (error) {
+        console.error(error);
+        setExpenses([]);
+      }
+    };
+    if (loggedInEmployeeId) fetchExpenses();
+  }, [loggedInEmployeeId]);
+
+  const handleAddExpense = () => {
+    window.location.href = "/expenses/new";
+  };
+
+  const formatDate = (dateString) =>
+    new Date(dateString).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+
+  const openModal = (expense) => {
+    setSelectedExpense(expense);
+    setSelectedFile(null);
+    setShowModal(true);
+  };
+
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+
+  const handleUpload = async () => {
+    if (!selectedFile || !selectedExpense) return;
+
+    const receiptData = {
+      expense: { id: selectedExpense.id },
+      fileName: selectedFile.name,
+      fileSize: selectedFile.size,
+      fileType: selectedFile.type,
+      filePath: `/uploads/${selectedFile.name}`, // Adjust based on your storage
+    };
+
+    try {
+      await createReceipt(receiptData);
+      alert("Receipt uploaded successfully!");
+      setShowModal(false);
+    } catch (error) {
+      console.error("Upload error", error);
+      alert(error.message);
+    }
+  };
+
+  return (
+    <>
+      <div className="expense-list">
+        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "15px" }}>
+          <button
+            className="back-btn"
+            style={{
+              position: "absolute",
+              padding: "6px 12px",
+              backgroundColor: "#f87171",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+            }}
+            onClick={() => window.history.back()}
+          >
+            Back
+          </button>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "15px",
+          }}
+        >
+          <h2>My Expenses</h2>
+          <button onClick={handleAddExpense} className="add-expense-btn">
+            Add Expense
+          </button>
+        </div>
+
+        {expenses.length === 0 ? (
+          <p>No expenses found</p>
+        ) : (
+          <table>
+            <thead>
+              <tr>
+                <th>Employee ID</th>
+                <th>Amount</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Remarks</th>
+              </tr>
+            </thead>
+            <tbody>
+              {expenses.map((expense) => (
+                <tr key={expense.id} onClick={() => openModal(expense)} style={{ cursor: "pointer" }}>
+                  <td>{expense.employeeId}</td>
+                  <td>${Number(expense.amount).toFixed(2)}</td>
+                  <td>{expense.description}</td>
+                  <td>{formatDate(expense.date)}</td>
+                  <td>{expense.status}</td>
+                  <td>{expense.remarks || ""}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
+      {/* Modal */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Upload Receipt for Expense ID: {selectedExpense.id}</h3>
+            <input type="file" onChange={handleFileChange} />
+            {selectedFile && (
+              <div>
+                <p>File Name: {selectedFile.name}</p>
+                <p>File Size: {selectedFile.size} bytes</p>
+                <p>File Type: {selectedFile.type}</p>
+              </div>
+            )}
+            <button onClick={handleUpload}>Upload</button>
+            <button onClick={() => setShowModal(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+export default EmployeeDashboard;
 
 
 
