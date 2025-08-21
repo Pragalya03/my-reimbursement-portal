@@ -117,7 +117,7 @@
 
 
 import React, { useEffect, useState } from "react";
-import { getExpenses } from "../utils/api.js";
+import { getExpenses, createReceipt } from "../utils/api.js";
 import "../styles/EmployeeDashboard.css";
 
 function EmployeeDashboard() {
@@ -269,6 +269,7 @@ function EmployeeDashboard() {
 }
 
 export default EmployeeDashboard;
+
 
 
 
