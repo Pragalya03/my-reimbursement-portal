@@ -126,6 +126,32 @@ public class ReceiptController {
     public List<Receipt> getReceiptsByExpense(@PathVariable Long expenseId) {
         return receiptService.getReceiptsByExpense(expenseId);
     }
+
+    @GetMapping("/receipts/download/{filename:.+}")
+    public ResponseEntity<Resource> downloadReceipt(@PathVariable String filename) {
+        try {
+            Path filePath = Paths.get("uploads").resolve(filename).normalize(); // relative to springapp/
+            Resource resource = new UrlResource(filePath.toUri());
+            if (!resource.exists()) {
+                throw new RuntimeException("File not found: " + filename);
+            }
+    
+            String contentType = "application/octet-stream";
+            if(filename.endsWith(".png")) contentType = "image/png";
+            if(filename.endsWith(".jpg") || filename.endsWith(".jpeg")) contentType = "image/jpeg";
+            if(filename.endsWith(".pdf")) contentType = "application/pdf";
+    
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+    
+        } catch (Exception e) {
+            throw new RuntimeException("Could not download file: " + filename, e);
+        }
+}
+
+    
 }
 
 
