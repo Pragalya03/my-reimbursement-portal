@@ -159,5 +159,29 @@
 //     }
 // }
 
+    @RestController
+@RequestMapping("/api/receipts")
+public class ReceiptController {
     
+    @Value("${file.upload-dir}") // Configure this in application.properties
+    private String uploadDir;
+    
+    @GetMapping("/{fileName}")
+    public ResponseEntity<Resource> getReceipt(@PathVariable String fileName) {
+        try {
+            Path filePath = Paths.get(uploadDir).resolve(fileName).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+            
+            if (resource.exists()) {
+                return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_PNG) // Adjust based on file type
+                    .body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+}
 
