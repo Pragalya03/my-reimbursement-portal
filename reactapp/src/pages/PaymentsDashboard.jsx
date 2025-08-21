@@ -1,4 +1,3 @@
-// src/pages/PaymentsDashboard.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getExpenses, getPayments, createPayment, updatePayment } from "../utils/api.js";
@@ -28,10 +27,8 @@ function PaymentsDashboard() {
       const [paymentData, expenseData] = await Promise.all([getPayments(), getExpenses()]);
       setPayments(paymentData);
 
-      // Only show expenses with status "APPROVED"
       const approvedExpenses = expenseData.filter(exp => exp.status === "APPROVED");
 
-      // Exclude expenses that already have a payment
       const unpaidExpenses = approvedExpenses.filter(
         exp => !paymentData.some(p => p.expense.id === exp.id)
       );
@@ -46,7 +43,6 @@ function PaymentsDashboard() {
 
   const openPaymentModal = (expenseOrPayment, isPayment = false) => {
     if (isPayment) {
-      // Editing an existing payment
       setFormData({
         paymentId: expenseOrPayment.id,
         expenseId: expenseOrPayment.expense.id,
@@ -57,7 +53,6 @@ function PaymentsDashboard() {
       });
       setSelectedExpense(expenseOrPayment.expense);
     } else {
-      // New payment from approved expense
       setFormData({
         paymentId: null,
         expenseId: expenseOrPayment.id,
@@ -118,21 +113,7 @@ function PaymentsDashboard() {
       >
         Back to Finance Dashboard
       </button>
-      {/*<button 
-      // className="back-btn"
-      // style={{
-      //   position: "absolute",
-      //   padding: "6px 12px",
-      //   backgroundColor: "#f87171",
-      //   color: "white",
-      //   border: "none",
-      //   borderRadius: "8px",
-      //   cursor: "pointer",
-    
-      // }}
-      //  onClick={() => winavigate("/finance-dashboard")}>
-      //   Back
-      // </button> */}
+      
       <h3>Approved Expenses</h3>
       {expenses.length === 0 ? (
         <p>No approved expenses</p>
