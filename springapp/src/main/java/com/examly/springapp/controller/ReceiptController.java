@@ -50,6 +50,10 @@ import com.examly.springapp.repository.ExpenseRepository;
 import com.examly.springapp.service.ReceiptService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -136,11 +140,14 @@ public class ReceiptController {
                 throw new RuntimeException("File not found: " + filename);
             }
     
-            String contentType = "application/octet-stream";
-            if(filename.endsWith(".png")) contentType = "image/png";
-            if(filename.endsWith(".jpg") || filename.endsWith(".jpeg")) contentType = "image/jpeg";
-            if(filename.endsWith(".pdf")) contentType = "application/pdf";
-    
+            // String contentType = "application/octet-stream";
+            // if(filename.endsWith(".png")) contentType = "image/png";
+            // if(filename.endsWith(".jpg") || filename.endsWith(".jpeg")) contentType = "image/jpeg";
+            // if(filename.endsWith(".pdf")) contentType = "application/pdf";
+
+            String contentType=Files.probeContentType(filePath);
+            if(contentType==null) contentType= "application/octet-stream";
+            
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(contentType))
                     .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
@@ -149,9 +156,8 @@ public class ReceiptController {
         } catch (Exception e) {
             throw new RuntimeException("Could not download file: " + filename, e);
         }
+    }
 }
 
     
-}
-
 
