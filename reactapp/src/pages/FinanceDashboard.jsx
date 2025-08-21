@@ -546,11 +546,12 @@ function FinanceDashboard() {
   const fetchReceipt = async(fileName)=>{
     try{
       const encodedFileName = encodeURIComponent(fileName);
-      const url= `receipts/download/${encodedFileName}`;
+      const url= `https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io/receipts/download/${encodedFileName}`;
       console.log("[fetchReceipt] Requesting:", url);
 
       const res = await fetch(url);
 
+      console.log("Image blob URL:", url);
       console.log("[fetchReceipt] HTTP status:", res.status, res.statusText);
       console.log("[fetchReceipt] Content-Type:", res.headers.get("content-type"));
 
@@ -563,7 +564,7 @@ function FinanceDashboard() {
       const blob = await res.blob();
       console.log("[fecthReceipt] Blob type:", blob.type, "size:", blob.size, "bytes");
 
-      const objectUrl = URL.createdObjectURL(blob);
+      const objectUrl = URL.createObjectURL(blob);
       console.log("[fetchReceipt] Blob URL: ", objectUrl);
 
       setReceiptBlobs((prev)=>({...prev, [fileName]: objectUrl}));
