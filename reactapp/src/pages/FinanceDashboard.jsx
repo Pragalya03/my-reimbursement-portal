@@ -221,6 +221,7 @@ function FinanceDashboard() {
     try{
       const [expenseData, paymentData]=await Promise.all([getExpenses(), getPayments()]);
       const approvedExpense = expenseData.filter((exp)=>exp.status==="APPROVED");
+const [receiptBlobs, setReceiptBlobs] = useState({});
 
       const unpaidExpenses=approvedExpense.filter(
         (exp)=>!paymentData.some((p)=>p.expense.id===exp.id)
@@ -230,6 +231,18 @@ function FinanceDashboard() {
     } catch (error){
       console.error("Failed to fetch expenses or payments: ", error);
       setExpenses([]);
+    }
+  };
+  const fetchReceipt = async (fileName) => {
+    try {
+      const res = await fetch(`/receipts/download/${fileName}`);
+      if (!res.ok) throw new Error("File not found");
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+  
+      setReceiptBlobs(prev => ({ ...prev, [fileName]: url }));
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -398,14 +411,26 @@ function FinanceDashboard() {
               <div className="receipts-section">
                 <h4>Receipts</h4>
                 <ul>
-                  {receipts.map((receipt)=>(
+{/*                   {receipts.map((receipt)=>(
                     <li key={receipt.id}>
                       <a href={`https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io/receipts/download/${receipt.fileName}`} target="_blank" rel="noopener noreferrer">
                         {receipt.fileName}({(receipt.fileSize/1024).toFixed(2)} KB)
                       </a>
                       <span> | Uploaded in: {new Date(receipt.uploadDate).toLocaleDateString()}</span>
                     </li>
+                  ))} */}
+                  {receipts.map(receipt => (
+                    <div key={receipt.id}>
+                      <p>{receipt.fileName}</p>
+                      {receiptBlobs[receipt.fileName] && receipt.fileName.endsWith(".png") && (
+                        <img src={receiptBlobs[receipt.fileName]} alt={receipt.fileName} style={{ maxWidth: "300px" }} />
+                      )}
+                      {receiptBlobs[receipt.fileName] && receipt.fileName.endsWith(".pdf") && (
+                        <iframe src={receiptBlobs[receipt.fileName]} width="400" height="500" title={receipt.fileName}></iframe>
+                      )}
+                    </div>
                   ))}
+
                 </ul>
               </div>
             <form onSubmit={handleSubmit}>
@@ -460,6 +485,7 @@ function FinanceDashboard() {
 }
 
 export default FinanceDashboard;
+
 
 
 
