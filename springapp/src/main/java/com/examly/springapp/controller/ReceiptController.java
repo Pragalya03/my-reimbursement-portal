@@ -131,3 +131,4 @@ public class ReceiptController {
         return receiptService.getReceiptsByExpense(expenseId);
     }
 }
+
