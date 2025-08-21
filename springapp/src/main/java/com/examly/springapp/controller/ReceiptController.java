@@ -68,10 +68,39 @@ public class ReceiptController {
         return receiptService.getReceiptById(id);
     }
 
-    @PostMapping
-    public Receipt createReceipt(@RequestBody Receipt receipt) {
-        return receiptService.createReceipt(receipt);
-    }
+    @PostMapping("/upload")
+public ResponseEntity<Receipt> uploadReceipt(
+        @RequestParam("file") MultipartFile file,
+        @RequestParam("expenseId") Long expenseId,
+        @RequestParam("fileName") String fileName,
+        @RequestParam("fileSize") Long fileSize,
+        @RequestParam("fileType") String fileType,
+        @RequestParam("filePath") String filePath,
+        @RequestParam("uploadDate") String uploadDateStr
+) throws IOException {
+
+    Expense expense = expenseRepository.findById(expenseId)
+            .orElseThrow(() -> new RuntimeException("Expense not found"));
+
+    // Save file physically
+    Path uploadDir = Paths.get("uploads");
+    if (!Files.exists(uploadDir)) Files.createDirectories(uploadDir);
+    Path fileLocation = uploadDir.resolve(file.getOriginalFilename());
+    Files.copy(file.getInputStream(), fileLocation, StandardCopyOption.REPLACE_EXISTING);
+
+    // Create Receipt entity
+    Receipt receipt = new Receipt();
+    receipt.setExpense(expense);
+    receipt.setFileName(fileName);
+    receipt.setFileSize(fileSize);
+    receipt.setFileType(fileType);
+    receipt.setFilePath(fileLocation.toString());
+    receipt.setUploadDate(LocalDateTime.parse(uploadDateStr));
+
+    Receipt saved = receiptService.createReceipt(receipt);
+    return ResponseEntity.ok(saved);
+}
+
 
     @PutMapping("/{id}")
     public Receipt updateReceipt(@PathVariable Long id, @RequestBody Receipt receipt) {
