@@ -118,7 +118,6 @@
 
 import React, { useEffect, useState } from "react";
 import { getExpenses } from "../utils/api.js";
-import { createReceipt } from "../utils/receiptApi"; // new api for receipt
 import "../styles/EmployeeDashboard.css";
 
 function EmployeeDashboard() {
@@ -270,5 +269,6 @@ function EmployeeDashboard() {
 }
 
 export default EmployeeDashboard;
+
 
 
