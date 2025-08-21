@@ -44,11 +44,22 @@
 // failed to upload receipt
 package com.examly.springapp.controller;
 
+import com.examly.springapp.model.Expense;
 import com.examly.springapp.model.Receipt;
+import com.examly.springapp.repository.ExpenseRepository;
 import com.examly.springapp.service.ReceiptService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -57,6 +68,9 @@ public class ReceiptController {
 
     @Autowired
     private ReceiptService receiptService;
+
+    @Autowired
+    private ExpenseRepository expenseRepository;
 
     @GetMapping
     public List<Receipt> getAllReceipts() {
@@ -69,38 +83,38 @@ public class ReceiptController {
     }
 
     @PostMapping("/upload")
-public ResponseEntity<Receipt> uploadReceipt(
-        @RequestParam("file") MultipartFile file,
-        @RequestParam("expenseId") Long expenseId,
-        @RequestParam("fileName") String fileName,
-        @RequestParam("fileSize") Long fileSize,
-        @RequestParam("fileType") String fileType,
-        @RequestParam("filePath") String filePath,
-        @RequestParam("uploadDate") String uploadDateStr
-) throws IOException {
+    public ResponseEntity<Receipt> uploadReceipt(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("expenseId") Long expenseId,
+            @RequestParam("fileName") String fileName,
+            @RequestParam("fileSize") Long fileSize,
+            @RequestParam("fileType") String fileType,
+            @RequestParam("filePath") String filePath,
+            @RequestParam("uploadDate") String uploadDateStr
+    ) throws IOException {
 
-    Expense expense = expenseRepository.findById(expenseId)
-            .orElseThrow(() -> new RuntimeException("Expense not found"));
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow(() -> new RuntimeException("Expense not found"));
 
-    // Save file physically
-    Path uploadDir = Paths.get("uploads");
-    if (!Files.exists(uploadDir)) Files.createDirectories(uploadDir);
-    Path fileLocation = uploadDir.resolve(file.getOriginalFilename());
-    Files.copy(file.getInputStream(), fileLocation, StandardCopyOption.REPLACE_EXISTING);
+        // Save file physically
+        Path uploadDir = Paths.get("uploads");
+        if (!Files.exists(uploadDir)) Files.createDirectories(uploadDir);
 
-    // Create Receipt entity
-    Receipt receipt = new Receipt();
-    receipt.setExpense(expense);
-    receipt.setFileName(fileName);
-    receipt.setFileSize(fileSize);
-    receipt.setFileType(fileType);
-    receipt.setFilePath(fileLocation.toString());
-    receipt.setUploadDate(LocalDateTime.parse(uploadDateStr));
+        Path fileLocation = uploadDir.resolve(file.getOriginalFilename());
+        Files.copy(file.getInputStream(), fileLocation, StandardCopyOption.REPLACE_EXISTING);
 
-    Receipt saved = receiptService.createReceipt(receipt);
-    return ResponseEntity.ok(saved);
-}
+        // Create Receipt entity
+        Receipt receipt = new Receipt();
+        receipt.setExpense(expense);
+        receipt.setFileName(fileName);
+        receipt.setFileSize(fileSize);
+        receipt.setFileType(fileType);
+        receipt.setFilePath(fileLocation.toString());
+        receipt.setUploadDate(LocalDateTime.parse(uploadDateStr));
 
+        Receipt saved = receiptService.createReceipt(receipt);
+        return ResponseEntity.ok(saved);
+    }
 
     @PutMapping("/{id}")
     public Receipt updateReceipt(@PathVariable Long id, @RequestBody Receipt receipt) {
