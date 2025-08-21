@@ -55,10 +55,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -99,7 +96,6 @@ public class ReceiptController {
         // Save file physically
         Path uploadDir = Paths.get("uploads");
         if (!Files.exists(uploadDir)) Files.createDirectories(uploadDir);
-
         Path fileLocation = uploadDir.resolve(file.getOriginalFilename());
         Files.copy(file.getInputStream(), fileLocation, StandardCopyOption.REPLACE_EXISTING);
 
@@ -127,8 +123,9 @@ public class ReceiptController {
     }
 
     @GetMapping("/expense/{expenseId}")
-    public List<Receipt> getReceiptsByExpense(@PathVariable Long expenseId){
+    public List<Receipt> getReceiptsByExpense(@PathVariable Long expenseId) {
         return receiptService.getReceiptsByExpense(expenseId);
     }
 }
+
 
