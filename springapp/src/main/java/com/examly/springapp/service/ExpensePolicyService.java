@@ -29,14 +29,14 @@ public class ExpensePolicyService {
                 .orElseThrow(() -> new RuntimeException("Policy not found with id " + id));
     }
     
-public ExpensePolicy createPolicy(ExpensePolicy policy) {
-    if (policy.getCategory() != null && policy.getCategory().getId() != null) {
-        ExpenseCategory category = categoryRepo.findById(policy.getCategory().getId())
-            .orElseThrow(() -> new RuntimeException("Category not found"));
-        policy.setCategory(category);
+    public ExpensePolicy createPolicy(ExpensePolicy policy) {
+        if (policy.getCategory() != null && policy.getCategory().getId() != null) {
+            ExpenseCategory category = categoryRepo.findById(policy.getCategory().getId())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+            policy.setCategory(category);
+        }
+        return expensePolicyRepository.save(policy);
     }
-    return expensePolicyRepository.save(policy);
-}
 
 
     public ExpensePolicy updatePolicy(Long id, ExpensePolicy policyDetails) {
