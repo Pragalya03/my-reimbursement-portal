@@ -117,7 +117,7 @@
 
 
 import React, { useEffect, useState } from "react";
-import { getExpenses, createReceipt, getReceiptsByExpense } from "../utils/api.js";
+import { getExpenses, uploadReceipt } from "../utils/api.js";
 import "../styles/EmployeeDashboard.css";
 
 function EmployeeDashboard() {
@@ -159,55 +159,30 @@ function EmployeeDashboard() {
     setFile(e.target.files[0]);
   };
 
-const handleUpload = async () => {
-  if (!selectedFile || !selectedExpense) return;
-
-  const formData = new FormData();
-  formData.append("file", selectedFile); // actual file
-  formData.append("expenseId", selectedExpense.id); // expense reference
-  formData.append("fileName", selectedFile.name);
-  formData.append("fileSize", Number(selectedFile.size));
-  formData.append("fileType", selectedFile.type);
-  formData.append("filePath", `/uploads/${selectedFile.name}`);
-  formData.append("uploadDate", new Date().toISOString());
-
-  try {
-    const res = await fetch(`${BASE_URL}/receipts/upload`, {
-      method: "POST",
-      body: formData,
-    });
-
-    if (!res.ok) {
-      const err = await res.text();
-      throw new Error(err || "Failed to create receipt");
+  const handleUpload = async () => {
+    if (!file || !selectedExpense) {
+      alert("Select a file and an expense first!");
+      return;
     }
 
-    const created = await res.json();
-    console.log("Receipt created:", created);
-    setShowModal(false);
-  } catch (err) {
-    console.error("Upload error", err);
-    alert("Failed to create receipt: " + err.message);
-  }
-};
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("expenseId", selectedExpense.id);
+    formData.append("fileName", file.name);
+    formData.append("fileSize", Number(file.size));
+    formData.append("fileType", file.type);
+    formData.append("filePath", `/uploads/${file.name}`);
+    formData.append("uploadDate", new Date().toISOString());
 
-
-    // try {
-    //   await createReceipt(receiptData);
-    //   alert("Receipt uploaded successfully!");
-    //   setShowModal(false);
-    //   setFile(null);
-    // } catch (err) {
-    //   console.error("Upload error"+err);
-    //   alert(err.message || "Failed to upload receipt.");
-    // }
     try {
-      const created = await createReceipt(receiptData);
-      console.lof("Receipt created:", created);
+      const created = await uploadReceipt(formData);
+      console.log("Receipt created:", created);
+      alert("Receipt uploaded successfully!");
       setShowModal(false);
+      setFile(null);
     } catch (err) {
       console.error("Upload error", err);
-      alert("Failed to create receipt:"+ err.message);
+      alert("Failed to create receipt: " + err.message);
     }
   };
 
@@ -221,88 +196,86 @@ const handleUpload = async () => {
   };
 
   return (
-    <>
-      <div className="expense-list">
-        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "15px" }}>
-          <button
-            className="back-btn"
-            style={{
-              position: "absolute",
-              padding: "6px 12px",
-              backgroundColor: "#f87171",
-              color: "white",
-              border: "none",
-              borderRadius: "8px",
-              cursor: "pointer",
-            }}
-            onClick={() => window.history.back()}
-          >
-            Back
-          </button>
-        </div>
-
-        <div
+    <div className="expense-list">
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "15px" }}>
+        <button
+          className="back-btn"
           style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "15px",
+            position: "absolute",
+            padding: "6px 12px",
+            backgroundColor: "#f87171",
+            color: "white",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
           }}
+          onClick={() => window.history.back()}
         >
-          <h2>My Expenses</h2>
-          <button onClick={handleAddExpense} className="add-expense-btn">
-            Add Expense
-          </button>
-        </div>
-
-        {expenses.length === 0 ? (
-          <p>No expenses found</p>
-        ) : (
-          <table data-testid="expenses-table">
-            <thead>
-              <tr>
-                <th>Employee ID</th>
-                <th>Amount</th>
-                <th>Description</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Remarks</th>
-              </tr>
-            </thead>
-            <tbody>
-              {expenses.map((expense) => (
-                <tr key={expense.id} onClick={() => handleRowClick(expense)}>
-                  <td>{expense.employeeId}</td>
-                  <td>${Number(expense.amount).toFixed(2)}</td>
-                  <td>{expense.description}</td>
-                  <td>{formatDate(expense.date)}</td>
-                  <td>{expense.status}</td>
-                  <td>{expense.remarks || ""}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-
-        {showModal && (
-          <div className="modal">
-            <div className="modal-content">
-              <h3>Upload Receipt for Expense #{selectedExpense.id}</h3>
-              <input type="file" onChange={handleFileChange} />
-              {file && (
-                <div>
-                  <p>File Name: {file.name}</p>
-                  <p>File Size: {file.size} bytes</p>
-                  <p>File Type: {file.type}</p>
-                </div>
-              )}
-              <button onClick={handleUpload}>Upload</button>
-              <button onClick={() => setShowModal(false)}>Cancel</button>
-            </div>
-          </div>
-        )}
+          Back
+        </button>
       </div>
-    </>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "15px",
+        }}
+      >
+        <h2>My Expenses</h2>
+        <button onClick={handleAddExpense} className="add-expense-btn">
+          Add Expense
+        </button>
+      </div>
+
+      {expenses.length === 0 ? (
+        <p>No expenses found</p>
+      ) : (
+        <table data-testid="expenses-table">
+          <thead>
+            <tr>
+              <th>Employee ID</th>
+              <th>Amount</th>
+              <th>Description</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Remarks</th>
+            </tr>
+          </thead>
+          <tbody>
+            {expenses.map((expense) => (
+              <tr key={expense.id} onClick={() => handleRowClick(expense)}>
+                <td>{expense.employeeId}</td>
+                <td>${Number(expense.amount).toFixed(2)}</td>
+                <td>{expense.description}</td>
+                <td>{formatDate(expense.date)}</td>
+                <td>{expense.status}</td>
+                <td>{expense.remarks || ""}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+
+      {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h3>Upload Receipt for Expense #{selectedExpense.id}</h3>
+            <input type="file" onChange={handleFileChange} />
+            {file && (
+              <div>
+                <p>File Name: {file.name}</p>
+                <p>File Size: {file.size} bytes</p>
+                <p>File Type: {file.type}</p>
+              </div>
+            )}
+            <button onClick={handleUpload}>Upload</button>
+            <button onClick={() => setShowModal(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
