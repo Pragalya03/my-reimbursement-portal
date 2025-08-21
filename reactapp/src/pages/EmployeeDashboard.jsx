@@ -117,7 +117,7 @@
 
 
 import React, { useEffect, useState } from "react";
-import { getExpenses, createReceipt } from "../utils/api.js";
+import { getExpenses, createReceipt, getReceiptsByExpense } from "../utils/api.js";
 import "../styles/EmployeeDashboard.css";
 
 function EmployeeDashboard() {
@@ -162,11 +162,17 @@ function EmployeeDashboard() {
   const handleUpload = async () => {
     if (!file || !selectedExpense) return;
 
+    const existing=await getReceiptsByExpense(selectedExpense.id);
+    if(existing.length>0){
+      alert("A receipt for this expense already exists");
+      return;
+    }
+
     const receiptData = {
       expense: { id: selectedExpense.id },
       fileName: file.name,
-      fileSize: file.size,
-      fileType: file.type,
+      fileSize: Number(file.size),
+      fileType: file.type || "unknown",
       filePath: `/uploads/${file.name}`,
       uploadDate: new Date().toISOString(),
       ocrText: "",
@@ -181,8 +187,8 @@ function EmployeeDashboard() {
       setShowModal(false);
       setFile(null);
     } catch (err) {
-      alert(err.message || "Failed to upload receipt. Maybe a receipt already exists.");
-      console.error(err);
+      console.error("Upload error"+err);
+      alert(err.message || "Failed to upload receipt.");
     }
   };
 

@@ -337,4 +337,9 @@ export const createReceipt = async (receipt) => {
   return res.json();
 };
 
+export const getReceiptsByExpense=async(expenseId)=>{
+  const res=await fetch(`${BASE_URL}/receipts/expense/${expenseId}`);
+  if(!res.ok) throw new Error("Failed to fetch receipts");
+  return res.json();
+}
 

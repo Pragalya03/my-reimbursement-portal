@@ -80,4 +80,9 @@ public class ReceiptController {
     public void deleteReceipt(@PathVariable Long id) {
         receiptService.deleteReceipt(id);
     }
+
+    @GetMapping("/expense/{expenseId}")
+    public List<Receipt> getReceiptsByExpense(@PathVariable Long expenseId){
+        return receiptService.getReceiptsByExpense(expenseId);
+    }
 }
