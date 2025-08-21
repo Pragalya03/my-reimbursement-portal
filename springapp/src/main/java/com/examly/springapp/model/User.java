@@ -38,25 +38,11 @@ public class User {
     @JsonIgnoreProperties("users")
     private Department department;
 
-    // @ManyToOne(optional=true)
-    // @JoinColumn(name = "manager_id")
-    // @JsonIgnoreProperties({"manager","department"})
-    // private User manager;
-
     @Column(name = "created_date", nullable = false, updatable = false)
     private LocalDateTime createdDate = LocalDateTime.now();
 
-    // @Column(name = "last_login")
-    // private LocalDateTime lastLogin;
-
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
-
-    // @PrePersist
-    // protected void onCreate(){
-    //     this.createdDate=LocalDateTime.now();
-    //     this.lastLogin=null;
-    // }
 
     public void onUpdate(){
         
@@ -117,14 +103,6 @@ public class User {
         this.department = department;
     }
 
-    // public User getManager() {
-    //     return manager;
-    // }
-
-    // public void setManager(User manager) {
-    //     this.manager = manager;
-    // }
-
     public LocalDateTime getCreatedDate() {
         return createdDate;
     }
@@ -132,14 +110,6 @@ public class User {
     public void setCreatedDate(LocalDateTime createdDate) {
         this.createdDate = createdDate;
     }
-
-    // public LocalDateTime getLastLogin() {
-    //     return lastLogin;
-    // }
-
-    // public void setLastLogin(LocalDateTime lastLogin) {
-    //     this.lastLogin = lastLogin;
-    // }
 
     public Boolean getIsActive() {
         return isActive;
@@ -150,7 +120,7 @@ public class User {
     }
 
     public User(Long id, String username, String email, String passwordHash, Role role, String employeeId,
-            Department department, /*User manager,*/ LocalDateTime createdDate, /*LocalDateTime lastLogin,*/ Boolean isActive) {
+            Department department, LocalDateTime createdDate, Boolean isActive) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -158,9 +128,7 @@ public class User {
         this.role = role;
         this.employeeId = employeeId;
         this.department = department;
-        //this.manager = manager;
         this.createdDate = createdDate;
-        // this.lastLogin = lastLogin;
         this.isActive = isActive;
     }
 
