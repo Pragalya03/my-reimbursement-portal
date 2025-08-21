@@ -327,15 +327,18 @@ export const updatePayment=async(id,payment)=>{
   return res.json();
 }
 
-export const createReceipt = async (receipt) => {
-  const res = await fetch(`${BASE_URL}/receipts`, {
+export const uploadReceipt = async (formData) => {
+  const res = await fetch(`${BASE_URL}/receipts/upload`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(receipt),
+    body: formData,
   });
-  if (!res.ok) throw new Error("Failed to create receipt");
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(errText || "Failed to create receipt");
+  }
   return res.json();
 };
+
 
 export const getReceiptsByExpense=async(expenseId)=>{
   const res=await fetch(`${BASE_URL}/receipts/expense/${expenseId}`);
