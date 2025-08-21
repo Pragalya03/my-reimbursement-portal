@@ -4,7 +4,6 @@ import com.examly.springapp.model.User;
 import com.examly.springapp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +28,6 @@ public class UserController {
     @PostMapping
     public User createUser(@RequestBody User user) {
         user.setCreatedDate(LocalDateTime.now());
-        //user.setLastLogin(null); 
         return userService.createUser(user);
     }
 
