@@ -12,9 +12,7 @@ export default function Register() {
     role: "EMPLOYEE",
     employeeId: "",
     department: null,
-    // manager: null,
     createdDate: "",
-    // lastLogin: "",
     isActive: true
   });
 
@@ -146,5 +144,6 @@ export default function Register() {
     </div>
   );
 }
+
 
 
