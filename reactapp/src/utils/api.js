@@ -327,5 +327,14 @@ export const updatePayment=async(id,payment)=>{
   return res.json();
 }
 
+export const createReceipt = async (receipt) => {
+  const res = await fetch(`${BASE_URL}/receipts`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(receipt),
+  });
+  if (!res.ok) throw new Error("Failed to create receipt");
+  return res.json();
+};
 
 
