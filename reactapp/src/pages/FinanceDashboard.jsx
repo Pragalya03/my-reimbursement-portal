@@ -187,11 +187,12 @@
 // src/pages/FinanceDashboard.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getExpenses, createApproval, getPayments } from "../utils/api.js";
+import { getExpenses, createApproval, getPayments, getReceiptsByExpense } from "../utils/api.js";
 import "../styles/ExpenseList.css";
 
 function FinanceDashboard() {
   const [expenses, setExpenses] = useState([]);
+  const [receipts, setReceipts]=useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState(null);
   const [formData, setFormData] = useState({
@@ -241,7 +242,7 @@ function FinanceDashboard() {
     });
   };
 
-  const handleRowClick = (expense) => {
+  const handleRowClick = async (expense) => {
     setSelectedExpense(expense);
     setFormData({
       approvalStatus: "PENDING",
@@ -249,6 +250,14 @@ function FinanceDashboard() {
       isFinalApproval: false,
     });
     setShowModal(true);
+    
+    try{
+      const expenseReceipts=await getReceiptsByExpense(expense.id);
+      setReceipts(expenseReceipts);
+    } catch (err) {
+      console.error("Failed to fetch receipt: ",err);
+      setReceipts([]);
+    }
   };
 
   const handleChange = (e) => {
@@ -386,6 +395,19 @@ function FinanceDashboard() {
         <div className="modal-overlay">
           <div className="modal-content">
             <h3>Approval for Expense #{selectedExpense.id}</h3>
+              <div className="receipts-section">
+                <h4>Receipts</h4>
+                <ul>
+                  {receipts.map((receipt)=>(
+                    <li key={receipt.id}>
+                      <a href={receipt.filePath} target="_blank" rel="noopener noreferrer">
+                        {receipt.fileName}({(receipt.fileSize/1024).toFixed(2)} KB)
+                      </a>
+                      <span> | Uploaded in: {new Date(receipt.uploadDate).toLocaleDateString()}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             <form onSubmit={handleSubmit}>
               <label>
                 Approval Status:
