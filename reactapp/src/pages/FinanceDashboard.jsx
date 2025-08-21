@@ -527,20 +527,21 @@ function FinanceDashboard() {
     }
   };
 
-  const fetchReceipt = async (fileName) => {
-    try {
-      const res = await fetch(
-        `https://8080-faedbbbbecaaddcbcedcecbaebefef.premiumproject.examly.io/receipts/download/${fileName}`
-      );
-      if (!res.ok) throw new Error("File not found");
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
+  // const fetchReceipt = async (fileName) => {
+  //   try {
+  //     const encodedFileName=encodeURIComponent(fileName);
+  //     const res = await fetch(
+  //       `receipts/download/${encodedFileName}`
+  //     );
+  //     if (!res.ok) throw new Error(`File not found: ${fileName}`);
+  //     const blob = await res.blob();
+  //     const url = URL.createObjectURL(blob);
 
-      setReceiptBlobs((prev) => ({ ...prev, [fileName]: url }));
-    } catch (err) {
-      console.error("Failed to fetch receipt: ", err);
-    }
-  };
+  //     setReceiptBlobs((prev) => ({ ...prev, [fileName]: url }));
+  //   } catch (err) {
+  //     console.error("Failed to fetch receipt: ", err);
+  //   }
+  // };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -563,9 +564,7 @@ function FinanceDashboard() {
     try {
       const expenseReceipts = await getReceiptsByExpense(expense.id);
       setReceipts(expenseReceipts);
-
-      // Fetch blob URLs for each receipt
-      expenseReceipts.forEach((r) => fetchReceipt(r.fileName));
+      // expenseReceipts.forEach(r => fetchReceipt(r.fileName));
     } catch (err) {
       console.error("Failed to fetch receipts: ", err);
       setReceipts([]);
@@ -602,6 +601,10 @@ function FinanceDashboard() {
       alert("Failed to submit approval");
     }
   };
+
+  const getReceiptUrl=(fileName)=>{
+    return "https://via.placeholder.com/300x200/3B82F6/FFFFFF?text=Receipt+Image";
+  }
 
   return (
     <div className="expense-list">
@@ -709,14 +712,17 @@ function FinanceDashboard() {
             <div className="receipts-section">
               <h4>Receipts</h4>
               <ul>
-                {receipts.map((receipt) => (
-                  <li key={receipt.id} style={{ marginBottom: "15px" }}>
+                {receipts.map(receipt => (
+                  <div key={receipt.id} style={{ marginBottom: "15px" }}>
                     <p>{receipt.fileName} ({(receipt.fileSize / 1024).toFixed(2)} KB)</p>
-                    {receiptBlobs[receipt.fileName] && receipt.fileName.endsWith(".png") && (
+                    //{receiptBlobs[receipt.fileName] && receipt.fileName.endsWith(".png") && (
                       <img
-                        src={receiptBlobs[receipt.fileName]}
+                        src={getReceiptUrl(receipt.fileName)}
                         alt={receipt.fileName}
                         style={{ maxWidth: "300px" }}
+                        onError={(e)=>{
+                          e.target.style.display='none';
+                        }}
                       />
                     )}
                     {receiptBlobs[receipt.fileName] && receipt.fileName.endsWith(".pdf") && (
@@ -727,7 +733,7 @@ function FinanceDashboard() {
                         title={receipt.fileName}
                       ></iframe>
                     )}
-                  </li>
+                  </div>
                 ))}
               </ul>
             </div>
