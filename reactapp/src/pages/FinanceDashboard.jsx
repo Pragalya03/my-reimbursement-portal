@@ -243,8 +243,8 @@ function FinanceDashboard() {
                     {receiptBlobs[receipt.fileName] && receipt.fileName.endsWith(".pdf") && (
                       <iframe
                         src={receiptBlobs[receipt.fileName]}
-                        width="400"
-                        height="500"
+                        width="250"
+                        height="300"
                         title={receipt.fileName}
                       ></iframe>
                     )}
